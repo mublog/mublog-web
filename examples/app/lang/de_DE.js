@@ -15,6 +15,8 @@ export default {
     loginFailed: "Einloggen fehlgeschlagen",
     loginFailedMessage: "Benutzer existiert nicht oder inkorrekte Eingaben",
 
+    logoutMessage: "Du bist nun abgemeldet",
+
     routeNotFound: "Seite '$url' nicht gefunden.",
 
     enterAccount: "Logge dich in dein Konto ein",
