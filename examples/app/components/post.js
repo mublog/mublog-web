@@ -11,8 +11,10 @@ export default function Post({
         name,
         profileImageUrl
     },
-    textContent, 
-    dateTime
+    textContent,
+    likeAmount,
+    datePosted,
+    dateEdited
 }) {
     let component = Div({ id: `post-${id}`, className: "post" },
         Flex({ gap: "8px" },
@@ -30,7 +32,7 @@ export default function Post({
                                 Span({ className: "user-alias" }, alias)
                             )
                         ),
-                        Time({ dateTime, className: "datetime" })
+                        Time({ dateTime: datePosted, title: dateEdited, className: "datetime" })
                     )
                 ),
                 Seperator(),
@@ -40,7 +42,7 @@ export default function Post({
                 Seperator(),
                 Flex({ gap: "8px" },
                     Flex({ gap: "8px", alignItems: "center" },
-                        Span({}, "0"),
+                        Span({}, String(likeAmount)),
                         Span({}, "Like"),
                     ),
                     Span({ className: "post-menu" }, "Menu")

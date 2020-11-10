@@ -23,14 +23,18 @@ export const Users = [
 export const Posts = [
     {
         id: 1,
-        dateTime: Date.now(),
+        datePosted: Date.now() - 500,
+        dateEdited: Date.now() - 200,
         user: 1,
+        likeAmount: 10,
         textContent: "ahoooo"
     },
     {
         id: 2,
-        dateTime: Date.now(),
+        datePosted: Date.now() - 1500,
+        dateEdited: Date.now() - 300,
         user: 2,
+        likeAmount: 420,
         textContent: "awoooooo"
     }
 ]
