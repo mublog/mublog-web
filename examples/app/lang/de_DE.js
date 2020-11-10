@@ -6,8 +6,14 @@ export default {
     error: "Fehler",
     navigation: "Navigation",
 
+    name: "Name",
     alias: "Benutzername",
     password: "Passwort",
+
+    loginSuccess: "Erfolgreich eingeloggt",
+    loginSuccessMessage: "Du bist nun eingeloggt",
+    loginFailed: "Einloggen fehlgeschlagen",
+    loginFailedMessage: "Benutzer existiert nicht oder inkorrekte Eingaben",
 
     routeNotFound: "Seite '$url' nicht gefunden.",
 
