@@ -24,5 +24,7 @@
   "browserslist": [
     "last 1 Chrome versions"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "jsrsasign": "^10.0.5"
+  }
 }
