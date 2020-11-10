@@ -17,12 +17,17 @@ function NotificationItem(title, message, options = { timeout: 5000 }) {
         isComment(Title({ className: "notification-title" }, title)).if(!title),
         isComment(Seperator()).if(!title),
         message
-    )
+    ).style({ animation: "notification-slide 250ms ease-in-out 0ms 1 normal none" }).mixin({
+        slideOut(delay) {
+            let newDelay = delay > 250 ? delay - 250 : 0
+            setTimeout(() => component.style({
+                animation: `notification-slide 250ms ease-in-out ${newDelay}ms 1 reverse none`
+            }), newDelay)
+            setTimeout(() => component.unmount(), delay)
+        }
+    })
     if (timeout) {
-        component.style({
-            animation: `notification-slide 250ms ease-in-out ${timeout - 250}ms 1 reverse none !important`
-        })
-        setTimeout(() => component.unmount(), timeout)
+        component.slideOut(timeout)
     }
     if (removeOnClick) {
         component.addEvent("click", node => node.unmount())
