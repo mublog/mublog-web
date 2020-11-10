@@ -41,5 +41,5 @@ export default function Flex(props, ...children) {
         delete props.alignItems
     }
 
-    return Choc.create("div", props, ...children).style(styles)
+    return Choc.create("div", { ...props, styles }, ...children)
 }
