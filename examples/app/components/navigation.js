@@ -4,6 +4,7 @@ import i18n from "../lang/de_DE.js"
 import { Div, A, Route, activateRoute } from "./generic.js"
 import { isComment, loadingCircle } from "./decorators.js"
 import Box, { Seperator, Title } from "./box.js"
+import Notifications from "../components/notifications.js"
 
 import { UserService } from "../services/db.js"
 
@@ -43,4 +44,5 @@ async function logout() {
     await UserService.logout()
     activateRoute("/login")
     Navigation.signal("refresh")
+    Notifications.push(null, i18n.logoutMessage)
 }
