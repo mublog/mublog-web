@@ -410,14 +410,12 @@ input, textarea {
 }
 
 #notifications {
-    &:not(:empty) {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 300px;
-        max-height: 100%;
-        overflow: hidden;
-    }
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    max-height: 100%;
+    overflow: hidden;
 
     .notification-wrapper {
         display: flex;
