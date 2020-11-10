@@ -1,0 +1,326 @@
+/**
+    Thanks to the PICO-8 team for their color palette!
+    I used the hexadecimal values from: https://lospec.com/palette-list/pico-8
+*/
+@font-face {
+  font-family: battlenet;
+  src: url("/battlenet.e52f21ca.ttf");
+  font-style: normal;
+  font-weight: normal;
+}
+:root {
+  background: #83769C;
+}
+
+::selection {
+  color: #FFF1E8;
+  background: #FF77A8;
+}
+
+body, html {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+input:invalid, textarea:invalid {
+  box-shadow: none;
+}
+input::placeholder, textarea::placeholder {
+  color: #5F574F;
+}
+
+* {
+  cursor: url("/cursor.40f13383.svg") 2 2, default !important;
+  box-sizing: border-box;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  word-wrap: break-word;
+  word-break: break-all;
+  color: #000000;
+  font-family: battlenet;
+  font-size: 32px;
+  line-height: 26px;
+  font-weight: normal;
+}
+
+#app {
+  width: 700px;
+  display: flex;
+  gap: 10px;
+  margin: 20px auto;
+  flex-direction: row-reverse;
+}
+
+#router.loading::after {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background-image: url("/loading.3f685e01.svg");
+  animation: loading-bar 5s linear infinite;
+  z-index: 999;
+}
+
+@keyframes loading-bar {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 128px 0px;
+  }
+}
+.label .label-content {
+  text-shadow: 0px 2px #C2C3C7;
+  margin: 0px 4px 4px 4px;
+  display: block;
+}
+.label .label-content::after {
+  content: ":";
+}
+
+.input {
+  border: 12px solid transparent;
+  border-image: url("/input.9dc8a623.svg") 12 fill round;
+  background-color: transparent;
+  width: 100%;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: 100ms;
+  transform: translateY(0px);
+}
+.input:hover, .input:active {
+  transform: translateY(2px);
+}
+.input textarea, .input input {
+  margin: -8px;
+  padding: 2px 8px 2px 8px;
+  background-color: transparent;
+  flex: auto;
+  width: 100%;
+  border: none;
+}
+.input textarea:invalid, .input textarea[valid=false], .input input:invalid, .input input[valid=false] {
+  border-image: url("/input-invalid.724b9753.svg") 12 fill round !important;
+}
+.input textarea {
+  resize: vertical;
+  scrollbar-width: none;
+}
+
+.box {
+  display: block;
+  border: 12px solid transparent;
+  border-image: url("/box.1775d594.svg") 12 fill round;
+  background-color: transparent;
+}
+.box .arrow {
+  background-image: url("/arrow-min.3290501f.svg");
+  position: absolute;
+  display: block;
+  background-repeat: no-repeat;
+}
+.box .arrow.arrow-top-left, .box .arrow.arrow-top-right, .box .arrow.arrow-bottom-left, .box .arrow.arrow-bottom-right, .box .arrow.arrow-top, .box .arrow.arrow-bottom, .box .arrow.arrow-left, .box .arrow.arrow-right {
+  width: 12px;
+  height: 10px;
+}
+.box .arrow.arrow-top, .box .arrow.arrow-bottom, .box .arrow.arrow-left, .box .arrow.arrow-right {
+  background-position: 0 -12px;
+}
+.box .arrow.arrow-top {
+  top: -15px;
+  transform: rotate(90deg);
+}
+.box .arrow.arrow-bottom {
+  bottom: -15px;
+  transform: rotate(-90deg);
+}
+.box .arrow.arrow-left {
+  left: -16px;
+}
+.box .arrow.arrow-right {
+  right: -16px;
+  transform: rotate(180deg);
+}
+.box .arrow.arrow-top-left {
+  top: -12px;
+  left: -16px;
+}
+.box .arrow.arrow-top-right {
+  top: -12px;
+  right: -16px;
+  transform: scaleX(-1);
+}
+.box .arrow.arrow-bottom-left {
+  bottom: -12px;
+  left: -16px;
+  transform: scaleY(-1);
+}
+.box .arrow.arrow-bottom-right {
+  bottom: -12px;
+  right: -16px;
+  transform: scaleX(-1) scaleY(-1);
+}
+.box .box {
+  border-image: url("/box-inner.529238bc.svg") 12 fill round;
+  display: inline-block;
+}
+.box .button {
+  padding: 0px 4px 0px 4px;
+  border: 12px solid transparent;
+  border-image: url("/button-normal.49851407.svg") 12 fill round;
+  display: inline-block;
+  background: transparent;
+  cursor: pointer;
+  transition: 100ms;
+  transform: translateY(0px);
+}
+.box .button:hover, .box .button:focus {
+  animation: button-hover 400ms linear infinite;
+}
+.box .button:active {
+  animation: none;
+  transform: translateY(2px);
+  border-image: url("/button-active.29b6f789.svg") 12 fill round;
+}
+.box .button * {
+  cursor: pointer;
+}
+.box .button .button-content {
+  margin: -6px 0px -4px 0px;
+  display: flex;
+  padding: 2px;
+}
+.box .title {
+  text-shadow: 0px 2px #C2C3C7;
+}
+.box .seperator {
+  display: block;
+  border: 2px solid transparent;
+  border-image: url("/seperator.683e97a0.svg") 2 fill round;
+  height: 10px;
+  width: calc(100% + 16px);
+  margin-left: -8px;
+  margin-bottom: 8px;
+  margin-top: 4px;
+}
+
+@keyframes button-hover {
+  0% {
+    transform: translateY(0px);
+  }
+  33% {
+    transform: translateY(-2px);
+  }
+  67% {
+    transform: translateY(2px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+.user-link {
+  text-decoration: none;
+}
+
+.post .user-image-wrap {
+  height: max-content;
+}
+.post .user-image-wrap .user-image-frame {
+  display: block;
+  width: 48px;
+  height: 48px;
+  background-image: url("/circle-transparent.47858319.svg");
+  background-size: cover;
+}
+.post .user-image-wrap .user-image {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  display: inherit;
+  background-size: contain;
+  border-radius: 12px;
+  top: 4px;
+  left: 4px;
+  background-color: #FFF1E8;
+}
+.post .title .datetime {
+  margin-left: auto;
+}
+.post .user .user-alias {
+  color: #29ADFF;
+}
+.post .user .user-alias::before {
+  content: "@";
+}
+.post .post-content {
+  flex: 1;
+  position: relative;
+}
+.post .post-menu {
+  margin-left: auto;
+}
+.post + .post {
+  margin-top: 8px;
+}
+
+#content {
+  flex: 1;
+  height: max-content;
+}
+
+#navigation {
+  width: 200px;
+  gap: 5px;
+  flex-direction: column;
+  height: max-content;
+}
+#navigation .list a {
+  text-decoration: none;
+  width: 100%;
+  transition: 250ms;
+  display: block;
+}
+#navigation .list a span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#navigation .list a + a {
+  margin-top: 4px;
+}
+#navigation .list a:hover {
+  cursor: pointer;
+  box-shadow: 0px 2px #5F574F;
+}
+
+.loading-circle {
+  position: relative;
+  pointer-events: none;
+}
+.loading-circle::after {
+  content: "";
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: calc(50% - 16px);
+  left: calc(50% - 16px);
+  background-image: url("/loading-circle.6a71a2c3.svg");
+  animation: loading-circle 0.5s steps(4) infinite;
+}
+
+@keyframes loading-circle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
