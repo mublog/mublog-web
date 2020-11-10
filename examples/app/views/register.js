@@ -10,7 +10,7 @@ export default async function Register() {
         Title({}, i18n.createAccount),
         Seperator(),
         Form({},
-            Flex({},
+            Flex({ gap: "8px", direction: "row" },
                 Label({ labelText: i18n.alias }, 
                     Input({ placeholder: i18n.alias })
                 ),
@@ -18,7 +18,7 @@ export default async function Register() {
                     Input({ placeholder: i18n.name })
                 )
             ),
-            Flex({},
+            Flex({ gap: "8px", direction: "row" },
                 Label({ labelText: i18n.password }, Input({ placeholder: i18n.password, type: "password" })),
                 Label({ labelText: i18n.password }, Input({ placeholder: i18n.password, type: "password" }))
             ),
