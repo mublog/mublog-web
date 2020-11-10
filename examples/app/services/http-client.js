@@ -18,18 +18,21 @@ export default class HttpClient {
         }
         try {
             let result = await fetch(url, { method, body })
-            let resultContent
+            let results = {
+                status: result.status,
+                content: undefined
+            }
             switch (responseType) {
                 case "JSON":
-                    resultContent = await result.json()
+                    results.content = await result.json()
                     break
                 case "Text":
-                    resultContent = await result.text()
+                    results.content = await result.text()
                     break
                 case "Blob":
-                    resultContent = await result.blob()
+                    results.content = await result.blob()
             }
-            return resultContent
+            return results
         }
         catch (error) {
             console.error(error)
