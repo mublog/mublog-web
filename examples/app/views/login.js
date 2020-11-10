@@ -10,6 +10,7 @@ import * as pattern from "../definitions/pattern.js"
 import { UserService } from "../services/db.js"
 import Navigation from "../components/navigation.js"
 import { loadingCircle } from "../components/decorators.js"
+import Notification from "../components/notifications.js"
 
 export default async function Login() {
     const alias = Input({ 
@@ -46,9 +47,10 @@ export default async function Login() {
                 if (res) {
                     Navigation.signal("refresh")
                     activateRoute("/")
+                    Notification.push(i18n.loginSuccess, i18n.loginSuccessMessage)
                 }
                 else {
-                    alert("fail lol")
+                    Notification.push(i18n.loginFailed, i18n.loginFailedMessage)
                 }
             })
         })
