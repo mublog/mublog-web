@@ -23,7 +23,7 @@ export const Users = [
 export const Posts = [
     {
         id: 1,
-        datePosted: Date.now() - 500,
+        datePosted: Date.now() - 500000,
         dateEdited: Date.now() - 200,
         user: 1,
         likeAmount: 10,
@@ -31,8 +31,8 @@ export const Posts = [
     },
     {
         id: 2,
-        datePosted: Date.now() - 1500,
-        dateEdited: Date.now() - 300,
+        datePosted: Date.now() - 15000,
+        dateEdited: Date.now() - 3000,
         user: 2,
         likeAmount: 420,
         textContent: "awoooooo"
