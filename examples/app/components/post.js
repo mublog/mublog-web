@@ -8,7 +8,8 @@ export default function Post({
     id,
     user: {
         alias,
-        name
+        name,
+        profileImageUrl
     },
     textContent, 
     dateTime
@@ -16,7 +17,7 @@ export default function Post({
     let component = Div({ id: `post-${id}`, className: "post" },
         Flex({ gap: "8px" },
             Route({ href: `/user/${alias}`, className: "user-image-wrap" },
-                Div({ className: "user-image" }).style({ backgroundImage: `url(https://picsum.photos/200)`}),
+                Div({ className: "user-image" }).style({ backgroundImage: `url("${profileImageUrl}")`}),
                 Div({ className: "user-image-frame" })
             ),
             Box({ className: "post-content" },

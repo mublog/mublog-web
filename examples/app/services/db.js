@@ -8,14 +8,14 @@ export const Users = [
         id: 1,
         alias: "iljushka",
         name: "Ilja",
-        image: "https://i.pinimg.com/originals/0f/04/47/0f04471f592c8afcf17c36b89796e63e.png",
+        profileImageUrl: "https://picsum.photos/200",
         password: "passwort"
     },
     {
         id: 2,
         alias: "tani",
         name: "Tani",
-        image: "https://coubsecure-s.akamaihd.net/get/b111/p/channel/cw_avatar/84e7c7c0cc0/787ebe9126b688618d3a0/profile_pic_big_1479058355_IMG_1221.JPG",
+        profileImageUrl: "https://picsum.photos/300",
         password: "passwort"
     }
 ]
