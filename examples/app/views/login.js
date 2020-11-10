@@ -47,10 +47,10 @@ export default async function Login() {
                 if (res) {
                     Navigation.signal("refresh")
                     activateRoute("/")
-                    Notification.push(i18n.loginSuccess, i18n.loginSuccessMessage)
+                    Notification.push(null, i18n.loginSuccessMessage)
                 }
                 else {
-                    Notification.push(i18n.loginFailed, i18n.loginFailedMessage)
+                    Notification.push(null, i18n.loginFailedMessage)
                 }
             })
         })
