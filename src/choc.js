@@ -7,6 +7,11 @@ import Styles from "./helpers/styles.js"
 import Signals from "./helpers/signals.js"
 
 /**
+ * @typedef ChocAttributes
+ * @property {Partial<CSSStyleDeclaration>} [styles]
+ */
+
+/**
  * @template tag, props
  */
 export default class Choc {
@@ -29,7 +34,7 @@ export default class Choc {
     /**
      * @param {Object} param
      * @param {tag & keyof HTMLElementTagNameMap} param.tag 
-     * @param {props} param.props 
+     * @param {props & ChocAttributes} param.props 
      * @param {(Choc<any, any> | string | Element)[]} param.children 
      */
     constructor({ tag, props, children }) {
@@ -182,7 +187,7 @@ export default class Choc {
     /**
      * @template tag, props
      * @param {tag & keyof HTMLElementTagNameMap} tag 
-     * @param {props} props 
+     * @param {props & ChocAttributes} props 
      * @param  {(Choc<any, any> | string | Element)[]} children 
      */
     static create(tag, props = null, ...children) {
