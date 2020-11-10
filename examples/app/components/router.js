@@ -1,7 +1,6 @@
 // @ts-check
 import Extras from "../../../extras.js"
-
-import { Div } from "./generic.js"
+import Choc from "../../../module.js"
 
 import i18n from "../lang/de_DE.js"
 import { UserService, hasUser } from "../services/db.js"
@@ -12,7 +11,7 @@ import Login from "../views/login.js"
 import Register from "../views/register.js"
 import RouteNotFound from "../views/route-not-found.js"
 
-const Router = Extras.chocRouter(Div({ id: "router", className: "loading" }), [
+const Router = Extras.chocRouter(Choc.create("div", { id: "router", className: "loading" }), [
     { 
         path: "", 
         title: i18n.home, 
