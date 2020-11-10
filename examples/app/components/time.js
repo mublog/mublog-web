@@ -3,11 +3,11 @@ import Choc from "../../../module.js"
 import i18n from "../lang/de_DE.js"
 
 export default function Time({ dateTime, ...props }) {
-    let [ interval, innerText ] = elapsed(dateTime)
+    let [ interval, innerText ] = elapsedTime(dateTime)
     let time = Choc.create("time", { ...props, innerText })
     let intervalNum = setInterval(update, interval)
     function update() {
-        let [ _interval, _innerText ] = elapsed(dateTime)
+        let [ _interval, _innerText ] = elapsedTime(dateTime)
         if (_interval !== interval) {
             interval = _interval
         }
@@ -27,7 +27,7 @@ export default function Time({ dateTime, ...props }) {
  * @param {number} dateTime
  * @returns {[any, string]}
  */
-function elapsed(dateTime) {
+export function elapsedTime(dateTime) {
     let sec = Math.floor((Date.now() - dateTime) / 1000), n, int
     n = Math.floor(sec / 31536000), int = 604800000
     if (n == 1) {
