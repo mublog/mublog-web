@@ -9,6 +9,7 @@ import Signals from "./helpers/signals.js"
 /**
  * @typedef ChocAttributes
  * @property {Partial<CSSStyleDeclaration>} [styles]
+ * @property { { [eventName: string]: (node: Choc, event: Event) => void } } [events]
  */
 
 /**

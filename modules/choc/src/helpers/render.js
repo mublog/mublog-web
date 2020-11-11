@@ -10,5 +10,10 @@ export default function render(node) {
     if (node.$propsRef && node.$propsRef.styles) {
         node.$styles.addGroup(node.$propsRef.styles)
     }
+    if (node.$propsRef && node.$propsRef.events) {
+        for (let event in node.$propsRef.events) {
+            node.addEvent(event, node.$propsRef.events[event])
+        }
+    }
     node.append(...node.$childrenRef)
 }
