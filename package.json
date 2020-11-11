@@ -5,7 +5,8 @@
   "scripts": {
     "build-js": "esbuild public/app.js --bundle --minify --target=chrome58,firefox57,safari11 --outfile=public/index.js",
     "build-css": "sass public/styles/main.scss public/styles/main.css",
-    "serve": "npm run build-js; npm run build-css; serve public"
+    "serve": "npm run build-js; npm run build-css; serve public",
+    "dev": "parcel public/dev.html --no-source-maps --no-cache --port 5000"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   ],
   "dependencies": {
     "esbuild": "^0.8.5",
+    "jsrsasign": "^10.0.5",
     "serve": "^11.3.2"
   }
 }
