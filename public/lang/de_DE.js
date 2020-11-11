@@ -15,8 +15,9 @@ export default {
     loginSuccessMessage: "Du bist nun eingeloggt",
     loginFailed: "Einloggen fehlgeschlagen",
     loginFailedMessage: "Benutzer existiert nicht oder inkorrekte Eingaben",
-
     logoutMessage: "Du bist nun abgemeldet",
+
+    showPostPreview: "Vorschau des Posts anzeigen",
 
     routeNotFound: "Seite '$url' nicht gefunden.",
 
