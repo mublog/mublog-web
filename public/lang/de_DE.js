@@ -6,6 +6,7 @@ export default {
     error: "Fehler",
     navigation: "Navigation",
 
+    send: "Senden",
     name: "Name",
     alias: "Benutzername",
     password: "Passwort",
