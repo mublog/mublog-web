@@ -148,7 +148,6 @@ input, textarea {
 
     textarea {
         resize: vertical;
-        scrollbar-width: none;
     }
 }
 
@@ -446,4 +445,27 @@ input, textarea {
 
 .mark-down {
     display: block;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    background-image: url("svg/icons.svg");
+    background-position: 0 0;
+    display: inline-block;
+
+    &.icon-magnifier {
+        background-position: 0 0;
+    }
+}
+
+.toggle-post-preview {
+    position: absolute;
+    bottom: -8px;
+    left: -8px;
+    z-index: 1;
+
+    &:hover, &:focus {
+        animation: button-hover 400ms linear infinite;
+    }
 }

@@ -115,7 +115,6 @@ input::placeholder, textarea::placeholder {
 }
 .input textarea {
   resize: vertical;
-  scrollbar-width: none;
 }
 
 .box {
@@ -361,6 +360,17 @@ input::placeholder, textarea::placeholder {
 }
 .mark-down {
   display: block;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  background-image: url("svg/icons.svg");
+  background-position: 0 0;
+  display: inline-block;
+}
+.icon.icon-magnifier {
+  background-position: 0 0;
 }
 
 /*# sourceMappingURL=main.css.map */
