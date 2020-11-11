@@ -45,3 +45,16 @@ export function activateRoute(href) {
 export function A(props, ...children) {
     return Choc.create("a", props, ...children)
 }
+
+/**
+ * @param {"magnifier"} iconName 
+ * @param {any} props 
+ */
+export function Icon(iconName, props) {
+    let className = "icon icon-" + iconName
+    if (props.className) {
+        className += " " + props.className
+        delete props.className
+    }
+    return Choc.create("i", { ...props, className })
+}
