@@ -71,7 +71,7 @@ input, textarea {
 }
 
 #app {
-    width: 700px;
+    width: 800px;
     display: flex;
     gap: 10px;
     margin: 20px auto;
@@ -240,7 +240,7 @@ input, textarea {
         transform: translateY(0px);
 
         &:hover, &:focus {
-            animation: button-hover 400ms linear infinite;
+            animation: wiggle-vertical 400ms linear infinite;
         }
 
         &:active {
@@ -264,6 +264,12 @@ input, textarea {
         text-shadow: 0px 2px $light-grey;
     }
 
+    /* .footer, .header {
+        .footer-content, .header-content {
+            margin: -4px;
+        }
+    } */
+
     .seperator {
         display: block;
         border: 2px solid transparent;
@@ -276,7 +282,7 @@ input, textarea {
     }
 }
 
-@keyframes button-hover {
+@keyframes wiggle-vertical {
     0% {
         transform: translateY(0px);
     }
@@ -289,10 +295,6 @@ input, textarea {
     100% {
         transform: translateY(0px);
     }
-}
-
-.user-link {
-    text-decoration: none;
 }
 
 .post {
@@ -321,6 +323,15 @@ input, textarea {
     }
 
     .title {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        .user-link {
+            text-decoration: none;
+            margin-left: 4px;
+        }
+
         .datetime {
             margin-left: auto;
         }
@@ -341,8 +352,26 @@ input, textarea {
         position: relative;
     }
 
+    .post-like {
+        &:hover, &:focus {
+            animation: wiggle-vertical 400ms linear infinite;
+        }
+
+        &:hover {
+            background-position: -32px -32px;
+        }
+
+        &:focus, &:active {
+            background-position: -64px -32px;
+        }
+    }
+
     .post-menu {
         margin-left: auto;
+
+        &:hover, &:focus {
+            animation: wiggle-vertical 400ms linear infinite;
+        }
     }
 
     + .post {
@@ -443,18 +472,50 @@ input, textarea {
 }
 
 .mark-down {
-    display: block;
+    display: block !important;
 }
 
 .icon {
     width: 32px;
     height: 32px;
     background-image: url("svg/icons.svg");
-    background-position: 0 0;
+    background-position: 0px 0px;
     display: inline-block;
 
     &.icon-magnifier {
-        background-position: 0 0;
+        background-position: 0px 0px;
+    }
+
+    &.icon-clock {
+        background-position: -32px 0px;
+    }
+
+    &.icon-calendar {
+        background-position: -64px 0px;
+    }
+
+    &.icon-menu-kebab {
+        background-position: -96px 0px;
+    }
+
+    &.icon-menu-meatballs {
+        background-position: -128px 0px;
+    }
+
+    &.icon-menu-bento {
+        background-position: -162px 0px;
+    }
+
+    &.icon-heart-grey {
+        background-position: 0px -32px;
+    }
+
+    &.icon-heart-pink {
+        background-position: -32px -32px;
+    }
+
+    &.icon-heart-red {
+        background-position: -64px -32px;
     }
 }
 
@@ -465,6 +526,6 @@ input, textarea {
     z-index: 1;
 
     &:hover, &:focus {
-        animation: button-hover 400ms linear infinite;
+        animation: wiggle-vertical 400ms linear infinite;
     }
 }
