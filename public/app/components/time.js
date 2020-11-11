@@ -1,6 +1,6 @@
 // @ts-check
 import Choc from "../../../modules/choc/module.js"
-import i18n from "../lang/de_DE.js"
+import i18n from "../../lang/de_DE.js"
 
 export default function Time({ dateTime, ...props }) {
     let [ interval, innerText ] = elapsedTime(dateTime)

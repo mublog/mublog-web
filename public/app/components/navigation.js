@@ -1,5 +1,5 @@
 // @ts-check
-import i18n from "../lang/de_DE.js"
+import i18n from "../../lang/de_DE.js"
 
 import { Div, A, Route, activateRoute } from "./generic.js"
 import { isComment, loadingCircle } from "./decorators.js"

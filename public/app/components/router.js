@@ -2,7 +2,7 @@
 import Extras from "../../../modules/choc/extras.js"
 import Choc from "../../../modules/choc/module.js"
 
-import i18n from "../lang/de_DE.js"
+import i18n from "../../lang/de_DE.js"
 import { UserService, hasUser } from "../services/db.js"
 
 import Home from "../views/home.js"

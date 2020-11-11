@@ -1,5 +1,5 @@
 // @ts-check
-import i18n from "../lang/de_DE.js"
+import i18n from "../../lang/de_DE.js"
 
 import Box, { Seperator, Title } from "../components/box.js"
 

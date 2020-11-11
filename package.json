@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build-js": "esbuild public/app.js --bundle --minify --target=chrome58,firefox57,safari11 --outfile=public/index.js",
-    "build-css": "sass public/app/styles/main.scss public/app/styles/main.css",
+    "build-css": "sass public/styles/main.scss public/styles/main.css",
     "serve": "npm run build-js; npm run build-css; serve public"
   },
   "repository": {
@@ -26,7 +26,6 @@
   ],
   "dependencies": {
     "esbuild": "^0.8.5",
-    "jsrsasign": "^10.0.5",
     "serve": "^11.3.2"
   }
 }
