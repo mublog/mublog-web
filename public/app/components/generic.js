@@ -47,10 +47,18 @@ export function A(props, ...children) {
 }
 
 /**
- * @param {"magnifier"} iconName 
+ * @typedef {"menu-kebab" | "menu-meatballs" | "menu-bento"} MenuIcons
+ */
+
+/**
+ * @typedef {"heart-grey" | "heart-pink" | "heart-red"} HeartIcons
+ */
+
+/**
+ * @param {"magnifier" | "clock" | "calendar" | HeartIcons | MenuIcons} iconName 
  * @param {any} props 
  */
-export function Icon(iconName, props) {
+export function Icon(iconName, props = {}) {
     let className = "icon icon-" + iconName
     if (props.className) {
         className += " " + props.className

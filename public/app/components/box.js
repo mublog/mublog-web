@@ -84,13 +84,41 @@ export function Seperator() {
  * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  * @returns {import("../../../modules/choc/module").default<"div", props & BoxProperties>}
  */
-export function Title({ ...props }, ...children) {
-    let className = "title"
+export function Title(props, ...children) {
+    let className = "title header-content"
     if (props.className) {
         className += " " + props.className
         delete props.className
     }
     return Choc.create("div", { ...props, className }, ...children)
+}
+
+/** 
+ * @template props
+ * @param {Properties<props>} props
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ */
+export function Header(props, ...children) {
+    return Choc.create("div", { className: "header" },
+        Title(props, ...children),
+        Seperator()
+    )
+}
+
+/** 
+ * @template props
+ * @param {Properties<props>} props
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ */
+export function Footer(props, ...children) {
+    let className = "footer-content"
+    if (props.className) {
+        className += " " + props.className
+    }
+    return Choc.create("div", { className: "footer" },
+        Seperator(),
+        Choc.create("div", { ...props, className }, ...children)
+    )
 }
 
 /** 
