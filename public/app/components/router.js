@@ -33,7 +33,7 @@ const Router = Extras.chocRouter(Choc.create("div", { id: "router", className: "
         path: "user/:alias", 
         title: ({ alias }) => `.${alias}//`, 
         component: User,
-        activates: [ hasUser ]
+        //activates: [ hasUser ]
     },
     { 
         path: "**", 
