@@ -1,15 +1,15 @@
 // @ts-check
-import Choc from "../../../module.js"
+import Choc from "../../../modules/choc/module.js"
 
-/** 
+/**
  * @template props
  * @param {props} props
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(Choc | string | Element)} children
  */
 export default function Form({ ...props }, ...children) {
     let submitCallbacks = []
     const form = Choc.create("form", props, ...children).mixin({
-        /** @param {(node: import("../../../module").default<"form", props>, event: Event) => any} callback  */
+        /** @param {(node: Choc<"form", props>, event: Event) => any} callback  */
         onSubmit(callback) {
             submitCallbacks.push(callback)
             return form

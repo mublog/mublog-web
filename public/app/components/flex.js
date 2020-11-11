@@ -1,5 +1,5 @@
 // @ts-check
-import Choc from "../../../module.js"
+import Choc from "../../../modules/choc/module.js"
 
 /**
  * @template T
@@ -16,7 +16,7 @@ import Choc from "../../../module.js"
 /**
  * @template props
  * @param {Properties<props> & FlexOptions} props 
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(Choc | string | Element)} children
  */
 export default function Flex(props, ...children) {
     /**

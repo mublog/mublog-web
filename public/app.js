@@ -1,5 +1,5 @@
 // @ts-check
-import Choc from "../module.js"
+import Choc from "../modules/choc/module.js"
 import Router from "./app/components/router.js"
 import Navigation from "./app/components/navigation.js"
 

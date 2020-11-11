@@ -1,5 +1,5 @@
 // @ts-check
-import Choc from "../../../module.js"
+import Choc from "../../../modules/choc/module.js"
 
 /**
  * @template T
@@ -13,14 +13,14 @@ import Choc from "../../../module.js"
 
 /**
  * @template props
- * @typedef {import("../../../module").default<"div", props & BoxProperties>} Box
+ * @typedef {import("../../../modules/choc/module").default<"div", props & BoxProperties>} Box
  */
 
 /** 
  * @template props
  * @param {Properties<props>} props
- * @param {...(import("../../../module").default | string | Element)} children
- * @returns {import("../../../module").default<"div", props & BoxProperties>}
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ * @returns {import("../../../modules/choc/module").default<"div", props & BoxProperties>}
  */
 export default function Box({ ...props }, ...children) {
     let className = "box"
@@ -81,8 +81,8 @@ export function Seperator() {
 /** 
  * @template props
  * @param {Properties<props>} props
- * @param {...(import("../../../module").default | string | Element)} children
- * @returns {import("../../../module").default<"div", props & BoxProperties>}
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ * @returns {import("../../../modules/choc/module").default<"div", props & BoxProperties>}
  */
 export function Title({ ...props }, ...children) {
     let className = "title"
@@ -96,7 +96,7 @@ export function Title({ ...props }, ...children) {
 /** 
  * @template props
  * @param {Properties<props & { labelText: string }>} props
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  */
 export function Label(props, ...children) {
     let className = "label"
@@ -144,7 +144,7 @@ export function Textarea(props) {
 /** 
  * @template props
  * @param {Properties<props>} props
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  */
 export function Button(props, ...children) {
     let className = "button"

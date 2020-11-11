@@ -1,5 +1,5 @@
 // @ts-check
-import Choc from "../../../module.js"
+import Choc from "../../../modules/choc/module.js"
 import i18n from "../lang/de_DE.js"
 
 export default function Time({ dateTime, ...props }) {
@@ -81,15 +81,15 @@ export function elapsedTime(dateTime) {
 }
 
 /**
- * @param {string} text 
- * @param {number} time 
+ * @param {string} text
+ * @param {number} time
  */
 function replace(text, time) {
     return text.replace("$n", time + "")
 }
 
 /**
- * @param {import("../../../module").default} node 
+ * @param {Choc} node
  */
 function onScreen(node) {
     if (!(node.nativeElement instanceof Element)) {

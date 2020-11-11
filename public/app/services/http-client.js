@@ -5,10 +5,10 @@ export default class HttpClient {
      * @param {string} url
      * @param {string} method
      * @param {Object} [options]
-     * @param {any} options.body
-     * @param {"JSON" | "Text" | "Blob"} options.responseType
+     * @param {any} [options.body]
+     * @param {"JSON" | "Text" | "Blob"} [options.responseType]
      */
-    static async fetch(url, method, options) {
+    static async fetch(url, method, options = {}) {
         let { body, responseType } = options
         if (body) {
             body = JSON.stringify(body)

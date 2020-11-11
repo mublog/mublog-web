@@ -2,7 +2,7 @@
 
 /**
  * @template tag, props, com
- * @param {com & import("../../../module").default<tag, props>} com 
+ * @param {com & import("../../../modules/choc/module").default<tag, props>} com 
  */
 export function isComment(com) {
     return {
@@ -22,7 +22,7 @@ export function isComment(com) {
 /**
  * Adds Signal<"while", () => any> to the component.\
  * @template component
- * @param {component & import("../../../module").default} com
+ * @param {component & import("../../../modules/choc/module").default} com
  */
 export function loadingCircle(com) {
     return com.mixin({

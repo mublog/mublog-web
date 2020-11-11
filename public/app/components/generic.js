@@ -1,10 +1,10 @@
 // @ts-check
-import Choc from "../../../module.js"
+import Choc from "../../../modules/choc/module.js"
 
 /**
  * @template props
  * @param {props} props 
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  */
 export function Div(props, ...children) {
     return Choc.create("div", props, ...children)
@@ -13,7 +13,7 @@ export function Div(props, ...children) {
 /**
  * @template props
  * @param {props} props 
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  */
 export function Span(props, ...children) {
     return Choc.create("span", props, ...children)
@@ -23,7 +23,7 @@ const aEvent = new PopStateEvent("popstate")
 /**
  * @template props
  * @param {props & { href: string }} props 
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  */
 export function Route(props, ...children) {
     return Choc.create("a", props, ...children).addEvent("click", (node, event) => {
@@ -40,7 +40,7 @@ export function activateRoute(href) {
 /**
  * @template props
  * @param {props} props 
- * @param {...(import("../../../module").default | string | Element)} children
+ * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  */
 export function A(props, ...children) {
     return Choc.create("a", props, ...children)

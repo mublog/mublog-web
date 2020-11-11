@@ -1,6 +1,6 @@
 // @ts-check
-import Extras from "../../../extras.js"
-import Choc from "../../../module.js"
+import Extras from "../../../modules/choc/extras.js"
+import Choc from "../../../modules/choc/module.js"
 
 import i18n from "../lang/de_DE.js"
 import { UserService, hasUser } from "../services/db.js"
