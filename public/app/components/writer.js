@@ -1,5 +1,5 @@
 // @ts-check
-import Box, { Seperator, Textarea, Button } from "./box.js"
+import Box, { Seperator, Textarea, Button, Arrow, Footer } from "./box.js"
 import Form from "./form.js"
 import Flex from "./flex.js"
 import i18n from "../../lang/de_DE.js"
@@ -16,6 +16,7 @@ export default function Writer() {
         styles: { display: "none" }
     },
         preview,
+        Arrow("top", 50),
         Seperator()
     )
     const magnifier = Icon("magnifier", { 
@@ -25,10 +26,11 @@ export default function Writer() {
     const component = Box({ className: "writer" },
         Form({}, 
             Div(null, textArea, magnifier),
-            Seperator(),
-            previewWrapper,
-            Flex({ gap: "8px" },
-                Button({ type: "submit" }, i18n.send)
+            Footer({},
+                previewWrapper,
+                Flex({ gap: "8px" },
+                    Button({ type: "submit" }, i18n.send)
+                )
             )
         )       
     )
@@ -44,8 +46,9 @@ export default function Writer() {
     }
 
     function togglePreview() {
-        previewWrapper.style({ display: previewWrapper.get("_visible") === false ? "unset" : "none" })
-        previewWrapper.set("_visible", previewWrapper.get("_visible") === false ? true : false)
+        let visibleState = previewWrapper.get("_visible")
+        previewWrapper.style({ display: !visibleState ? "unset" : "none" })
+        previewWrapper.set("_visible", !visibleState ? true : false)
     }
     return component
 }

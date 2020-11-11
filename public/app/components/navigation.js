@@ -3,7 +3,7 @@ import i18n from "../../lang/de_DE.js"
 
 import { Div, A, Route, activateRoute } from "./generic.js"
 import { isComment, loadingCircle } from "./decorators.js"
-import Box, { Seperator, Title } from "./box.js"
+import Box, { Header, Seperator, Title } from "./box.js"
 import Notifications from "../components/notifications.js"
 
 import { UserService } from "../services/db.js"
@@ -20,8 +20,7 @@ const Navigation = (function() {
     }
 
     let component = Box({ id: "navigation" },
-        Title({ }, i18n.navigation),
-        Seperator(),
+        Header({}, i18n.navigation),
         loadingCircle(Div({ key: "list", className: "list" }))
     )
 

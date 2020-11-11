@@ -19,7 +19,7 @@ export default async function Home() {
         }).signal("refresh")
     ).addSignal("refresh", node => node.child(0).signal("refresh"))
 
-    setInterval(() => component.signal("refresh"), 60000)
+    //setInterval(() => component.signal("refresh"), 60000)
 
     return component
 }
