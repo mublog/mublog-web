@@ -416,6 +416,7 @@ input, textarea {
     width: 300px;
     max-height: 100%;
     overflow: hidden;
+    pointer-events: none;
 
     .notification-wrapper {
         display: flex;
@@ -441,4 +442,8 @@ input, textarea {
         opacity: 1;
         transform: translateX(0px);
     }
+}
+
+.mark-down {
+    display: block;
 }

@@ -334,6 +334,7 @@ input::placeholder, textarea::placeholder {
   width: 300px;
   max-height: 100%;
   overflow: hidden;
+  pointer-events: none;
 }
 #notifications .notification-wrapper {
   display: flex;
@@ -357,6 +358,9 @@ input::placeholder, textarea::placeholder {
     opacity: 1;
     transform: translateX(0px);
   }
+}
+.mark-down {
+  display: block;
 }
 
 /*# sourceMappingURL=main.css.map */
