@@ -1,9 +1,9 @@
 // @ts-check
-import Box, { Seperator, Title, Arrow, Header, Footer } from "../components/box.js"
+import Box, { Arrow, Header, Footer } from "../components/box.js"
 import Flex from "../components/flex.js"
 import Time from "../components/time.js"
 import { Div, Span, Route, Icon } from "../components/generic.js"
-import Choc from "../../../modules/choc/module.js"
+import translateMarkDown from "../helpers/mark-down.js"
 
 export default function Post({ 
     id,
@@ -36,7 +36,7 @@ export default function Post({
                     Icon("calendar")  
                 ),
                 Div({ className: "user-content" },
-                    Box({ className: "text-content" }, textContent)
+                    Box({ className: "text-content", innerHTML: translateMarkDown(textContent) })
                 ),
                 Footer({ },
                     Flex({ gap: "8px" },

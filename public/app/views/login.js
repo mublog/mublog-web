@@ -43,7 +43,7 @@ export default async function Login() {
             )
         ).onSubmit(async (node, event) => {
             loadingCircle(node).while(async () => {
-                let res = await UserService.login(alias.ref.value, password.ref.value)
+                let res = await UserService.login(alias.value, password.value)
                 if (res) {
                     Navigation.signal("refresh")
                     activateRoute("/")

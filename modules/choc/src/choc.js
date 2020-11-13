@@ -180,7 +180,14 @@ export default class Choc {
      * @returns {this & mixin}
      */
     mixin(mixin) {
-        Object.assign(this, mixin)
+        const props = Object.keys(mixin)
+        for (const prop of props) {
+            const descriptor = Object.getOwnPropertyDescriptor(mixin, prop)
+            Object.defineProperty(this, prop, descriptor)
+        }
+
+
+        //Object.assign(this, mixin)
         // @ts-ignore
         return this
     }

@@ -149,6 +149,12 @@ export function Input(props) {
     return Choc.create("div", { className: "input" }, input).mixin({
         get ref() {
             return input.nativeElement
+        },
+        get value() {
+            return input.nativeElement.value
+        },
+        set value(newValue) {
+            input.nativeElement.value = newValue
         }
     })
 }
@@ -165,6 +171,12 @@ export function Textarea(props) {
         },
         get node() {
             return textarea
+        },
+        get value() {
+            return textarea.nativeElement.value
+        },
+        set value(newValue) {
+            textarea.nativeElement.value = newValue
         }
     })
 }

@@ -353,16 +353,17 @@ input, textarea {
     }
 
     .post-like {
-        &:hover, &:focus {
+        /* &:hover, &:focus {
             animation: wiggle-vertical 400ms linear infinite;
         }
 
         &:hover {
             background-position: -32px -32px;
-        }
+        } */
 
         &:focus, &:active {
-            background-position: -64px -32px;
+            background-image: url("svg/heart-animation.svg");
+            animation: heart-animation 1s steps(6) 1;
         }
     }
 
@@ -376,6 +377,15 @@ input, textarea {
 
     + .post {
         margin-top: 8px;
+    }
+}
+
+@keyframes heart-animation {
+    from {
+        background-position: 0px 0px;
+    }
+    to {
+        background-position: -192px 0px;
     }
 }
 

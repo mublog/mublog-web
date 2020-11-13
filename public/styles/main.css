@@ -46,11 +46,10 @@ input::placeholder, textarea::placeholder {
   font-family: battlenet;
   font-size: 32px;
   line-height: 26px;
-  font-weight: normal;
 }
 
 #app {
-  width: 700px;
+  width: 800px;
   display: flex;
   gap: 10px;
   margin: 20px auto;
@@ -122,6 +121,11 @@ input::placeholder, textarea::placeholder {
   border: 12px solid transparent;
   border-image: url("svg/box.svg") 12 fill round;
   background-color: transparent;
+  /* .footer, .header {
+      .footer-content, .header-content {
+          margin: -4px;
+      }
+  } */
 }
 .box .arrow {
   background-image: url("svg/arrow-min.svg");
@@ -185,7 +189,7 @@ input::placeholder, textarea::placeholder {
   transform: translateY(0px);
 }
 .box .button:hover, .box .button:focus {
-  animation: button-hover 400ms linear infinite;
+  animation: wiggle-vertical 400ms linear infinite;
 }
 .box .button:active {
   animation: none;
@@ -214,7 +218,7 @@ input::placeholder, textarea::placeholder {
   margin-top: 4px;
 }
 
-@keyframes button-hover {
+@keyframes wiggle-vertical {
   0% {
     transform: translateY(0px);
   }
@@ -228,10 +232,6 @@ input::placeholder, textarea::placeholder {
     transform: translateY(0px);
   }
 }
-.user-link {
-  text-decoration: none;
-}
-
 .post .user-image-wrap {
   height: max-content;
 }
@@ -253,6 +253,15 @@ input::placeholder, textarea::placeholder {
   left: 4px;
   background-color: #FFF1E8;
 }
+.post .title {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.post .title .user-link {
+  text-decoration: none;
+  margin-left: 4px;
+}
 .post .title .datetime {
   margin-left: auto;
 }
@@ -266,8 +275,20 @@ input::placeholder, textarea::placeholder {
   flex: 1;
   position: relative;
 }
+.post .post-like:hover, .post .post-like:focus {
+  animation: wiggle-vertical 400ms linear infinite;
+}
+.post .post-like:hover {
+  background-position: -32px -32px;
+}
+.post .post-like:focus, .post .post-like:active {
+  background-position: -64px -32px;
+}
 .post .post-menu {
   margin-left: auto;
+}
+.post .post-menu:hover, .post .post-menu:focus {
+  animation: wiggle-vertical 400ms linear infinite;
 }
 .post + .post {
   margin-top: 8px;
@@ -359,18 +380,52 @@ input::placeholder, textarea::placeholder {
   }
 }
 .mark-down {
-  display: block;
+  display: block !important;
 }
 
 .icon {
   width: 32px;
   height: 32px;
   background-image: url("svg/icons.svg");
-  background-position: 0 0;
+  background-position: 0px 0px;
   display: inline-block;
 }
 .icon.icon-magnifier {
-  background-position: 0 0;
+  background-position: 0px 0px;
+}
+.icon.icon-clock {
+  background-position: -32px 0px;
+}
+.icon.icon-calendar {
+  background-position: -64px 0px;
+}
+.icon.icon-menu-kebab {
+  background-position: -96px 0px;
+}
+.icon.icon-menu-meatballs {
+  background-position: -128px 0px;
+}
+.icon.icon-menu-bento {
+  background-position: -162px 0px;
+}
+.icon.icon-heart-grey {
+  background-position: 0px -32px;
+}
+.icon.icon-heart-pink {
+  background-position: -32px -32px;
+}
+.icon.icon-heart-red {
+  background-position: -64px -32px;
+}
+
+.toggle-post-preview {
+  position: absolute;
+  bottom: -8px;
+  left: -8px;
+  z-index: 1;
+}
+.toggle-post-preview:hover, .toggle-post-preview:focus {
+  animation: wiggle-vertical 400ms linear infinite;
 }
 
 /*# sourceMappingURL=main.css.map */
