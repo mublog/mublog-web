@@ -1,5 +1,5 @@
 // @ts-check
-import Doc, { useStyles } from "../../../modules/doc/module.js"
+import Doc, { useStyleGroup } from "../../../modules/doc/module.js"
 
 /**
  * @template T
@@ -18,9 +18,6 @@ import Doc, { useStyles } from "../../../modules/doc/module.js"
  * @param {...any} children
  */
 export default function Flex(props, ...children) {
-    /**
-     * @type {Partial<CSSStyleDeclaration>}
-     */
     let styles = {
         display: "flex"
     }
@@ -40,5 +37,5 @@ export default function Flex(props, ...children) {
         delete props.alignItems
     }
     // @ts-expect-error
-    return useStyles(Doc.createNode("div", props, ...children), styles)
+    return useStyleGroup(Doc.createNode("div", props, ...children), styles)
 }

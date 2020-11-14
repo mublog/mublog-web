@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "build-js": "esbuild public/app.js --bundle --minify --target=chrome58,firefox57,safari11 --outfile=public/index.js",
+    "build-js": "esbuild public/app.js --loader:.js=jsx --jsx-factory=Doc.createNode --bundle --minify --target=chrome58,firefox57,safari11 --outfile=public/index.js",
     "build-css": "sass public/styles/main.scss public/styles/main.css",
     "serve": "npm run build-js; npm run build-css; serve public",
     "dev": "parcel public/dev.html --no-source-maps --no-cache --port 5000"

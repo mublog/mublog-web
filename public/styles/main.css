@@ -247,11 +247,12 @@ input::placeholder, textarea::placeholder {
   width: 40px;
   height: 40px;
   display: inherit;
-  background-size: contain;
+  background-size: cover;
   border-radius: 12px;
   top: 4px;
   left: 4px;
   background-color: #FFF1E8;
+  background-position: 50% 50%;
 }
 .post .title {
   display: flex;
@@ -275,14 +276,18 @@ input::placeholder, textarea::placeholder {
   flex: 1;
   position: relative;
 }
-.post .post-like:hover, .post .post-like:focus {
-  animation: wiggle-vertical 400ms linear infinite;
-}
-.post .post-like:hover {
-  background-position: -32px -32px;
+.post .post-like {
+  /* &:hover, &:focus {
+      animation: wiggle-vertical 400ms linear infinite;
+  }
+
+  &:hover {
+      background-position: -32px -32px;
+  } */
 }
 .post .post-like:focus, .post .post-like:active {
-  background-position: -64px -32px;
+  background-image: url("svg/heart-animation.svg");
+  animation: heart-animation 1s steps(6) 1;
 }
 .post .post-menu {
   margin-left: auto;
@@ -294,6 +299,14 @@ input::placeholder, textarea::placeholder {
   margin-top: 8px;
 }
 
+@keyframes heart-animation {
+  from {
+    background-position: 0px 0px;
+  }
+  to {
+    background-position: -192px 0px;
+  }
+}
 #content {
   flex: 1;
   height: max-content;

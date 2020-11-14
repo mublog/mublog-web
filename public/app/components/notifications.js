@@ -1,6 +1,6 @@
 // @ts-check
 import Doc, { useStyles, useMixin, unmount, useEvent } from "../../../modules/doc/module.js"
-import Box, { Arrow, Seperator, Title } from "./box.js"
+import Box, { Arrow, Header } from "./box.js"
 
 /**
  * @param {string} title 
@@ -14,10 +14,7 @@ function NotificationItem(title, message, options = { timeout: 5000 }) {
 
     const View = Box({ className: "notification" },
         Arrow("top-right"),
-        Doc.createNode("div", { className: "notification-title" },
-            Title({ }, title || ""),
-            Seperator()
-        ),
+        Header({ className: "notification-title" }, title || ""),
         message
     )
     useStyles(View, { animation: "notification-slide 250ms ease-in-out 0ms 1 normal none" })
@@ -51,9 +48,10 @@ function NotificationItem(title, message, options = { timeout: 5000 }) {
 }
 
 const Notifications = (function() {
-    return useMixin(Doc.createNode("div", { id: "notifications" }, 
-        Doc.createNode("div", { className: "notification-wrapper" } )
-    ), {
+    const View = Doc.createNode("div", { id: "notifications" }, 
+        Doc.createNode("div", { className: "notification-wrapper" })
+    )
+    return useMixin(View, {
         /**
          * @param {string} title 
          * @param {string} message 
@@ -62,7 +60,8 @@ const Notifications = (function() {
          * @param {boolean} [options.removeOnClick]
          */
         push(title, message, options) {
-            Notifications.querySelector(".notification-wrapper").appendChild(NotificationItem(title, message, options))
+            
+            Doc.query(View, "div", ".notification-wrapper").appendChild(NotificationItem(title, message, options))
         }
     })
 })()

@@ -14,7 +14,9 @@ export default function Time({ dateTime, ...props }) {
         let [ newInterval, newInnerText ] = elapsedTime(dateTime)
         Interval.value = newInterval
         if (onScreen(View)) {
-            InnerText.value = newInnerText
+            if (InnerText.value !== newInnerText) {
+                InnerText.value = newInnerText
+            }
         }
         if (!View.isConnected) {
             clearInterval(interval)

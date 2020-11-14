@@ -9,11 +9,7 @@ import RouteNotFound from "../views/route-not-found.js"
 import * as db from "../services/fakedb.js"
 
 const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className: "loading" }), [
-    { 
-        path: "", 
-        title: i18n.home, 
-        component: Home
-    },
+    {  path: "",  title: i18n.home, component: Home },
     { 
         path: "login/?*", 
         title: i18n.login, 
@@ -30,13 +26,13 @@ const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className:
         path: "user/:alias", 
         title: ({ alias }) => `.${alias}//`, 
         component: User,
-        activates: [ ({ alias }) => !!db.Users.value.find(user => user.alias === alias) ]
+        activates: [ 
+            () => db.User.value.loggedIn === true,
+            ({ alias }) => !!db.Users.value.find(user => user.alias === alias),
+            () => new Promise(resolve => setTimeout(() => resolve(true), 1000))
+        ]
     },
-    { 
-        path: "**", 
-        title: i18n.error, 
-        component: RouteNotFound
-    }
+    { path: "**", title: i18n.error, component: RouteNotFound }
 ])
 
 Router.onLoad(() => Router.classList.add("loading"))

@@ -17,10 +17,20 @@ export default {
     loginFailedMessage: "Benutzer existiert nicht oder inkorrekte Eingaben",
     logoutMessage: "Du bist nun abgemeldet",
 
+    registerSuccess: "Erfolgreich registriert. Du kannst dich nun einloggen.",
+    registerFailed: "Entweder existiert der Benutzer bereits oder falsche Eingaben getätigt.",
+    passwordsNotSame: "Passwörter stimmen nicht überein",
+
     showPostPreview: "Vorschau des Posts anzeigen",
 
     routeNotFound: "Seite '$url' nicht gefunden.",
 
+    messageTooShort: "Die Nachricht ist zu kurz",
+    messageTooLong: "Die Nachricht hat die maximale Länge überschritten",
+    messageWrongLength: "Die Nachricht hat eine inkorrekte Länge",
+    messageCriteriaError: "Die Nachricht konnte die gegebenen Kriterien nicht erfüllen",
+
+    alreadyAccount: "Du hast bereits ein Konto?",
     enterAccount: "Logge dich in dein Konto ein",
     createAccount: "Erstelle ein Konto",
     loginReason: "Dein Grund zum Einloggen",

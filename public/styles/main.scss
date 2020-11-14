@@ -45,7 +45,13 @@ body, html {
     width: 100%;
 }
 
-input, textarea {
+*, .cursor-default {
+    cursor: url("svg/cursor-default.svg") 3 3, default !important;
+}
+
+input, textarea, .cursor-text {
+    cursor: url("svg/cursor-text.svg") 3 3, default !important;
+
     &:invalid {
         box-shadow: none;
     }
@@ -55,8 +61,23 @@ input, textarea {
     }
 }
 
+a, button, .cursor-pointer {
+    cursor: url("svg/cursor-hover.svg") 3 3, default !important;
+}
+
+:active {
+    cursor: url("svg/cursor-active.svg") 3 3, default !important;
+}
+
+.cursor-disabled {
+    cursor: url("svg/cursor-disabled.svg") 3 3, default !important;
+}
+
+.cursor-active, :active {
+    cursor: url("svg/cursor-active.svg") 3 3, default !important;
+}
+
 * {
-    cursor: url("svg/cursor.svg") 2 2, default !important;
     box-sizing: border-box;
     outline: none;
     padding: 0;
@@ -74,7 +95,7 @@ input, textarea {
     width: 800px;
     display: flex;
     gap: 10px;
-    margin: 20px auto;
+    margin: 16px auto;
     flex-direction: row-reverse;
 }
 
@@ -231,8 +252,8 @@ input, textarea {
 
     .button {
         padding: 0px 4px 0px 4px;
-        border: 12px solid transparent;
-        border-image: url("svg/button-normal.svg") 12 fill round;
+        border: 15px solid transparent;
+        border-image: url("svg/button-normal.svg") 15 fill round;
         display: inline-block;
         background: transparent;
         cursor: pointer;
@@ -246,7 +267,7 @@ input, textarea {
         &:active {
             animation: none;
             transform: translateY(2px);
-            border-image: url("svg/button-active.svg") 12 fill round;
+            border-image: url("svg/button-active.svg") 15 fill round;
         }
     
         * {
@@ -254,7 +275,7 @@ input, textarea {
         }
 
         .button-content {
-            margin: -6px 0px -4px 0px;
+            margin: -8px -2px -6px -2px;
             display: flex;
             padding: 2px;
         } 
@@ -263,12 +284,6 @@ input, textarea {
     .title {
         text-shadow: 0px 2px $light-grey;
     }
-
-    /* .footer, .header {
-        .footer-content, .header-content {
-            margin: -4px;
-        }
-    } */
 
     .seperator {
         display: block;
@@ -354,17 +369,11 @@ input, textarea {
     }
 
     .post-like {
-        /* &:hover, &:focus {
-            animation: wiggle-vertical 400ms linear infinite;
-        }
-
-        &:hover {
-            background-position: -32px -32px;
-        } */
-
-        &:focus, &:active {
-            background-image: url("svg/heart-animation.svg");
-            animation: heart-animation 1s steps(6) 1;
+        &.clickable {
+            &:hover {
+                animation: wiggle-vertical 400ms linear infinite;
+                background-position: -32px -32px;
+            }
         }
     }
 

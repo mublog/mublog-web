@@ -1,27 +1,9 @@
 // @ts-check
-import Doc, { useEvent } from "../../../modules/doc/module.js"
-
-const aEvent = new PopStateEvent("popstate")
-
-/**
- * @param {any} props 
- * @param {...any} children
- */
-export function Route(props, ...children) {
-    return useEvent(Doc.createNode("a", props, ...children), "click", (event) => {
-        event.preventDefault()
-        if (props.href.isState) {
-            activateRoute(props.href.value)
-        }
-        else {
-            activateRoute(props.href)
-        }
-    })
-}
+import Doc, { useMixin } from "../../../modules/doc/module.js"
 
 export function activateRoute(href) {
-    history.pushState(null, null, href)
-    dispatchEvent(aEvent)
+    history.pushState(null, "", href)
+    dispatchEvent(new PopStateEvent("popstate"))
 }
 
 
@@ -42,12 +24,23 @@ export function activateRoute(href) {
  */
 export function Icon(props) {
     let className = "icon icon-"
+    let iconName
     if (props.name) {
+        iconName = props.name
         className += props.name
     }
     if (props.className) {
         className += " " + props.className
         delete props.className
     }
-    return Doc.createNode("i", { ...props, className })
+
+    const View = Doc.createNode("i", { ...props, className })
+
+    return useMixin(View, {
+        /** @param {AllIcons} name */
+        set iconName(name) {
+            View.classList.replace(`icon-${iconName}`, `icon-${name}`)
+            iconName = name
+        }
+    })
 }

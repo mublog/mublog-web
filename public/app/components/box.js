@@ -5,7 +5,7 @@ import Doc, { useEvent, useMixin, useStyles } from "../../../modules/doc/module.
  * @param {any} props
  * @param {...any} children
  */
-export default function Box({ ...props }, ...children) {
+export default function Box(props, ...children) {
     let className = "box"
     if (props.className) {
         className += " " + props.className
@@ -68,8 +68,13 @@ export function Title(props, ...children) {
  * @param {...any} children
  */
 export function Header(props, ...children) {
-    return Doc.createNode("div", { className: "header" },
-        Title(props, ...children),
+    let className = "header"
+    if (props.className) {
+        className += " " + props.className
+        delete props.className
+    }
+    return Doc.createNode("div", { ...props, className },
+        Title({}, ...children),
         Seperator()
     )
 }
@@ -91,7 +96,7 @@ export function Footer(props, ...children) {
 
 /** 
  * @param {{ labelText: string, [key: string]: any }} props
- * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ * @param {...any} children
  */
 export function Label(props, ...children) {
     let className = "label"
@@ -105,42 +110,6 @@ export function Label(props, ...children) {
         Doc.createNode("label", { className: "label-content" }, labelText),
         ...children
     )
-}
-
-/** 
- * @param {any} props
- */
-export function Input(props) {
-    let input = Doc.createNode("input", props)
-    return useMixin(Doc.createNode("div", { className: "input" }, input), {
-        get ref() {
-            return input
-        },
-        get value() {
-            return input.value
-        },
-        set value(newValue) {
-            input.value = newValue
-        }
-    })
-}
-
-/** 
- * @param {any} props
- */
-export function Textarea(props) {
-    let textarea = Doc.createNode("textarea", props)
-    return useMixin(Doc.createNode("div", { className: "input" }, textarea), {
-        get ref() {
-            return textarea
-        },
-        get value() {
-            return textarea.value
-        },
-        set value(newValue) {
-            textarea.value = newValue
-        }
-    })
 }
 
 /** 

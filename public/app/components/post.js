@@ -1,10 +1,10 @@
 // @ts-check
-import Doc, { useState, useStyles } from "../../../modules/doc/module.js"
+import Doc, { useEvent, useState, useStyles } from "../../../modules/doc/module.js"
 import Box, { Arrow, Header, Footer } from "../components/box.js"
 import Flex from "../components/flex.js"
 import Time from "../components/time.js"
-import { Route, Icon } from "../components/generic.js"
-import translateMarkDown from "../helpers/mark-down.js"
+import { Icon } from "../components/generic.js"
+import * as db from "../services/fakedb.js"
 
 export default function Post({ 
     id,
@@ -14,17 +14,21 @@ export default function Post({
     datePosted,
     dateEdited
 }) {
-    const ViewUserImage = Doc.createNode("div", { className: "user-image" })
+    const PostRef = db.Posts.value.find(post => post.id === id)
+    const HeartsAmount = useState(likeAmount)
+    const HeartNames = useState(PostRef.likes)
+
+    const ViewHeartsIcon = Icon({ name: "heart-grey", className: "post-like" })
     const View = Doc.createNode("div", { id: `post-${id}`, className: "post" },
         Flex({ gap: "8px" },
-            Route({ href: `/user/${alias}`, className: "user-image-wrap" },
-                ViewUserImage,
+            Doc.createNode("a", { href: `/user/${alias}`, className: "user-image-wrap" },
+                Doc.createNode("div", { className: "user-image" }),
                 Doc.createNode("div", { className: "user-image-frame" })
             ),
             Box({ className: "post-content" },
                 Arrow("top-left"),
                 Header({ },
-                    Route({ href: `/user/${alias}`, className: "user-link" },
+                    Doc.createNode("a", { href: `/user/${alias}`, className: "user-link" },
                         Flex({ gap: "8px", className: "user" },
                             Doc.createNode("span", { className: "user-name" }, name),
                             Doc.createNode("span", { className: "user-alias" }, alias)
@@ -38,9 +42,9 @@ export default function Post({
                 ),
                 Footer({ },
                     Flex({ gap: "8px" },
-                        Flex({ gap: "8px", alignItems: "center" },
-                            Icon({ name: "heart-grey", className: "post-like" }),
-                            Doc.createNode("span", { innerText: likeAmount })
+                        Flex({ gap: "8px", alignItems: "center", className: "heart-action" },
+                            ViewHeartsIcon,
+                            Doc.createNode("span", { innerText: HeartsAmount })
                         ),
                         Icon({ name: "menu-meatballs", className: "post-menu" })
                     )
@@ -49,7 +53,40 @@ export default function Post({
         )
     )
 
-    useStyles(ViewUserImage, { backgroundImage: `url("${profileImageUrl}")` })
+    const ViewHeartRef = Doc.query(View, "div", ".heart-action")
+    
+    useEvent(ViewHeartRef, "click", () => {
+        if (!db.User.value.loggedIn) {
+            return
+        }
+        HeartNames.update(names => {
+            let index = names.indexOf(db.User.value.alias)
+            if (index === -1) {
+                names.push(db.User.value.alias)
+            }
+            else if (index >= 0) {
+                names.splice(index, 1)
+            }
+        })
+    })
+
+    db.User.subscribe(state => {
+        if (state.loggedIn) {
+            ViewHeartsIcon.classList.add("clickable")
+        }
+        else {
+            ViewHeartsIcon.classList.remove("clickable")
+        }
+    })
+
+    HeartNames.subscribe(names => {
+        HeartsAmount.value = names.length
+        if (db.User.value.loggedIn) {
+            ViewHeartsIcon.iconName = names.includes(db.User.value.alias) ? "heart-red" : "heart-grey"
+        }
+    })
+
+    useStyles(Doc.query(View, "div", ".user-image"), { backgroundImage: `url("${profileImageUrl}")` })
 
     return View
 }
