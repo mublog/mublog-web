@@ -1,7 +1,6 @@
 // @ts-check
-import { Div } from "./generic.js"
+import Doc, { useStyles, useMixin, unmount, useEvent } from "../../../modules/doc/module.js"
 import Box, { Arrow, Seperator, Title } from "./box.js"
-import { isComment } from "./decorators.js"
 
 /**
  * @param {string} title 
@@ -12,33 +11,49 @@ import { isComment } from "./decorators.js"
  */
 function NotificationItem(title, message, options = { timeout: 5000 }) {
     let { timeout, removeOnClick } = options
-    let component = Box({ className: "notification" },
+
+    const View = Box({ className: "notification" },
         Arrow("top-right"),
-        isComment(Title({ className: "notification-title" }, title)).if(!title),
-        isComment(Seperator()).if(!title),
+        Doc.createNode("div", { className: "notification-title" },
+            Title({ }, title || ""),
+            Seperator()
+        ),
         message
-    ).style({ animation: "notification-slide 250ms ease-in-out 0ms 1 normal none" }).mixin({
+    )
+    useStyles(View, { animation: "notification-slide 250ms ease-in-out 0ms 1 normal none" })
+
+    const Mixin = useMixin(View, {
+        enableRemoveOnClick() {
+            useEvent(Mixin, "click", () => unmount(Mixin))
+        },
+        hideTitle() {
+            useStyles(Mixin.querySelector(".notification-title"), { display: "none" })
+        },
         slideOut(delay) {
             let newDelay = delay > 250 ? delay - 250 : 0
-            setTimeout(() => component.style({
+            setTimeout(() => useStyles(Mixin, {
                 animation: `notification-slide 250ms ease-in-out ${newDelay}ms 1 reverse none`
             }), newDelay)
-            setTimeout(() => component.unmount(), delay)
+            setTimeout(() => unmount(Mixin), delay)
         }
     })
+
+    if (!title) {
+        Mixin.hideTitle()
+    }
     if (timeout) {
-        component.slideOut(timeout)
+        Mixin.slideOut(timeout)
     }
     if (removeOnClick) {
-        component.addEvent("click", node => node.unmount())
+        Mixin.enableRemoveOnClick()
     }
-    return component
+    return Mixin
 }
 
 const Notifications = (function() {
-    let component = Div({ id: "notifications" },
-        Div({ key: "wrapper", className: "notification-wrapper" })
-    ).mixin({
+    return useMixin(Doc.createNode("div", { id: "notifications" }, 
+        Doc.createNode("div", { className: "notification-wrapper" } )
+    ), {
         /**
          * @param {string} title 
          * @param {string} message 
@@ -47,12 +62,11 @@ const Notifications = (function() {
          * @param {boolean} [options.removeOnClick]
          */
         push(title, message, options) {
-            component.child("wrapper").append(NotificationItem(title, message, options))
+            Notifications.querySelector(".notification-wrapper").appendChild(NotificationItem(title, message, options))
         }
     })
-    return component
 })()
 
-Notifications.appendTo(document.body)
+document.body.appendChild(Notifications)
 
 export default Notifications

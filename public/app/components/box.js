@@ -1,26 +1,9 @@
 // @ts-check
-import Choc from "../../../modules/choc/module.js"
-
-/**
- * @template T
- * @typedef {T & { [key: string]: any }} Properties
- */
-
-/**
- * @typedef BoxProperties
- * @property {string} className
- */
-
-/**
- * @template props
- * @typedef {import("../../../modules/choc/module").default<"div", props & BoxProperties>} Box
- */
+import Doc, { useEvent, useMixin, useStyles } from "../../../modules/doc/module.js"
 
 /** 
- * @template props
- * @param {Properties<props>} props
- * @param {...(import("../../../modules/choc/module").default | string | Element)} children
- * @returns {import("../../../modules/choc/module").default<"div", props & BoxProperties>}
+ * @param {any} props
+ * @param {...any} children
  */
 export default function Box({ ...props }, ...children) {
     let className = "box"
@@ -28,7 +11,7 @@ export default function Box({ ...props }, ...children) {
         className += " " + props.className
         delete props.className
     }
-    return Choc.create("div", { ...props, className }, ...children)
+    return Doc.createNode("div", { ...props, className }, ...children)
 }
 
 /**
@@ -41,48 +24,35 @@ export default function Box({ ...props }, ...children) {
  * @param {number} y 
  */
 export function Arrow(type, x = 0, y = 0) {
-    /** 
-     * @param {number} x
-     * @param {number} y
-     * @returns {Partial<CSSStyleDeclaration>}
-     */
     function createPosition(x, y) {
         return { 
             left: `${x}%`,
             top: `${y}%`
         }
     }
-
-    let arrow = Choc.create("div", { className: `arrow arrow-${type}` })
-
+    const arrow = Doc.createNode("div", { className: `arrow arrow-${type}` })
     if (x || 0) {
-        arrow.style(createPosition(x, y))
+        useStyles(arrow, createPosition(x, y))
     }
-
-    return arrow.mixin({
-        /**
-         * @param {ArrowType} type 
-         */
+    return useMixin(arrow, {
+        /** @param {ArrowType} type */
         updateType(type) {
-            arrow.nativeElement.className = `arrow arrow-${type}`
+            arrow.className = `arrow arrow-${type}`
             return arrow
         },
         updateAxis(x, y) {
-            arrow.style(createPosition(x, y))
+            useStyles(arrow, createPosition(x, y))
             return arrow
         }
     })
 }
 
 export function Seperator() {
-    return Choc.create("div", { className: "seperator" })
+    return Doc.createNode("div", { className: "seperator" })
 }
 
 /** 
- * @template props
- * @param {Properties<props>} props
- * @param {...(import("../../../modules/choc/module").default | string | Element)} children
- * @returns {import("../../../modules/choc/module").default<"div", props & BoxProperties>}
+ * @param {...any} children
  */
 export function Title(props, ...children) {
     let className = "title header-content"
@@ -90,40 +60,37 @@ export function Title(props, ...children) {
         className += " " + props.className
         delete props.className
     }
-    return Choc.create("div", { ...props, className }, ...children)
+    return Doc.createNode("div", { ...props, className }, ...children)
 }
 
 /** 
- * @template props
- * @param {Properties<props>} props
- * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ * @param {any} props
+ * @param {...any} children
  */
 export function Header(props, ...children) {
-    return Choc.create("div", { className: "header" },
+    return Doc.createNode("div", { className: "header" },
         Title(props, ...children),
         Seperator()
     )
 }
 
 /** 
- * @template props
- * @param {Properties<props>} props
- * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ * @param {any} props
+ * @param {...any} children
  */
 export function Footer(props, ...children) {
     let className = "footer-content"
     if (props.className) {
         className += " " + props.className
     }
-    return Choc.create("div", { className: "footer" },
+    return Doc.createNode("div", { className: "footer" },
         Seperator(),
-        Choc.create("div", { ...props, className }, ...children)
+        Doc.createNode("div", { ...props, className }, ...children)
     )
 }
 
 /** 
- * @template props
- * @param {Properties<props & { labelText: string }>} props
+ * @param {{ labelText: string, [key: string]: any }} props
  * @param {...(import("../../../modules/choc/module").default | string | Element)} children
  */
 export function Label(props, ...children) {
@@ -134,57 +101,51 @@ export function Label(props, ...children) {
         className += " " + props.className
         delete props.className
     }
-    return Choc.create("div", { ...props, className }, 
-        Choc.create("label", { className: "label-content" }, labelText),
+    return Doc.createNode("div", { ...props, className }, 
+        Doc.createNode("label", { className: "label-content" }, labelText),
         ...children
     )
 }
 
 /** 
- * @template props
- * @param {props} props
+ * @param {any} props
  */
 export function Input(props) {
-    let input = Choc.create("input", props)
-    return Choc.create("div", { className: "input" }, input).mixin({
+    let input = Doc.createNode("input", props)
+    return useMixin(Doc.createNode("div", { className: "input" }, input), {
         get ref() {
-            return input.nativeElement
+            return input
         },
         get value() {
-            return input.nativeElement.value
+            return input.value
         },
         set value(newValue) {
-            input.nativeElement.value = newValue
+            input.value = newValue
         }
     })
 }
 
 /** 
- * @template props
- * @param {props} props
+ * @param {any} props
  */
 export function Textarea(props) {
-    let textarea = Choc.create("textarea", props)
-    return Choc.create("div", { className: "input" }, textarea).mixin({
+    let textarea = Doc.createNode("textarea", props)
+    return useMixin(Doc.createNode("div", { className: "input" }, textarea), {
         get ref() {
-            return textarea.nativeElement
-        },
-        get node() {
             return textarea
         },
         get value() {
-            return textarea.nativeElement.value
+            return textarea.value
         },
         set value(newValue) {
-            textarea.nativeElement.value = newValue
+            textarea.value = newValue
         }
     })
 }
 
 /** 
- * @template props
- * @param {Properties<props>} props
- * @param {...(import("../../../modules/choc/module").default | string | Element)} children
+ * @param {any} props
+ * @param {...any} children
  */
 export function Button(props, ...children) {
     let className = "button"
@@ -192,7 +153,7 @@ export function Button(props, ...children) {
         className += " " + props.className
         delete props.className
     }
-    return Choc.create("button", { ...props, className },
-        Choc.create("div", { className: "button-content" }, ...children)
+    return Doc.createNode("button", { ...props, className },
+        Doc.createNode("div", { className: "button-content" }, ...children)
     )
 }

@@ -1,5 +1,5 @@
 // @ts-check
-import Choc from "../../../modules/choc/module.js"
+import Doc, { useStyles } from "../../../modules/doc/module.js"
 
 /**
  * @template T
@@ -14,9 +14,8 @@ import Choc from "../../../modules/choc/module.js"
  */
 
 /**
- * @template props
- * @param {Properties<props> & FlexOptions} props 
- * @param {...(Choc | string | Element)} children
+ * @param {FlexOptions & { [key: string]: any}} props 
+ * @param {...any} children
  */
 export default function Flex(props, ...children) {
     /**
@@ -40,6 +39,6 @@ export default function Flex(props, ...children) {
         styles.alignItems = props.alignItems
         delete props.alignItems
     }
-
-    return Choc.create("div", { ...props, styles }, ...children)
+    // @ts-expect-error
+    return useStyles(Doc.createNode("div", props, ...children), styles)
 }

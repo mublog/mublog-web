@@ -1,26 +1,27 @@
 // @ts-check
-import Choc from "../../../modules/choc/module.js"
+import Doc, { useState, unmount } from "../../../modules/doc/module.js"
 import i18n from "../../lang/de_DE.js"
 
 export default function Time({ dateTime, ...props }) {
-    let [ interval, innerText ] = elapsedTime(dateTime)
-    let time = Choc.create("time", { ...props, innerText })
-    let intervalNum = setInterval(update, interval)
+    let init = elapsedTime(dateTime)
+    const Interval = useState(init[0])
+    const InnerText = useState(init[1])
+
+    const View = Doc.createNode("time", { ...props, innerText: InnerText })
+    let interval = setInterval(update, Interval.value)
+
     function update() {
-        let [ _interval, _innerText ] = elapsedTime(dateTime)
-        if (_interval !== interval) {
-            interval = _interval
+        let [ newInterval, newInnerText ] = elapsedTime(dateTime)
+        Interval.value = newInterval
+        if (onScreen(View)) {
+            InnerText.value = newInnerText
         }
-        if (onScreen(time)) {
-            time.update({ innerText: _innerText })
-        }
-        if (!time.nativeElement.isConnected) {
-            clearInterval(intervalNum)
-            time.unmount()
-            time = undefined
+        if (!View.isConnected) {
+            clearInterval(interval)
+            unmount(View)
         }
     }
-    return time
+    return View
 }
 
 /**
@@ -89,13 +90,10 @@ function replace(text, time) {
 }
 
 /**
- * @param {Choc} node
+ * @param {Element} node
  */
 function onScreen(node) {
-    if (!(node.nativeElement instanceof Element)) {
-        return false
-    }
-    const { top, bottom } = node.nativeElement.getBoundingClientRect()
+    const { top, bottom } = node.getBoundingClientRect()
     if ((top && bottom) === 0) {
         return false
     }

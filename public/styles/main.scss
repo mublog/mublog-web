@@ -314,11 +314,12 @@ input, textarea {
             width: 40px;
             height: 40px;
             display: inherit;
-            background-size: contain;
+            background-size: cover;
             border-radius: 12px;
             top: 4px;
             left: 4px;
             background-color: $white;
+            background-position: 50% 50%;
         }
     }
 

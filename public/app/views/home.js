@@ -1,25 +1,18 @@
 // @ts-check
+import Doc, { useState } from "../../../modules/doc/module.js"
 import Post from "../components/post.js"
-import { Div } from "../components/generic.js"
-import { loadingCircle } from "../components/decorators.js"
 import Flex from "../components/flex.js"
 import Writer from "../components/writer.js"
 
-import * as db from "../../fakedb.js"
+import * as db from "../services/fakedb.js"
 
 export default async function Home() {
-    const component = Flex({ direction: "column", gap: "8px" },
+    let PostArray = useState([])
+    db.Posts.subscribe(posts => PostArray.value = posts.map(Post))
+
+    const View = Flex({ direction: "column", gap: "8px" },
         Writer(),
-        loadingCircle(Div({ key: 0, className: "post-container" })).addSignal("refresh", node => {
-            node.while(async () => {
-                let posts = db.Posts
-                node.nativeElement.innerHTML = ""
-                node.append(...posts.map(Post))
-            })
-        }).signal("refresh")
-    ).addSignal("refresh", node => node.child(0).signal("refresh"))
-
-    //setInterval(() => component.signal("refresh"), 60000)
-
-    return component
+        Doc.createNode("div", { className: "post-container" }, PostArray)
+    )
+    return View
 }

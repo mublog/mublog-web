@@ -1,47 +1,41 @@
 // @ts-check
 import i18n from "../../lang/de_DE.js"
 
-import { Div, A, Route, activateRoute } from "./generic.js"
-import { isComment, loadingCircle } from "./decorators.js"
-import Box, { Header, Seperator, Title } from "./box.js"
+import Doc, { useEvent, selectAll, useStyles } from "../../../modules/doc/module.js"
+import { Route, activateRoute } from "./generic.js"
+import Box, { Header } from "./box.js"
 import Notifications from "../components/notifications.js"
-
-import { UserService } from "../services/db.js"
+import { User } from "../services/fakedb.js"
 
 const Navigation = (function() {
-    let items = async () => {
-        let isAuthorized = await UserService.isAuthorized()
-        return [
-            Route({ href: "/" }, i18n.home),
-            isComment(Route({ href: "/login" }, i18n.login)).if(isAuthorized),
-            isComment(Route({ href: "/register" }, i18n.register)).if(isAuthorized),
-            isComment(A(null, i18n.logout).addEvent("click", logout)).if(!isAuthorized)
-        ]
-    }
-
-    let component = Box({ id: "navigation" },
+    const ViewActionLogout = Doc.createNode("a", { className: "only-user action-logout" }, i18n.logout)
+    const View = Box({ id: "navigation" },
         Header({}, i18n.navigation),
-        loadingCircle(Div({ key: "list", className: "list" }))
+        Doc.createNode("div", { className: "list" },
+            Route({ href: "/" }, i18n.home),
+            Route({ href: "/login", className: "not-user" }, i18n.login),
+            Route({ href: "/register", className: "not-user" }, i18n.register),
+            ViewActionLogout
+        )
     )
 
-    component.child("list").addSignal("load", async node => {
-        node.signal("while", async () => {
-            let newList = await items()
-            node.nativeElement.innerHTML = ""
-            node.append(...newList)
-        })
+    const UserNav = selectAll(View, ".only-user", "i")
+    const GuestNav = selectAll(View, ".not-user", "i")
+
+    User.subscribe(state => {
+        UserNav.forEach(nav => useStyles(nav, { display: state.loggedIn === false ? "none !important" : "" }))
+        GuestNav.forEach(nav => useStyles(nav, { display: state.loggedIn === true ? "none !important" : "" }))
     })
-    component.addSignal("refresh", node => node.child("list").signal("load"))
-    component.signal("refresh")
-    
-    return component
+
+    useEvent(ViewActionLogout, "click", logout)
+
+    return View
 })()
 
 export default Navigation
 
 async function logout() {
-    await UserService.logout()
     activateRoute("/login")
-    Navigation.signal("refresh")
+    User.update(state => state.loggedIn = false)
     Notifications.push(null, i18n.logoutMessage)
 }
