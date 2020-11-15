@@ -1,7 +1,7 @@
 // @ts-check
 import i18n from "../../lang/de_DE.js"
 
-import Doc, { useEvent } from "../../../modules/doc/module.js"
+import Doc, { useEvent, useMixin } from "../../../modules/doc/module.js"
 import Box, { Button, Label, Header, Footer } from "../components/box.js"
 import Flex from "../components/flex.js"
 import { activateRoute } from "../components/generic.js"

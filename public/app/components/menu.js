@@ -7,7 +7,7 @@ export function MenuItem(child) {
 }
 
 export default function Menu(props, ...children) {
-    const Visibility = useState(true)
+    const Visibility = useState(false)
     let className = "menu"
     if (props.className) {
         className += " " + props.className

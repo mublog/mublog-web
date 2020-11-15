@@ -13,7 +13,7 @@ function NotificationItem(title, message, options = { timeout: 5000 }) {
     let { timeout, removeOnClick } = options
 
     const View = Box({ className: "notification" },
-        Arrow("top-right"),
+        Arrow("bottom-right"),
         Header({ className: "notification-title" }, title || ""),
         message
     )
@@ -51,6 +51,7 @@ const Notifications = (function() {
     const View = Doc.createNode("div", { id: "notifications" }, 
         Doc.createNode("div", { className: "notification-wrapper" })
     )
+    const ViewWrapperRef = Doc.query(View, "div", ".notification-wrapper")
     return useMixin(View, {
         /**
          * @param {string} title 
@@ -60,12 +61,10 @@ const Notifications = (function() {
          * @param {boolean} [options.removeOnClick]
          */
         push(title, message, options) {
-            
             Doc.query(View, "div", ".notification-wrapper").appendChild(NotificationItem(title, message, options))
+            ViewWrapperRef.scrollBy(0, ViewWrapperRef.scrollHeight)
         }
     })
 })()
-
-document.body.appendChild(Notifications)
 
 export default Notifications

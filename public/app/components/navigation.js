@@ -18,7 +18,6 @@ const Navigation = (function() {
         )
     )
 
-    //const ViewListRef = Doc.query(View, "div", ".list")
     const UserNavRef = Doc.queryAll(View, "a", ".for-user")
     const GuestNavRef = Doc.queryAll(View, "a", ".for-guest")
 

@@ -1,5 +1,5 @@
 // @ts-check
-import Doc, { useEvent, useEvents, useState, useStyles } from "../../../modules/doc/module.js"
+import Doc, { useEvent, useState, useStyles } from "../../../modules/doc/module.js"
 import Box, { Arrow, Header, Footer } from "../components/box.js"
 import Flex from "../components/flex.js"
 import Time from "../components/time.js"
@@ -22,14 +22,14 @@ export default function Post({
     const ViewHeartsIcon = Icon({ name: "heart-grey", className: "post-like" })
     const View = Doc.createNode("div", { id: `post-${id}`, className: "post" },
         Flex({ gap: "8px" },
-            Doc.createNode("a", { href: `/user/${alias}`, className: "user-image-wrap" },
+            Doc.createNode("a", { className: "user-image-wrap user-link" },
                 Doc.createNode("div", { className: "user-image" }),
                 Doc.createNode("div", { className: "user-image-frame" })
             ),
             Box({ className: "post-content" },
                 Arrow("top-left"),
                 Header({ },
-                    Doc.createNode("a", { href: `/user/${alias}`, className: "user-link" },
+                    Doc.createNode("a", { className: "user-link" },
                         Flex({ gap: "8px", className: "user" },
                             Doc.createNode("span", { className: "user-name" }, name),
                             Doc.createNode("span", { className: "user-alias" }, alias)
@@ -54,31 +54,11 @@ export default function Post({
         )
     )
 
+    const ViewUserLinkRefs = Doc.queryAll(View, "a", ".user-link")
     const ViewUserImageRef = Doc.query(View, "div", ".user-image")
     const ViewHeartRef = Doc.query(View, "div", ".heart-action")
     const ViewMenuTriggerRef = Doc.query(View, "i", ".post-menu")
 
-    const PostMenu = Menu({ },
-        Doc.createNode("a", { href: "/" }, "home"),
-        Doc.createNode("a", { href: "/login" }, "login"),
-        Doc.createNode("a", { href: "/register" },  "register"),
-        Doc.createNode("div", {},
-            "Submenu",
-            Menu({ },
-                Doc.createNode("a", { href: "/" }, "home"),
-                Doc.createNode("a", { href: "/login" }, "login"),
-                Doc.createNode("a", { href: "/register" },  "register"),
-            )
-        )
-    )
-    PostMenu.hide()
-    ViewMenuTriggerRef.appendChild(PostMenu)
-
-    useEvent(ViewMenuTriggerRef, "click", ({ clientX, clientY }) => {
-        PostMenu.toggle()
-        PostMenu.set("fixed", `${clientY}px`, `${clientX}px`)
-    })
-    
     useEvent(ViewHeartRef, "click", event => {
         if (!db.User.value.loggedIn) {
             return
@@ -96,10 +76,14 @@ export default function Post({
 
     db.User.subscribe(state => {
         if (state.loggedIn) {
-            ViewHeartsIcon.classList.add("clickable")
+            ViewHeartsIcon.classList.remove("cursor-disabled")
+            ViewHeartsIcon.classList.add("clickable", "cursor-action")
+            ViewUserLinkRefs.forEach(link => link.href = `/user/${alias}`)
         }
         else {
+            ViewHeartsIcon.classList.add("cursor-disabled")
             ViewHeartsIcon.classList.remove("clickable")
+            ViewUserLinkRefs.forEach(link => delete link.href)
         }
     })
 
