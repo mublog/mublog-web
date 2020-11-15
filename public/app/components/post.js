@@ -74,9 +74,9 @@ export default function Post({
     PostMenu.hide()
     ViewMenuTriggerRef.appendChild(PostMenu)
 
-    useEvent(ViewMenuTriggerRef, "click", event => {
+    useEvent(ViewMenuTriggerRef, "click", ({ clientX, clientY }) => {
         PostMenu.toggle()
-        PostMenu.set("fixed", `${event.clientY}px`, `${event.clientX}px`)
+        PostMenu.set("fixed", `${clientY}px`, `${clientX}px`)
     })
     
     useEvent(ViewHeartRef, "click", event => {
