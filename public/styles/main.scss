@@ -65,16 +65,16 @@ a, button, .cursor-pointer {
     cursor: url("svg/cursor-hover.svg") 3 3, default !important;
 }
 
-:active {
-    cursor: url("svg/cursor-active.svg") 3 3, default !important;
-}
-
-.cursor-disabled {
+.cursor-disabled, :disabled {
     cursor: url("svg/cursor-disabled.svg") 3 3, default !important;
 }
 
-.cursor-active, :active {
+.cursor-active:active, :any-link {
     cursor: url("svg/cursor-active.svg") 3 3, default !important;
+}
+
+.cursor-ns-resize {
+    cursor: url("svg/cursor-ns-resize.svg") 3 3, default !important;
 }
 
 * {
@@ -91,12 +91,27 @@ a, button, .cursor-pointer {
     line-height: 26px;
 }
 
-#app {
+#app-grid {
+    margin: 8px auto;
     width: 800px;
+    flex-direction: row-reverse;
     display: flex;
     gap: 10px;
-    margin: 16px auto;
-    flex-direction: row-reverse;
+}
+
+#header {
+    border: 12px solid transparent;
+    border-image: url("svg/header.svg") 12 fill round;
+    background-color: transparent;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 99;
+
+    .header-content {
+        margin: -4px 0px 0px 0px;
+    }
 }
 
 #router {
@@ -160,10 +175,6 @@ a, button, .cursor-pointer {
         flex: auto;
         width: 100%;
         border: none;
-
-        &:invalid, &[valid="false"] {
-            border-image: url("svg/input-invalid.svg") 12 fill round !important;
-        }
     }
 
     textarea {
@@ -326,13 +337,13 @@ a, button, .cursor-pointer {
 
         .user-image {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             display: inherit;
             background-size: cover;
-            border-radius: 12px;
-            top: 4px;
-            left: 4px;
+            border-radius: 6px;
+            top: 6px;
+            left: 6px;
             background-color: $white;
             background-position: 50% 50%;
         }
@@ -430,8 +441,6 @@ a, button, .cursor-pointer {
 
 #navigation {
     width: 200px;
-    gap: 5px;
-    flex-direction: column;
     height: max-content;
 
     .list {
@@ -482,21 +491,21 @@ a, button, .cursor-pointer {
 
 #notifications {
     position: fixed;
-    top: 0;
     right: 0;
+    bottom: 0;
     width: 300px;
-    max-height: 100%;
     overflow: hidden;
     pointer-events: none;
+    z-index: 2;
+    margin-bottom: 8px;
 
     .notification-wrapper {
         display: flex;
         flex-direction: column;
         gap: 8px;
         padding: 8px;
-        height: 100vh;
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow: hidden;
+        max-height: 100vh;
     }
 
     .notification {
