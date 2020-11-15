@@ -1,8 +1,9 @@
 // @ts-check
-import Doc, { useEvent, useState, useStyles } from "../../../modules/doc/module.js"
+import Doc, { useEvent, useEvents, useState, useStyles } from "../../../modules/doc/module.js"
 import Box, { Arrow, Header, Footer } from "../components/box.js"
 import Flex from "../components/flex.js"
 import Time from "../components/time.js"
+import Menu from "../components/menu.js"
 import { Icon } from "../components/generic.js"
 import * as db from "../services/fakedb.js"
 
@@ -53,9 +54,32 @@ export default function Post({
         )
     )
 
+    const ViewUserImageRef = Doc.query(View, "div", ".user-image")
     const ViewHeartRef = Doc.query(View, "div", ".heart-action")
+    const ViewMenuTriggerRef = Doc.query(View, "i", ".post-menu")
+
+    const PostMenu = Menu({ },
+        Doc.createNode("a", { href: "/" }, "home"),
+        Doc.createNode("a", { href: "/login" }, "login"),
+        Doc.createNode("a", { href: "/register" },  "register"),
+        Doc.createNode("div", {},
+            "Submenu",
+            Menu({ },
+                Doc.createNode("a", { href: "/" }, "home"),
+                Doc.createNode("a", { href: "/login" }, "login"),
+                Doc.createNode("a", { href: "/register" },  "register"),
+            )
+        )
+    )
+    PostMenu.hide()
+    ViewMenuTriggerRef.appendChild(PostMenu)
+
+    useEvent(ViewMenuTriggerRef, "click", event => {
+        PostMenu.toggle()
+        PostMenu.set("fixed", `${event.clientY}px`, `${event.clientX}px`)
+    })
     
-    useEvent(ViewHeartRef, "click", () => {
+    useEvent(ViewHeartRef, "click", event => {
         if (!db.User.value.loggedIn) {
             return
         }
@@ -86,7 +110,9 @@ export default function Post({
         }
     })
 
-    useStyles(Doc.query(View, "div", ".user-image"), { backgroundImage: `url("${profileImageUrl}")` })
+    useStyles(ViewUserImageRef, { 
+        backgroundImage: `url("${profileImageUrl}")`
+    })
 
     return View
 }
