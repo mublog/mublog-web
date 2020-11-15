@@ -380,9 +380,9 @@ a, button, .cursor-pointer {
     .post-menu {
         margin-left: auto;
 
-        &:hover, &:focus {
+        /* &:hover, &:focus {
             animation: wiggle-vertical 400ms linear infinite;
-        }
+        } */
     }
 
     + .post {
@@ -396,6 +396,30 @@ a, button, .cursor-pointer {
     }
     to {
         background-position: -192px 0px;
+    }
+}
+
+.menu {
+    position: absolute;
+    width: 200px;
+    z-index: 999;
+
+    ul {
+        list-style: none;
+
+        li {
+            font-style: normal;
+            display: flex;
+            /* overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; */
+            padding: 2px 4px 2px 4px;
+            display: block;
+
+            * {
+                text-decoration: none;
+            }
+        }
     }
 }
 
