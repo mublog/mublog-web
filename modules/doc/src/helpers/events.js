@@ -1,11 +1,16 @@
 // @ts-check
 
+/**
+ * @template name
+ * @typedef {GlobalEventHandlersEventMap[name & keyof GlobalEventHandlersEventMap]} EventObject 
+ */
+
 const Events = Symbol("events")
 
 /**
  * @template target
  * @param {target & (Element | window)} el 
- * @param {{ [key: string]: (event: Event) => void }} events
+ * @param {Partial<{ [key in keyof GlobalEventHandlersEventMap]: (event: EventObject<key>) => void }>} events
  * @returns {target}
  */
 export function useEvents(el, events) {
@@ -24,10 +29,10 @@ export function useEvents(el, events) {
 }
 
 /**
- * @template target
+ * @template target, name
  * @param {target & (Element | window)} el 
- * @param {string} name
- * @param {(event: Event) => void} listener
+ * @param {name & keyof GlobalEventHandlersEventMap} name
+ * @param {(event: EventObject<name>) => void} listener
  * @returns {target}
  */
 export function useEvent(el, name, listener) {
