@@ -2,16 +2,29 @@
 
 /**
  * @template type
- * @param {type} initialValue 
+ * @typedef State
+ * @property {boolean} isState
+ * @property {(update: (newValue: type) => (any | Promise<any>)) => void} update 
+ * @property {type} value
+ * @property {(newValue: type) => any} notify
+ * @property {readonly ((newValue: type) => any)[]} subscribers
+ * @property {(subscription: (newValue: type) => any) => void} subscribe
+ * @property {(subscription: (newValue: type) => any) => void} unsubscribe
+ * @property {() => void} unsubscribeAll
+ */
+
+/**
+ * @template type
+ * @param {type} initialValue
+ * @returns {State<type>}
  */
 export default function useState(initialValue) {
     let value = initialValue
-    const subscribers = []
+    let subscribers = []
     const State = {
         get isState() {
             return true
         },
-        /** @param {(value: type) => (any | Promise<any>)} callback */
         async update(callback) {
             await callback(State.value)
             State.value = State.value
@@ -26,17 +39,21 @@ export default function useState(initialValue) {
             value = newValue
             State.notify(value)
         },
-        /** @param {(value: type) => any} fn */
+        get subscribers() {
+            return subscribers
+        },
         subscribe(fn) {
             subscribers.push(fn)
             State.notify(value)
         },
-        /** @param {(value: type) => any} fn */
         unsubscribe(fn) {
             let index = subscribers.indexOf(fn)
             if (index >= 0) {
                 subscribers.splice(index, 1)
             }
+        },
+        unsubscribeAll() {
+            subscribers = []
         }
     }
     State.value = initialValue
