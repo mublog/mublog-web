@@ -3,6 +3,7 @@ import createNode from "./src/create-node.js"
 import createText from "./src/create-text.js"
 import useState from "./src/helpers/state.js"
 import useMixin from "./src/helpers/mixin.js"
+import createAnimation from "./src/helpers/animation.js"
 import { useEvent, useEvents } from "./src/helpers/events.js"
 import tagged from "./src/helpers/tagged.js"
 import { mount, unmount } from "./src/helpers/mount.js"
@@ -14,6 +15,7 @@ const Doc = {
     createNode,
     createText,
     createRouter,
+    createAnimation,
     queryAll,
     query
 }
