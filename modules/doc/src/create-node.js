@@ -13,7 +13,7 @@
 /**
  * @template tag
  * @param {tag & keyof HTMLElementTagNameMap} tag 
- * @param {Partial<HTMLProperties<tag>>} props 
+ * @param {Partial<HTMLProperties<tag>> & { [key: string]: any} } props 
  * @param  {...any} children
  * @returns {MappedHTMLElement<tag>}
  */
