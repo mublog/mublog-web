@@ -26,15 +26,37 @@ body, html {
   width: 100%;
 }
 
-input:invalid, textarea:invalid {
+*, .cursor-default {
+  cursor: url("svg/cursor-default.svg") 3 3, default !important;
+}
+
+input, textarea, .cursor-text {
+  cursor: url("svg/cursor-text.svg") 3 3, default !important;
+}
+input:invalid, textarea:invalid, .cursor-text:invalid {
   box-shadow: none;
 }
-input::placeholder, textarea::placeholder {
+input::placeholder, textarea::placeholder, .cursor-text::placeholder {
   color: #5F574F;
 }
 
+a, button, .cursor-pointer {
+  cursor: url("svg/cursor-hover.svg") 3 3, default !important;
+}
+
+.cursor-disabled, :disabled {
+  cursor: url("svg/cursor-disabled.svg") 3 3, default !important;
+}
+
+.cursor-active:active, :any-link {
+  cursor: url("svg/cursor-active.svg") 3 3, default !important;
+}
+
+.cursor-ns-resize {
+  cursor: url("svg/cursor-ns-resize.svg") 3 3, default !important;
+}
+
 * {
-  cursor: url("svg/cursor.svg") 2 2, default !important;
   box-sizing: border-box;
   outline: none;
   padding: 0;
@@ -48,12 +70,26 @@ input::placeholder, textarea::placeholder {
   line-height: 26px;
 }
 
-#app {
+#app-grid {
+  margin: 8px auto;
   width: 800px;
+  flex-direction: row-reverse;
   display: flex;
   gap: 10px;
-  margin: 20px auto;
-  flex-direction: row-reverse;
+}
+
+#header {
+  border: 12px solid transparent;
+  border-image: url("svg/header.svg") 12 fill round;
+  background-color: transparent;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+#header .header-content {
+  margin: -4px 0px 0px 0px;
 }
 
 #router.loading::after {
@@ -109,9 +145,6 @@ input::placeholder, textarea::placeholder {
   width: 100%;
   border: none;
 }
-.input textarea:invalid, .input textarea[valid=false], .input input:invalid, .input input[valid=false] {
-  border-image: url("svg/input-invalid.svg") 12 fill round !important;
-}
 .input textarea {
   resize: vertical;
 }
@@ -121,11 +154,6 @@ input::placeholder, textarea::placeholder {
   border: 12px solid transparent;
   border-image: url("svg/box.svg") 12 fill round;
   background-color: transparent;
-  /* .footer, .header {
-      .footer-content, .header-content {
-          margin: -4px;
-      }
-  } */
 }
 .box .arrow {
   background-image: url("svg/arrow-min.svg");
@@ -180,8 +208,8 @@ input::placeholder, textarea::placeholder {
 }
 .box .button {
   padding: 0px 4px 0px 4px;
-  border: 12px solid transparent;
-  border-image: url("svg/button-normal.svg") 12 fill round;
+  border: 15px solid transparent;
+  border-image: url("svg/button-normal.svg") 15 fill round;
   display: inline-block;
   background: transparent;
   cursor: pointer;
@@ -194,13 +222,13 @@ input::placeholder, textarea::placeholder {
 .box .button:active {
   animation: none;
   transform: translateY(2px);
-  border-image: url("svg/button-active.svg") 12 fill round;
+  border-image: url("svg/button-active.svg") 15 fill round;
 }
 .box .button * {
   cursor: pointer;
 }
 .box .button .button-content {
-  margin: -6px 0px -4px 0px;
+  margin: -8px -2px -6px -2px;
   display: flex;
   padding: 2px;
 }
@@ -244,13 +272,13 @@ input::placeholder, textarea::placeholder {
 }
 .post .user-image-wrap .user-image {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: inherit;
   background-size: cover;
-  border-radius: 12px;
-  top: 4px;
-  left: 4px;
+  border-radius: 6px;
+  top: 6px;
+  left: 6px;
   background-color: #FFF1E8;
   background-position: 50% 50%;
 }
@@ -276,24 +304,15 @@ input::placeholder, textarea::placeholder {
   flex: 1;
   position: relative;
 }
-.post .post-like {
-  /* &:hover, &:focus {
-      animation: wiggle-vertical 400ms linear infinite;
-  }
-
-  &:hover {
-      background-position: -32px -32px;
-  } */
-}
-.post .post-like:focus, .post .post-like:active {
-  background-image: url("svg/heart-animation.svg");
-  animation: heart-animation 1s steps(6) 1;
+.post .post-like.clickable:hover {
+  animation: wiggle-vertical 400ms linear infinite;
+  background-position: -32px -32px;
 }
 .post .post-menu {
   margin-left: auto;
-}
-.post .post-menu:hover, .post .post-menu:focus {
-  animation: wiggle-vertical 400ms linear infinite;
+  /* &:hover, &:focus {
+      animation: wiggle-vertical 400ms linear infinite;
+  } */
 }
 .post + .post {
   margin-top: 8px;
@@ -307,6 +326,27 @@ input::placeholder, textarea::placeholder {
     background-position: -192px 0px;
   }
 }
+.menu {
+  position: absolute;
+  width: 200px;
+  z-index: 999;
+}
+.menu ul {
+  list-style: none;
+}
+.menu ul li {
+  font-style: normal;
+  display: flex;
+  /* overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; */
+  padding: 2px 4px 2px 4px;
+  display: block;
+}
+.menu ul li * {
+  text-decoration: none;
+}
+
 #content {
   flex: 1;
   height: max-content;
@@ -314,8 +354,6 @@ input::placeholder, textarea::placeholder {
 
 #navigation {
   width: 200px;
-  gap: 5px;
-  flex-direction: column;
   height: max-content;
 }
 #navigation .list a {
@@ -362,21 +400,21 @@ input::placeholder, textarea::placeholder {
 }
 #notifications {
   position: fixed;
-  top: 0;
   right: 0;
+  bottom: 0;
   width: 300px;
-  max-height: 100%;
   overflow: hidden;
   pointer-events: none;
+  z-index: 2;
+  margin-bottom: 8px;
 }
 #notifications .notification-wrapper {
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 8px;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
+  max-height: 100vh;
 }
 #notifications .notification {
   pointer-events: all;
@@ -429,6 +467,12 @@ input::placeholder, textarea::placeholder {
 }
 .icon.icon-heart-red {
   background-position: -64px -32px;
+}
+.icon.icon-comment-bubbles-grey {
+  background-position: -96px -32px;
+}
+.icon.icon-comment-bubbles {
+  background-position: -128px -32px;
 }
 
 .toggle-post-preview {

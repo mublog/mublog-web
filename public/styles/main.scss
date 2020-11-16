@@ -45,6 +45,10 @@ body, html {
     width: 100%;
 }
 
+img {
+    max-width: 100%;
+}
+
 *, .cursor-default {
     cursor: url("svg/cursor-default.svg") 3 3, default !important;
 }
@@ -99,6 +103,31 @@ a, button, .cursor-pointer {
     gap: 10px;
 }
 
+.user-image-wrap {
+    height: max-content;
+
+    .user-image {
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        display: inherit;
+        background-size: cover;
+        border-radius: 6px;
+        top: 6px;
+        left: 6px;
+        background-color: #FFF1E8;
+        background-position: 50% 50%;
+    }
+
+    .user-image-frame {
+        display: block;
+        width: 48px;
+        height: 48px;
+        background-image: url("svg/circle-transparent.svg");
+        background-size: cover;
+    }
+}
+
 #header {
     border: 12px solid transparent;
     border-image: url("svg/header.svg") 12 fill round;
@@ -110,7 +139,16 @@ a, button, .cursor-pointer {
     z-index: 99;
 
     .header-content {
-        margin: -4px 0px 0px 0px;
+        margin: -8px 0px -4px 0px;
+        display: flex;
+
+        .header-profile {
+            margin-left: auto;
+
+            .user-image-frame {
+                background-image: url("svg/circle-transparent-header.svg");
+            }
+        }
     }
 }
 
@@ -324,31 +362,6 @@ a, button, .cursor-pointer {
 }
 
 .post {
-    .user-image-wrap {
-        height: max-content;
-
-        .user-image-frame {
-            display: block;
-            width: 48px;
-            height: 48px;
-            background-image: url("svg/circle-transparent.svg");
-            background-size: cover;
-        }
-
-        .user-image {
-            position: absolute;
-            width: 36px;
-            height: 36px;
-            display: inherit;
-            background-size: cover;
-            border-radius: 6px;
-            top: 6px;
-            left: 6px;
-            background-color: $white;
-            background-position: 50% 50%;
-        }
-    }
-
     .title {
         display: flex;
         gap: 8px;
@@ -390,10 +403,6 @@ a, button, .cursor-pointer {
 
     .post-menu {
         margin-left: auto;
-
-        /* &:hover, &:focus {
-            animation: wiggle-vertical 400ms linear infinite;
-        } */
     }
 
     + .post {
@@ -516,7 +525,7 @@ a, button, .cursor-pointer {
 @keyframes notification-slide {
     from {
         opacity: 0;
-        transform: translateX(10px);
+        transform: translateX(50px);
     }
     to {
         opacity: 1;
@@ -569,6 +578,14 @@ a, button, .cursor-pointer {
 
     &.icon-heart-red {
         background-position: -64px -32px;
+    }
+
+    &.icon-comment-bubbles-grey {
+        background-position: -96px -32px;
+    }
+
+    &.icon-comment-bubbles {
+        background-position: -128px -32px;
     }
 }
 
