@@ -50,9 +50,9 @@ export default async function Login() {
     const ViewAliasInputRef = Doc.query(View, "input", "[name='alias']")
     const ViewPasswordInputRef = Doc.query(View, "input", "[name='password']")
 
-    useEvent(ViewFormRef, "submit", event => {
+    useEvent(ViewFormRef, "submit", async event => {
         event.preventDefault()
-        db.login({ alias: ViewAliasInputRef.value, password: ViewPasswordInputRef.value })
+        await db.User.login({ alias: ViewAliasInputRef.value, password: ViewPasswordInputRef.value })
         if (db.User.value.loggedIn === true) {
             activateRoute("/")
             Notification.push(null, i18n.loginSuccessMessage)

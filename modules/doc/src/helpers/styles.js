@@ -1,5 +1,4 @@
 // @ts-check
-
 import hash from "./hash.js"
 
 const styleElement = document.createElement("style")

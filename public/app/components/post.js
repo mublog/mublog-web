@@ -1,35 +1,43 @@
 // @ts-check
-import Doc, { useEvent, useState, useStyles } from "../../../modules/doc/module.js"
+import Doc, { useMixin, useEvent, useState, useStyles } from "../../../modules/doc/module.js"
 import Box, { Arrow, Header, Footer } from "../components/box.js"
 import Flex from "../components/flex.js"
 import Time from "../components/time.js"
-import Menu from "../components/menu.js"
+import UserImage from "../components/user-image.js"
 import { Icon } from "../components/generic.js"
 import * as db from "../services/fakedb.js"
 
-export default function Post({ 
-    id,
-    user: { alias, name, profileImageUrl },
-    textContent,
-    likeAmount,
-    datePosted,
-    dateEdited
-}) {
-    const PostRef = db.Posts.value.find(post => post.id === id)
-    const HeartsAmount = useState(likeAmount)
-    const HeartNames = useState(PostRef.likes)
+/**
+ * @typedef PostConstructor
+ * @property {number} id
+ * @property {Object} user
+ * @property {string} user.alias
+ * @property {string} user.name
+ * @property {string} user.profileImageUrl
+ * @property {string} textContent
+ * @property {number} likeAmount
+ * @property {string[]} likes
+ * @property {number} commentAmount
+ * @property {number} datePosted
+ * @property {number} dateEdited
+ */
 
-    const ViewHeartsIcon = Icon({ name: "heart-grey", className: "post-like" })
-    const View = Doc.createNode("div", { id: `post-${id}`, className: "post" },
+/**
+ * @param {PostConstructor} post 
+ */
+export default function Post(post) {
+    let { id, user: { alias, name, profileImageUrl }, textContent, datePosted } = post
+
+    const PostRef = PostModel(db.Posts.findOne($ => $.value.id === id))
+
+    const ViewUserImage = UserImage()
+    const View = Doc.createNode("div", { className: "post" },
         Flex({ gap: "8px" },
-            Doc.createNode("a", { className: "user-image-wrap user-link" },
-                Doc.createNode("div", { className: "user-image" }),
-                Doc.createNode("div", { className: "user-image-frame" })
-            ),
+            Doc.createNode("a", { className: "user-link", href: `/user/${alias}` }, ViewUserImage),
             Box({ className: "post-content" },
                 Arrow("top-left"),
                 Header({ },
-                    Doc.createNode("a", { className: "user-link" },
+                    Doc.createNode("a", { className: "user-link", href: `/user/${alias}` },
                         Flex({ gap: "8px", className: "user" },
                             Doc.createNode("span", { className: "user-name" }, name),
                             Doc.createNode("span", { className: "user-alias" }, alias)
@@ -44,8 +52,12 @@ export default function Post({
                 Footer({ },
                     Flex({ gap: "8px" },
                         Flex({ gap: "8px", alignItems: "center", className: "heart-action" },
-                            ViewHeartsIcon,
-                            Doc.createNode("span", { innerText: HeartsAmount })
+                            Icon({ name: "heart-grey", className: "post-like" }),
+                            Doc.createNode("span", { innerText: PostRef.$likeAmount })
+                        ),
+                        Flex({ gap: "8px", alignItems: "center", className: "comment-action" },
+                            Icon({ name: "comment-bubbles-grey", className: "post-comment" }),
+                            Doc.createNode("span", { innerText: PostRef.$commentAmount })
                         ),
                         Icon({ name: "menu-meatballs", className: "post-menu" })
                     )
@@ -54,49 +66,76 @@ export default function Post({
         )
     )
 
-    const ViewUserLinkRefs = Doc.queryAll(View, "a", ".user-link")
-    const ViewUserImageRef = Doc.query(View, "div", ".user-image")
     const ViewHeartRef = Doc.query(View, "div", ".heart-action")
-    const ViewMenuTriggerRef = Doc.query(View, "i", ".post-menu")
+    const ViewHeartsIconRef = Doc.query(View, "i", ".post-like")
 
-    useEvent(ViewHeartRef, "click", event => {
-        if (!db.User.value.loggedIn) {
-            return
-        }
-        HeartNames.update(names => {
-            let index = names.indexOf(db.User.value.alias)
-            if (index === -1) {
-                names.push(db.User.value.alias)
-            }
-            else if (index >= 0) {
-                names.splice(index, 1)
-            }
-        })
-    })
+    useEvent(ViewHeartRef, "click", PostRef.$like)
 
-    db.User.subscribe(state => {
-        if (state.loggedIn) {
-            ViewHeartsIcon.classList.remove("cursor-disabled")
-            ViewHeartsIcon.classList.add("clickable", "cursor-action")
-            ViewUserLinkRefs.forEach(link => link.href = `/user/${alias}`)
+    let heartSubscription = state => {
+        if (db.User.isLoggedIn()) {
+            ViewHeartsIconRef.classList.remove("cursor-disabled")
+            ViewHeartsIconRef.classList.add("clickable", "cursor-action")
         }
         else {
-            ViewHeartsIcon.classList.add("cursor-disabled")
-            ViewHeartsIcon.classList.remove("clickable")
-            ViewUserLinkRefs.forEach(link => delete link.href)
+            ViewHeartsIconRef.classList.add("cursor-disabled")
+            ViewHeartsIconRef.classList.remove("clickable")
         }
-    })
 
-    HeartNames.subscribe(names => {
-        HeartsAmount.value = names.length
-        if (db.User.value.loggedIn) {
-            ViewHeartsIcon.iconName = names.includes(db.User.value.alias) ? "heart-red" : "heart-grey"
+        if (PostRef.$likes.value.includes(db.User.getAlias())) {
+            ViewHeartsIconRef.classList.replace("icon-heart-grey", "icon-heart-red")
         }
-    })
+        else {
+            ViewHeartsIconRef.classList.replace("icon-heart-red", "icon-heart-grey")
+        }
+    }
 
-    useStyles(ViewUserImageRef, { 
-        backgroundImage: `url("${profileImageUrl}")`
-    })
+    PostRef.$likes.unsubscribe(heartSubscription)
+    PostRef.$likes.subscribe(heartSubscription)
+
+    ViewUserImage.userImage = profileImageUrl
 
     return View
+}
+
+/**
+ * @template t
+ * @param {import("../../../modules/doc/src/helpers/state.js").State<t>} postReference 
+ */
+function PostModel(postReference) {
+    const likeAmount = useState(postReference.value["likeAmount"])
+    const commentAmount = useState(postReference.value["commentAmount"])
+    const likes = useState(postReference.value["likes"])
+    const comments = useState(postReference.value["comments"])
+
+    likes.subscribe(names => likeAmount.value = names.length)
+    comments.subscribe(ids => commentAmount.value = ids.length)
+
+    return useMixin(postReference, {
+        $like() {
+            if (!db.User.isLoggedIn()) {
+                return
+            }
+            postReference.update(post => {
+                let index = likes.value.indexOf(db.User.getAlias())
+                if (index === -1) {
+                    likes.update(likes => likes.push(db.User.getAlias()))
+                }
+                else {
+                    likes.update(likes => likes.splice(index, 1))
+                }
+            })
+        },
+        get $likes() {
+            return likes
+        },
+        get $likeAmount() {
+            return likeAmount
+        },
+        get $comments() {
+            return comments
+        },
+        get $commentAmount() {
+            return commentAmount
+        }
+    })
 }

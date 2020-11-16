@@ -6,7 +6,12 @@ import * as db from "../services/fakedb.js"
 
 export default async function User({ alias }) {
     let PostArray = useState([])
-    db.Posts.subscribe(posts => PostArray.value = posts.filter(post => post.user.alias === alias).map(Post).reverse())
+    db.Posts.unsubscribeAll()
+    db.Posts.subscribe(posts => {
+        let newPosts = posts.filter(post => post.value.user.alias === alias).map(({ value }) => Post(value))
+        PostArray.value = newPosts.reverse()
+    })
+    
     const View = Flex({ direction: "column", gap: "8px" },
         Doc.createNode("div", { className: "post-container" }, PostArray)
     )

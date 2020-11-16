@@ -51,7 +51,7 @@ export default async function Register() {
 
     useEvent(ViewLoginButtonRef, "click", () => activateRoute("/login"))
 
-    useEvent(ViewFormRef, "submit", event => {
+    useEvent(ViewFormRef, "submit", async event => {
         event.preventDefault()
 
         if (new Set(ViewPasswordRefs.map(el => el.value)).size !== 1) {
@@ -59,7 +59,7 @@ export default async function Register() {
             return 
         }
 
-        let success = db.register({
+        let success = await db.User.register({
             alias: ViewAliasInputRef.value,
             name: ViewNameInputRef.value,
             password: "ViewPasswordInput1.value",

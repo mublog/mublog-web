@@ -16,7 +16,11 @@ export function activateRoute(href) {
  */
 
 /**
- * @typedef {"magnifier" | "clock" | "calendar" | HeartIcons | MenuIcons} AllIcons
+ * @typedef {"comment-bubbles" | "comment-bubbles-grey"} CommentIcons
+ */
+
+/**
+ * @typedef {"magnifier" | "clock" | "calendar" | HeartIcons | MenuIcons | CommentIcons} AllIcons
  */
 
 /**

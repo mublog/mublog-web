@@ -27,7 +27,6 @@ const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className:
         title: ({ alias }) => `.${alias}//`, 
         component: User,
         activates: [ 
-            () => db.User.value.loggedIn === true,
             ({ alias }) => !!db.Users.value.find(user => user.alias === alias),
             () => new Promise(resolve => setTimeout(() => resolve(true), 1000))
         ]

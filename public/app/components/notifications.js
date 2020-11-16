@@ -44,6 +44,7 @@ function NotificationItem(title, message, options = { timeout: 5000 }) {
     if (removeOnClick) {
         Mixin.enableRemoveOnClick()
     }
+
     return Mixin
 }
 
@@ -61,7 +62,7 @@ const Notifications = (function() {
          * @param {boolean} [options.removeOnClick]
          */
         push(title, message, options) {
-            Doc.query(View, "div", ".notification-wrapper").appendChild(NotificationItem(title, message, options))
+            ViewWrapperRef.appendChild(NotificationItem(title, message, options))
             ViewWrapperRef.scrollBy(0, ViewWrapperRef.scrollHeight)
         }
     })

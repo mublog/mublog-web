@@ -16,7 +16,8 @@ export default function Home() {
 
 function UserHome() {
     let PostArray = useState([])
-    db.Posts.subscribe(posts => PostArray.value = posts.map(Post).reverse())
+    db.Posts.unsubscribeAll()
+    db.Posts.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
 
     const ViewWriter = Writer()
     const View = Flex({ direction: "column", gap: "8px" },
@@ -33,15 +34,7 @@ function UserHome() {
             Notifications.push(null, i18n.messageTooLong)
             return
         }
-        db.Posts.update(posts => posts.push({
-            datePosted: Date.now(),
-            dateEdited: Date.now(),
-            id: Date.now(),
-            likeAmount: 0,
-            likes: [],
-            textContent: ViewWriter.text,
-            user: db.Users.value.find(user => user.alias === db.User.value.alias)
-        }))
+        db.Posts.insert(ViewWriter.text)
         ViewWriter.reset()
     })
 
@@ -50,7 +43,9 @@ function UserHome() {
 
 function GuestHome() {
     let PostArray = useState([])
-    db.Posts.subscribe(posts => PostArray.value = posts.map(Post).reverse())
+    db.Posts.unsubscribeAll()
+    db.Posts.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
+
     const View = Flex({ direction: "column", gap: "8px" },
         Doc.createNode("div", { className: "post-container" }, PostArray)
     )
