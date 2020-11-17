@@ -1,7 +1,8 @@
 import { useState, useMixin } from "../../../modules/doc/module"
 import type { Types } from "../../../modules/doc/module"
-import type { User as UserType } from "../definitions/user"
+import type { User as UserType, CurrentUser as CurrentUserType } from "../definitions/user"
 import mockUsers from "./mock_users"
+import User from "../views/user"
 
 const UsersState: Types.State<UserType[]> = useState(mockUsers)
 
@@ -16,17 +17,18 @@ export const Users = useMixin(UsersState, {
     },
     findOne(alias: string) {
         return Users.value.find(user => user.alias === alias)
+    },
+    find(predicate: (user: UserType) => any): UserType {
+        return Users.value.find(predicate)
     }
 })
 
-const UserState = useState({
-    loggedIn: false,
+export const UserService = useMixin(useState<CurrentUserType>({
     alias: undefined,
+    loggedIn: false,
     name: undefined,
     profileImageUrl: undefined
-})
-
-export const User = useMixin(UserState, {
+}), {
     register(registerUser: UserType) {
         let success = Users.insert(registerUser)
         if (success) {
@@ -39,7 +41,7 @@ export const User = useMixin(UserState, {
     login({ alias }: { alias: string }) {
         let user = Users.findOne(alias)
         if (user) {
-            User.update(state => {
+            UserService.update(state => {
                 state.loggedIn = true
                 state.alias = user.alias
                 state.name = user.name
@@ -49,15 +51,24 @@ export const User = useMixin(UserState, {
         }
         return false
     },
+    logout(callback?: () => any) {
+        UserService.update(state => state.loggedIn = false)
+        if (callback) {
+            callback()
+        }
+    },
     isLoggedIn() {
-        return !!User.value.loggedIn
+        return !!UserService.value.loggedIn
     },
     getAlias() {
-        return User.value.alias
+        return UserService.value.alias
+    },
+    ping() {
+        // API
     }
 })
 
-User.subscribe(state => {
+UserService.subscribe(state => {
     if (state.loggedIn === false) {
         state.alias = undefined
         state.name = undefined

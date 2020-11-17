@@ -3,7 +3,7 @@ import type { Types } from "../../../modules/doc/module"
 import mockUsers from "./mock_users"
 import mockPosts from "./mock_posts"
 import type { Post as PostType } from "../definitions/post"
-import { User, Users } from "./user"
+import { UserService, Users } from "./user"
 
 const PostState: Types.State<Types.State<PostType>[]> = useState([])
 
@@ -17,13 +17,13 @@ export const CurrentPosts = useMixin(PostState, {
         CurrentPosts.update(posts => posts.push(useState(post)))
     },
     insert(textContent: string) {
-        if (!User.isLoggedIn()) {
+        if (!UserService.isLoggedIn()) {
             return false
         }
         CurrentPosts.update(posts => {
             posts.push(useState({
                 id: Date.now(),
-                user: Users.value.find(user => user.alias === User.getAlias()),
+                user: Users.value.find(user => user.alias === UserService.getAlias()),
                 textContent,
                 likeAmount: 0,
                 likes: [],

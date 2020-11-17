@@ -4,6 +4,6 @@ export interface User {
     profileImageUrl: string
 }
 
-export type CurrentUser = User &  {
+export type CurrentUser = User & {
     loggedIn: boolean
 }

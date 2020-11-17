@@ -3,7 +3,7 @@ import Doc, { useEvent, useStyles } from "../../../modules/doc/module"
 import { activateRoute } from "./generic"
 import Box, { Header } from "./box"
 import Notifications from "./notifications"
-import { User as UserService } from "../services/user"
+import { UserService } from "../services/user"
 
 const Navigation = (function() {
     const View = Box({ id: "navigation" },
@@ -34,8 +34,7 @@ const Navigation = (function() {
 export default Navigation
 
 async function logout() {
-    UserService.update(state => {
-        state.loggedIn = false
+    UserService.logout(() => {
         activateRoute("/login")
         Notifications.push(null, i18n.logoutMessage)
     })

@@ -362,6 +362,8 @@ a, button, .cursor-pointer {
 }
 
 .post {
+    animation: wiggle-vertical 250ms linear 1;
+
     .title {
         display: flex;
         gap: 8px;

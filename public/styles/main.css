@@ -294,6 +294,9 @@ a, button, .cursor-pointer {
     transform: translateY(0px);
   }
 }
+.post {
+  animation: wiggle-vertical 250ms linear 1;
+}
 .post .title {
   display: flex;
   gap: 8px;

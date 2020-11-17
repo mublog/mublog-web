@@ -5,7 +5,7 @@ import Flex from "../components/flex"
 import Writer, { WriterElement } from "../components/writer"
 import Notifications from "../components/notifications"
 import { CurrentPosts as PostService } from "../services/posts"
-import { User as UserService, Users } from "../services/user"
+import { UserService, Users } from "../services/user"
 import i18n from "../../lang/de_DE.json"
 import { Post as PostType } from "../definitions/post"
 
