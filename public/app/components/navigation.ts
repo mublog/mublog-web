@@ -21,14 +21,13 @@ const Navigation = (function() {
 
     const UserNavRef = Doc.queryAll<HTMLAnchorElement>(View, ".for-user")
     const GuestNavRef = Doc.queryAll<HTMLAnchorElement>(View, ".for-guest")
-    const LogoutRef = Doc.query<HTMLAnchorElement>(View, ".action-logout")
 
     UserService.subscribe(({ loggedIn }) => {
         UserNavRef.forEach(nav => loggedIn ? nav.classList.remove(styleHidden) : nav.classList.add(styleHidden))
         GuestNavRef.forEach(nav => !loggedIn ? nav.classList.remove(styleHidden) : nav.classList.add(styleHidden))
     })
 
-    useEvent(LogoutRef, "click", logout)
+    useEvent(Doc.query<HTMLAnchorElement>(View, ".action-logout"), "click", logout)
 
     return View
 })()

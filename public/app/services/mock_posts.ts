@@ -34,6 +34,15 @@ export const mockPosts = [
         commentAmount: 0,
         datePosted: Date.now(),
         dateEdited: Date.now()
+    },
+    {
+        id: 5,
+        user: "iljushka",
+        textContent: "[post 5](/user/iljushka/post/5)",
+        likeAmount: 0,
+        commentAmount: 0,
+        datePosted: Date.now(),
+        dateEdited: Date.now()
     }
 ]
 

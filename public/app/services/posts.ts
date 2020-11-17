@@ -5,9 +5,16 @@ import mockPosts from "./mock_posts"
 import type { Post as PostType } from "../definitions/post"
 import { UserService, Users } from "./user"
 
-const PostState: Types.State<Types.State<PostType>[]> = useState([])
+const ActivePostState: Types.State<PostType> = useState(undefined)
+export const ActivePost = useMixin(ActivePostState, {
+    reset() {
+        ActivePostState.value = undefined
+        ActivePostState.unsubscribeAll()
+    }
+})
 
-export const CurrentPosts = useMixin(PostState, {
+const PostsState: Types.State<Types.State<PostType>[]> = useState([])
+export const CurrentPosts = useMixin(PostsState, {
     sort() {
         CurrentPosts.update(posts => {
             posts.sort((p1, p2) => p2.value.datePosted - p1.value.datePosted)

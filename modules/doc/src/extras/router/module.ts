@@ -16,7 +16,7 @@ export default function createRouter<Target extends Element>(
         loadEnd: [],
         loadError: []
     }
-
+    
     async function listener() {
         let loadUrl = url()
         callbacks.load.forEach(cb => cb())

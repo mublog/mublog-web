@@ -4,9 +4,8 @@ import Flex from "../components/flex"
 import Writer, { WriterElement } from "../components/writer"
 import Notifications from "../components/notifications"
 import { CurrentPosts as PostService } from "../services/posts"
-import { UserService, Users } from "../services/user"
+import { UserService } from "../services/user"
 import i18n from "../../lang/de_DE.json"
-import { Post as PostType } from "../definitions/post"
 
 export default function Home() {
     if (!UserService.isLoggedIn()) {
@@ -19,8 +18,7 @@ const fakeWait = () => new Promise(res => setTimeout(res, 500))
 
 function UserHome() {
     let PostArray = useState<PostElement[]>([])
-
-    PostService.reset()
+    PostService.init()
     PostService.unsubscribeAll()
     PostService.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
 
@@ -53,6 +51,7 @@ function UserHome() {
 
 function GuestHome() {
     let PostArray = useState<PostElement[]>([])
+    PostService.init()
     PostService.unsubscribeAll()
     PostService.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
     const View = Flex({ direction: "column", gap: "8px" },

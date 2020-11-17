@@ -49,14 +49,7 @@ export default function Writer(props: Partial<HTMLDivElement> = {}): WriterEleme
     const ViewTextAreaRef = Doc.query<HTMLTextAreaElement>(View, ".nested-textarea")
     const ViewPreviewWrapRef = Doc.query<HTMLDivElement>(View, ".mark-down-wrapper")
 
-    Visibility.subscribe(val => {
-        if (val) {
-            ViewPreviewWrapRef.classList.remove(styleHidden)
-        }
-        else {
-            ViewPreviewWrapRef.classList.add(styleHidden)
-        }
-    })
+    Visibility.subscribe(val => val ? ViewPreviewWrapRef.classList.remove(styleHidden) : ViewPreviewWrapRef.classList.add(styleHidden))
     useEvent(ViewTextAreaRef, "input", () => ViewPreviewRef.innerHTML = translateMarkDown(ViewTextAreaRef.value))
     useEvent(View.querySelector(".toggle-post-preview"), "click", () => {
         Visibility.value = Visibility.value === false ? true : false

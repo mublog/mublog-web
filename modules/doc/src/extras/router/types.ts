@@ -1,5 +1,5 @@
-export type RouteActivator = (...args: any[]) => boolean | Promise<boolean>
-export type RouterComponent = ((...args: any[]) => Element | Promise<Element>)
+export type RouteActivator = (params?: URLParams) => boolean | Promise<boolean>
+export type RouterComponent = (params?: URLParams) => Element | Promise<Element>
 export type URLParams = { [parameter: string]: string }
 export type RouteTitle = string | ((params: URLParams) => string)
 export interface LoadedRoute {

@@ -3,7 +3,7 @@ import Post, { PostElement } from "../components/post"
 import Flex from "../components/flex"
 import { CurrentPosts as PostService } from "../services/posts"
 
-export default async function User({ alias }) {
+export default async function User({ alias }: { alias: string }) {
     let PostArray = useState<PostElement[]>([])
     PostService.unsubscribeAll()
     PostService.subscribe(posts => {
