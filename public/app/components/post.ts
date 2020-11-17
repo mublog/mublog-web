@@ -30,7 +30,7 @@ export default function Post(post: PostConstructor) {
 
     const View = Doc.createNode("div", { className: "post" },
         Flex({ gap: "8px" },
-            Doc.createNode("a", { className: "user-link", href: `/user/${alias}` }, UserImage()),
+            Doc.createNode("a", { className: "user-link", href: `/user/${alias}` }, UserImage({ className: "post-avatar" })),
             Box({ className: "post-content" },
                 Arrow("top-left"),
                 Header({ },
@@ -65,7 +65,7 @@ export default function Post(post: PostConstructor) {
 
     const ViewHeartRef = Doc.query<HTMLDivElement>(View, ".heart-action")
     const ViewHeartsIconRef = Doc.query<HTMLElement>(View, ".post-like")
-    const ViewUserImage = Doc.query<UserImageElement>(View, ".post-like")
+    const ViewUserImage = Doc.query<UserImageElement>(View, ".post-avatar")
 
     useEvent(ViewHeartRef, "click", PostRef.$like)
 
