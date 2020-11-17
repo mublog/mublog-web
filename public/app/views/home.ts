@@ -1,9 +1,8 @@
 import Doc, { useState } from "../../../modules/doc/module"
-import Post, { PostElement } from "../components/post"
 import Flex from "../components/flex"
 import Writer, { WriterElement } from "../components/writer"
 import Notifications from "../components/notifications"
-import { CurrentPosts as PostService } from "../services/posts"
+import { PostService } from "../services/posts"
 import { UserService } from "../services/user"
 import i18n from "../../lang/de_DE.json"
 
@@ -17,14 +16,9 @@ export default function Home() {
 const fakeWait = () => new Promise(res => setTimeout(res, 500))
 
 function UserHome() {
-    let PostArray = useState<PostElement[]>([])
-    PostService.init()
-    PostService.unsubscribeAll()
-    PostService.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
-
     const View = Flex({ direction: "column", gap: "8px" },
         Writer({ className: "writer-home" }),
-        Doc.createNode("div", { className: "post-container" }, PostArray)
+        Doc.createNode("div", { className: "post-container" }, PostService.getCurrent())
     )
 
     const ViewWriterRef = Doc.query<WriterElement>(View, ".writer-home")
@@ -50,12 +44,8 @@ function UserHome() {
 }
 
 function GuestHome() {
-    let PostArray = useState<PostElement[]>([])
-    PostService.init()
-    PostService.unsubscribeAll()
-    PostService.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
     const View = Flex({ direction: "column", gap: "8px" },
-        Doc.createNode("div", { className: "post-container" }, PostArray)
+        Doc.createNode("div", { className: "post-container" }, PostService.getCurrent())
     )
     return View
 }

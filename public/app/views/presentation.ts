@@ -1,23 +1,9 @@
-import Doc, { useState } from "../../../modules/doc/module"
-import Post, { PostElement } from "../components/post"
+import Doc from "../../../modules/doc/module"
 import Flex from "../components/flex"
 import Notifications from "../components/notifications"
-import { CurrentPosts as PostService } from "../services/posts"
+import { PostService } from "../services/posts"
 import { Users } from "../services/user"
 import { Post as PostType } from "../definitions/post"
-
-export default function Presentation() {
-    Notifications.push("Willkommen auf mu-blog", "Gleich ist jemand für dich da")
-    let PostArray = useState<PostElement[]>([])
-    PostService.reset()
-    PostService.unsubscribeAll()
-    PostService.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
-    presentationStart()
-    const View = Flex({ direction: "column", gap: "8px" },
-        Doc.createNode("div", { className: "post-container" }, PostArray)
-    )
-    return View
-}
 
 type PresentationPost = Pick<PostType, "user" | "textContent">
 
@@ -41,16 +27,23 @@ const presentation: PresentationPost[] = [
     {
         user: Users.findOne("max"),
         textContent: "...Habe ich jedenfalls so gehört... :D"
-    },
+    }
 ]
 
-let i: number
-let length = presentation.length
+export default function Presentation() {
+    Notifications.push("Willkommen auf mu-blog", "Gleich ist jemand für dich da")
+    PostService.value = []
+    presentationStart()
+    const View = Flex({ direction: "column", gap: "8px" },
+        Doc.createNode("div", { className: "post-container" }, PostService.getCurrent())
+    )
+    return View
+}
 
 async function presentationStart() {
-    i = 0
+    let i = 0
     let interval = setInterval(() => {
-        if (i >= length) {
+        if (i >= presentation.length) {
             Notifications.push(null, "So das wars! Erstelle nun ein Konto und lege los :D")
             clearInterval(interval)
         }

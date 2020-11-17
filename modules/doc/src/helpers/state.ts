@@ -3,7 +3,7 @@ import { Update, State, Subscriber } from "../types"
 export default function useState<Type>(initialValue: Type): State<Type> {
     let value: Type = initialValue
     let subscribers: Subscriber<Type>[] = []
-    const State = {
+    let State = {
         get isState() {
             return true
         },
@@ -35,7 +35,7 @@ export default function useState<Type>(initialValue: Type): State<Type> {
             }
         },
         unsubscribeAll(): void {
-            subscribers = []
+            subscribers.length = 0
         }
     }
     State.value = initialValue

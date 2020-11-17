@@ -3,6 +3,7 @@ import i18n from "../../lang/de_DE.json"
 import Presentation from "../views/presentation"
 import Home from "../views/home"
 import User from "../views/user"
+import UserPost from "../views/user-post"
 import Login from "../views/login"
 import Register from "../views/register"
 import RouteNotFound from "../views/route-not-found"
@@ -35,7 +36,7 @@ const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className:
             {
                 path: "post/:id",
                 title: ({ alias, id }) => `.${alias}//post/${id}`,
-                component: ({ alias, id }) => document.createComment(alias + "/" + id) as unknown as Element
+                component: UserPost
             }
         ]
     },

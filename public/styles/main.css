@@ -325,6 +325,9 @@ a, button, .cursor-pointer {
   animation: wiggle-vertical 400ms linear infinite;
   background-position: -32px -32px;
 }
+.post .comment-action {
+  text-decoration: none;
+}
 .post .post-menu {
   margin-left: auto;
 }

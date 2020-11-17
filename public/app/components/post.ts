@@ -1,14 +1,10 @@
-import Doc, { useMixin, useEvent, useState } from "../../../modules/doc/module"
+import Doc, { useMixin } from "../../../modules/doc/module"
 import Box, { Arrow, Header, Footer } from "./box"
 import Flex from "./flex"
 import Time from "./time"
 import UserImage from "./user-image"
 import { Icon, IconElement } from "./generic"
 import type { User as UserType } from "../definitions/user"
-import type { Post as PostType } from "../definitions/post"
-import { UserService } from "../services/user"
-import { CurrentPosts as PostService }  from "../services/posts"
-import type { Types } from "../../../modules/doc/module"
 import translateMD from "../helpers/mark-down"
 
 export interface PostConstructor {
@@ -23,17 +19,13 @@ export interface PostConstructor {
     dateEdited: number
 }
 
-export type PostElement = HTMLDivElement
+export interface PostElement extends HTMLDivElement {
+    updateHearts(): void
+    updateComments(): void
+}
 
 export default function Post(post: PostConstructor): PostElement {
-    let { id, user: { alias, name, profileImageUrl }, textContent, datePosted } = post
-
-    if (!PostService.has(id)) {
-        // @ts-expect-error
-        return document.createComment("post not found")
-    }
-
-    const PostRef = PostModel(PostService.findOne($ => $.value.id === id))
+    let { id, user: { alias, name, profileImageUrl }, textContent, datePosted, likeAmount, commentAmount } = post
 
     const View = Doc.createNode("div", { className: "post" },
         Flex({ gap: "8px" },
@@ -59,11 +51,13 @@ export default function Post(post: PostConstructor): PostElement {
                     Flex({ gap: "8px" },
                         Flex({ gap: "8px", alignItems: "center", className: "heart-action" },
                             Icon({ name: "heart-grey", className: "post-like" }),
-                            Doc.createNode("span", { innerText: PostRef.$likeAmount })
+                            Doc.createNode("span", { innerText: String(likeAmount) })
                         ),
-                        Flex({ gap: "8px", alignItems: "center", className: "comment-action" },
-                            Icon({ name: "comment-bubbles-grey", className: "post-comment" }),
-                            Doc.createNode("span", { innerText: PostRef.$commentAmount })
+                        Doc.createNode("a", { href: `/user/${alias}/post/${id}`, className: "comment-action" },
+                            Flex({ gap: "8px", alignItems: "center" },
+                                Icon({ name: "comment-bubbles-grey", className: "post-comment" }),
+                                Doc.createNode("span", { innerText: String(commentAmount) })
+                            ),
                         ),
                         Icon({ name: "menu-meatballs", className: "post-menu" })
                     )
@@ -75,66 +69,32 @@ export default function Post(post: PostConstructor): PostElement {
     const ViewHeartRef = Doc.query<HTMLDivElement>(View, ".heart-action")
     const ViewHeartsIconRef = Doc.query<IconElement>(View, ".post-like")
 
-    useEvent(ViewHeartRef, "click", PostRef.$like)
+    //useEvent(ViewHeartRef, "click", PostRef.$like)
 
-    let heartSubscription = (state: string[]) => {
+    /* let heartSubscription = (state: string[]) => {
         if (UserService.isLoggedIn()) {
             ViewHeartsIconRef.classList.remove("cursor-disabled")
             ViewHeartsIconRef.classList.add("clickable", "cursor-action")
+            if (PostRef.$likes.value.includes(UserService.getAlias())) {
+                ViewHeartsIconRef.iconName = "heart-red"
+            }
+            else {
+                ViewHeartsIconRef.iconName = "heart-grey"
+            }
         }
         else {
+            ViewHeartsIconRef.classList.remove("clickable", "cursor-action")
             ViewHeartsIconRef.classList.add("cursor-disabled")
-            ViewHeartsIconRef.classList.remove("clickable")
-        }
-
-        if (PostRef.$likes.value.includes(UserService.getAlias())) {
-            ViewHeartsIconRef.iconName = "heart-red"
-        }
-        else {
             ViewHeartsIconRef.iconName = "heart-grey"
         }
-    }
+    } */
 
-    PostRef.$likes.subscribe(heartSubscription)
-
-    return View
-}
-
-function PostModel(postReference: Types.State<PostType>) {
-    const likeAmount = useState(postReference.value.likeAmount)
-    const commentAmount = useState(postReference.value.commentAmount)
-    const likes = useState(postReference.value.likes)
-    const comments = useState(postReference.value.comments)
-
-    likes.subscribe(names => likeAmount.value = names.length)
-    comments.subscribe(ids => commentAmount.value = ids.length)
-
-    return useMixin(postReference, {
-        $like() {
-            if (!UserService.isLoggedIn()) {
-                return
-            }
-            postReference.update(post => {
-                let index = likes.value.indexOf(UserService.getAlias())
-                if (index === -1) {
-                    likes.update(likes => likes.push(UserService.getAlias()))
-                }
-                else {
-                    likes.update(likes => likes.splice(index, 1))
-                }
-            })
+    return useMixin(View, {
+        updateHearts() {
+            
         },
-        get $likes() {
-            return likes
-        },
-        get $likeAmount() {
-            return likeAmount
-        },
-        get $comments() {
-            return comments
-        },
-        get $commentAmount() {
-            return commentAmount
+        updateComments() {
+            
         }
     })
 }
