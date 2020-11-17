@@ -238,7 +238,6 @@ a, button, .cursor-pointer {
 }
 .box .box {
   border-image: url("svg/box-inner.svg") 12 fill round;
-  display: inline-block;
 }
 .box .button {
   padding: 0px 4px 0px 4px;
@@ -308,6 +307,9 @@ a, button, .cursor-pointer {
 }
 .post .title .datetime {
   margin-left: auto;
+}
+.post .user-link {
+  height: max-content;
 }
 .post .user .user-alias {
   color: #29ADFF;

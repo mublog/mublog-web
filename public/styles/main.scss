@@ -296,7 +296,6 @@ a, button, .cursor-pointer {
 
     .box {
         border-image: url("svg/box-inner.svg") 12 fill round;
-        display: inline-block;
     }
 
     .button {
@@ -377,6 +376,10 @@ a, button, .cursor-pointer {
         .datetime {
             margin-left: auto;
         }
+    }
+
+    .user-link {
+        height: max-content;
     }
 
     .user {

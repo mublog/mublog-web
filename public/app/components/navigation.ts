@@ -5,6 +5,8 @@ import Box, { Header } from "./box"
 import Notifications from "./notifications"
 import { UserService } from "../services/user"
 
+const styleHidden = Doc.createStyle({ display: "none !important" })
+
 const Navigation = (function() {
     const View = Box({ id: "navigation" },
         Header({}, i18n.navigation),
@@ -21,9 +23,9 @@ const Navigation = (function() {
     const GuestNavRef = Doc.queryAll<HTMLAnchorElement>(View, ".for-guest")
     const LogoutRef = Doc.query<HTMLAnchorElement>(View, ".action-logout")
 
-    UserService.subscribe(state => {
-        UserNavRef.forEach(nav => useStyles(nav, { display: state.loggedIn === false ? "none !important" : "" }))
-        GuestNavRef.forEach(nav => useStyles(nav, { display: state.loggedIn === true ? "none !important" : "" }))
+    UserService.subscribe(({ loggedIn }) => {
+        UserNavRef.forEach(nav => loggedIn ? nav.classList.remove(styleHidden) : nav.classList.add(styleHidden))
+        GuestNavRef.forEach(nav => !loggedIn ? nav.classList.remove(styleHidden) : nav.classList.add(styleHidden))
     })
 
     useEvent(LogoutRef, "click", logout)

@@ -10,9 +10,14 @@ export interface UserImageConstructor extends Partial<HTMLDivElement> {
 
 export default function UserImage(props: UserImageConstructor): UserImageElement {
     let className = "user-image-wrap"
+    let userImage: string
     if (props.className) {
         className += " " + props.className
         delete props.className
+    }
+    if (props.userImage) {
+        userImage = props.userImage
+        delete props.userImage
     }
     const View = Doc.createNode("div", { ...props, className },
         Doc.createNode("div", { className: "user-image" }),
@@ -28,9 +33,7 @@ export default function UserImage(props: UserImageConstructor): UserImageElement
         }
     })
 
-    if (props.userImage) {
-        Mixin.userImage = props.userImage
-    }
+    Mixin.userImage = userImage
 
     return Mixin
 }

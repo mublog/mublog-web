@@ -7,7 +7,7 @@ import { useEvent, useEvents } from "./src/helpers/events"
 import tagged from "./src/helpers/tagged"
 import { mount, unmount } from "./src/helpers/mount"
 import { queryAll, query } from "./src/helpers/query"
-import { useStyles, useStyleGroup } from "./src/helpers/styles"
+import { useStyles, useStyleGroup, createStyle } from "./src/helpers/styles"
 import createRouter from "./src/extras/router/module"
 import type * as Types from "./src/types"
 
@@ -15,6 +15,7 @@ const Doc = {
     createNode,
     createText,
     createRouter,
+    createStyle,
     createAnimation,
     queryAll,
     query

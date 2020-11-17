@@ -1,11 +1,11 @@
-import Doc, { useEvent, useMixin, useState, useStyles } from "../../../modules/doc/module"
+import Doc, { useEvent, useMixin, useState } from "../../../modules/doc/module"
 import Box, { Seperator, Button, Footer } from "./box"
 import Flex from "./flex"
 import i18n from "../../lang/de_DE.json"
 import { Icon } from "./generic"
 import translateMarkDown from "../helpers/mark-down"
 
-export type WriterElement = HTMLDivElement & {
+export interface WriterElement extends HTMLDivElement {
     readonly rawText: string
     readonly text: string
     reset(): void
@@ -13,6 +13,8 @@ export type WriterElement = HTMLDivElement & {
     showPreview(): void
     onSubmit(eventHandler: (event: Event) => any): void
 }
+
+const styleHidden = Doc.createStyle({ display: "none !important" })
 
 export default function Writer(props: Partial<HTMLDivElement> = {}): WriterElement {
     const Visibility = useState(false)
@@ -47,7 +49,14 @@ export default function Writer(props: Partial<HTMLDivElement> = {}): WriterEleme
     const ViewTextAreaRef = Doc.query<HTMLTextAreaElement>(View, ".nested-textarea")
     const ViewPreviewWrapRef = Doc.query<HTMLDivElement>(View, ".mark-down-wrapper")
 
-    Visibility.subscribe(val => useStyles(ViewPreviewWrapRef, { display: val === true ? "" : "none" }))
+    Visibility.subscribe(val => {
+        if (val) {
+            ViewPreviewWrapRef.classList.remove(styleHidden)
+        }
+        else {
+            ViewPreviewWrapRef.classList.add(styleHidden)
+        }
+    })
     useEvent(ViewTextAreaRef, "input", () => ViewPreviewRef.innerHTML = translateMarkDown(ViewTextAreaRef.value))
     useEvent(View.querySelector(".toggle-post-preview"), "click", () => {
         Visibility.value = Visibility.value === false ? true : false

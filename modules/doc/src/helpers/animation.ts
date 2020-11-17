@@ -4,8 +4,6 @@ const styleElement: HTMLStyleElement = document.createElement("style")
 document.head.appendChild(styleElement)
 const CSSSheet: CSSStyleSheet = styleElement.sheet
 
-
-
 export default function createAnimation(
     keyframes: Partial<CSSStyleDeclaration>[],
     options: KeyframeOptions
