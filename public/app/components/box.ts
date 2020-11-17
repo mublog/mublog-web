@@ -14,10 +14,16 @@ export default function Box(
 
 export type ArrowType = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top" | "left" | "bottom" | "right"
 
-export function Arrow(type: ArrowType, x = 0, y = 0) {
-    const arrow = Doc.createNode("div", { className: `arrow arrow-${type}` })
-    if (x || 0) {
-        useStyles(arrow, createPosition(x, y))
+export type ArrowConstructor = {
+    type: ArrowType
+    x?: number
+    y?: number
+}
+
+export function Arrow(props: ArrowConstructor) {
+    const arrow = Doc.createNode("div", { className: `arrow arrow-${props.type}` })
+    if (!["top-left", "top-right", "bottom-left", "bottom-right"].includes(props.type)) {
+        useStyles(arrow, createPosition(props.x || 0, props.y || 0))
     }
     return useMixin(arrow, {
         updateType(type: ArrowType) {

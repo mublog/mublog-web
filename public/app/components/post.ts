@@ -1,4 +1,3 @@
-// @ts-check
 import Doc, { useMixin, useEvent, useState } from "../../../modules/doc/module"
 import Box, { Arrow, Header, Footer } from "./box"
 import Flex from "./flex"
@@ -35,7 +34,7 @@ export default function Post(post: PostConstructor): PostElement {
         Flex({ gap: "8px" },
             Doc.createNode("a", { className: "user-link", href: `/user/${alias}` }, UserImage({ className: "post-avatar" })),
             Box({ className: "post-content" },
-                Arrow("top-left"),
+                Arrow({ type: "top-left" }),
                 Header({ },
                     Doc.createNode("a", { className: "user-link", href: `/user/${alias}` },
                         Flex({ gap: "8px", className: "user" },

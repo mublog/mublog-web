@@ -13,7 +13,7 @@ function NotificationItem(
 ) {
     let { timeout, removeOnClick } = options
     const View = Box({ className: "notification" },
-        Arrow("bottom-right"),
+        Arrow({ type: "bottom-right" }),
         Header({ className: "notification-title" }, title || ""),
         message
     )
