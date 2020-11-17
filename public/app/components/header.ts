@@ -1,21 +1,21 @@
 import Doc, { useStyles } from "../../../modules/doc/module"
-import UserImage from "./user-image"
+import UserImage, { UserImageElement } from "./user-image"
 import { UserService } from "../services/user"
 
 const Header = (function() {
-    const ViewUserImage = UserImage()
     const View = Doc.createNode("div", { id: "header" },
         Doc.createNode("div", { className: "header-content" },
             Doc.createNode("div", { className: "header-profile" },
-                ViewUserImage
+                UserImage({ className: "user-profile-header" })
             )
         )
     )
+    const UserImageRef = Doc.query<UserImageElement>(View, ".user-image-header")
     UserService.subscribe(state => {
         useStyles(View, { 
             display: state.loggedIn === false ? "none !important" : "",
         })
-        ViewUserImage.userImage = state.profileImageUrl
+        UserImageRef.userImage = state.profileImageUrl
     })
     return View
 })()

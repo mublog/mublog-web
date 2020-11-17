@@ -1,10 +1,14 @@
 import Doc, { useMixin, useStyles } from "../../../modules/doc/module"
 
-export type UserImageElement = HTMLDivElement & {
+export interface UserImageElement extends HTMLDivElement {
     userImage: string
 }
 
-export default function UserImage(props: Partial<HTMLDivElement> = {}): UserImageElement {
+export interface UserImageConstructor extends Partial<HTMLDivElement> {
+    userImage?: string
+}
+
+export default function UserImage(props: UserImageConstructor): UserImageElement {
     let className = "user-image-wrap"
     if (props.className) {
         className += " " + props.className
@@ -15,11 +19,18 @@ export default function UserImage(props: Partial<HTMLDivElement> = {}): UserImag
         Doc.createNode("div", { className: "user-image-frame" })
     )
     const ViewUserImageRef = Doc.query<HTMLDivElement>(View, ".user-image")
-    return useMixin(View, {
+
+    const Mixin = useMixin(View, {
         set userImage(url: string) {
             useStyles(ViewUserImageRef, { 
                 backgroundImage: `url("${url}")`
             })
         }
     })
+
+    if (props.userImage) {
+        Mixin.userImage = props.userImage
+    }
+
+    return Mixin
 }

@@ -1,11 +1,9 @@
-// @ts-check
 import Doc, { useState } from "../../../modules/doc/module"
 import Post, { PostElement } from "../components/post"
 import Flex from "../components/flex"
 import Notifications from "../components/notifications"
 import { CurrentPosts as PostService } from "../services/posts"
 import { Users } from "../services/user"
-import i18n from "../../lang/de_DE.json"
 import { Post as PostType } from "../definitions/post"
 
 export default function Presentation() {

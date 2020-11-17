@@ -2,8 +2,8 @@ import Doc, { useMixin, useEvent, useState } from "../../../modules/doc/module"
 import Box, { Arrow, Header, Footer } from "./box"
 import Flex from "./flex"
 import Time from "./time"
-import UserImage, { UserImageElement } from "./user-image"
-import { Icon } from "./generic"
+import UserImage from "./user-image"
+import { Icon, IconElement } from "./generic"
 import type { User as UserType } from "../definitions/user"
 import type { Post as PostType } from "../definitions/post"
 import { UserService } from "../services/user"
@@ -28,11 +28,18 @@ export type PostElement = HTMLDivElement
 export default function Post(post: PostConstructor): PostElement {
     let { id, user: { alias, name, profileImageUrl }, textContent, datePosted } = post
 
+    if (!PostService.has(id)) {
+        // @ts-expect-error
+        return document.createComment("post not found")
+    }
+
     const PostRef = PostModel(PostService.findOne($ => $.value.id === id))
 
     const View = Doc.createNode("div", { className: "post" },
         Flex({ gap: "8px" },
-            Doc.createNode("a", { className: "user-link", href: `/user/${alias}` }, UserImage({ className: "post-avatar" })),
+            Doc.createNode("a", { className: "user-link", href: `/user/${alias}` }, 
+                UserImage({ className: "post-avatar", userImage: profileImageUrl })
+            ),
             Box({ className: "post-content" },
                 Arrow({ type: "top-left" }),
                 Header({ },
@@ -46,7 +53,7 @@ export default function Post(post: PostConstructor): PostElement {
                     Icon({ name: "calendar" })  
                 ),
                 Doc.createNode("div", { className: "user-content" },
-                    Box({ className: "text-content", innerHTML: translateMD(textContent) })
+                    Box({ className: "text-content mark-down", innerHTML: translateMD(textContent) })
                 ),
                 Footer({ },
                     Flex({ gap: "8px" },
@@ -66,12 +73,11 @@ export default function Post(post: PostConstructor): PostElement {
     )
 
     const ViewHeartRef = Doc.query<HTMLDivElement>(View, ".heart-action")
-    const ViewHeartsIconRef = Doc.query<HTMLElement>(View, ".post-like")
-    const ViewUserImage = Doc.query<UserImageElement>(View, ".post-avatar")
+    const ViewHeartsIconRef = Doc.query<IconElement>(View, ".post-like")
 
     useEvent(ViewHeartRef, "click", PostRef.$like)
 
-    let heartSubscription = state => {
+    let heartSubscription = (state: string[]) => {
         if (UserService.isLoggedIn()) {
             ViewHeartsIconRef.classList.remove("cursor-disabled")
             ViewHeartsIconRef.classList.add("clickable", "cursor-action")
@@ -82,16 +88,14 @@ export default function Post(post: PostConstructor): PostElement {
         }
 
         if (PostRef.$likes.value.includes(UserService.getAlias())) {
-            ViewHeartsIconRef.classList.replace("icon-heart-grey", "icon-heart-red")
+            ViewHeartsIconRef.iconName = "heart-red"
         }
         else {
-            ViewHeartsIconRef.classList.replace("icon-heart-red", "icon-heart-grey")
+            ViewHeartsIconRef.iconName = "heart-grey"
         }
     }
 
-    PostRef.$likes.unsubscribe(heartSubscription)
     PostRef.$likes.subscribe(heartSubscription)
-    ViewUserImage.userImage = profileImageUrl
 
     return View
 }

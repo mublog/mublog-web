@@ -11,7 +11,11 @@ export type Icons =
     "comment-bubbles-grey" | "comment-bubbles" |
     "magnifier" | "clock" | "calendar"
 
-export function Icon(props: Partial<HTMLElement> & { name: Icons}) {
+export interface IconElement extends HTMLElement {
+    iconName: Icons
+}
+
+export function Icon(props: Partial<HTMLElement> & { name: Icons}): IconElement {
     let className = "icon icon-"
     let iconName: string
     if (props.name) {

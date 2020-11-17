@@ -521,6 +521,8 @@ a, button, .cursor-pointer {
 
     .notification {
         pointer-events: all;
+        white-space: pre-line;
+        word-break: break-word;
     }
 }
 
@@ -599,5 +601,62 @@ a, button, .cursor-pointer {
 
     &:hover, &:focus {
         animation: wiggle-vertical 400ms linear infinite;
+    }
+}
+
+.mark-down {
+    code {
+        background-color: $light-grey;
+        display: block;
+        overflow: hidden;
+        padding: 0px 8px 0px 0px;
+        box-shadow: 2px 0px $black, 0px 2px $black, -2px 0px $black, 0px -2px $black;
+
+        p {
+            counter-increment: line;
+
+            &::before {
+                content: counter(line);
+                margin-right: 8px;
+                color: $black;
+                display: block;
+                min-width: 24px;
+                background-color: $dark-grey;
+                padding-left: 8px;
+                padding-right: 8px;
+                border-right: 2px solid $black;
+                text-align: right;
+            }
+        }
+
+        * {
+            display: flex;
+            color: inherit;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+    }
+
+    * {
+        max-width: 100%;
+    }
+    
+    li {
+        list-style: inside disc;
+    }
+    
+    ol {
+        li {
+            list-style: inside decimal;
+        }
+    }
+    
+    p {
+        white-space: pre-wrap;
+
+        code {
+            padding-left: 8px;
+            display: inline-block;
+        }
     }
 }

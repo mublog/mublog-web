@@ -1,4 +1,3 @@
-// @ts-check
 import Doc, { useState } from "../../../modules/doc/module"
 import Post, { PostElement } from "../components/post"
 import Flex from "../components/flex"

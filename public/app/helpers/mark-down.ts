@@ -25,8 +25,8 @@ const H6 = /[\\#]{6} (.+)/g
 export default function translateMarkDown(text: string): string {
     text = buildLists(text)
     text = buildHeaders(text)
-    text = text.replace(IMG, `<img loading="lazy" src="$2" alt="$1" title="$4">`)
-    text = text.replace(A, `<a target="_blank" href="$2" title="$4">$1</a>`)
+    text = text.replace(IMG, `<img loading="lazy" src="$2" alt="$1">`)
+    text = text.replace(A, `<a target="_blank" href="$2">$1</a>`)
     text = buildFontStyles(text)
     text = text.replace(PRE0, `<pre class="$2">`)
     text = text.replace(PRE1, "</pre>\n\n")

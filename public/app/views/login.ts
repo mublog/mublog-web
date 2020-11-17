@@ -1,5 +1,4 @@
 import i18n from "../../lang/de_DE.json"
-
 import Doc, { useEvent } from "../../../modules/doc/module"
 import Box, { Button, Label, Header, Footer } from "../components/box"
 import Flex from "../components/flex"

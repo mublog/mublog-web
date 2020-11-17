@@ -430,6 +430,8 @@ a, button, .cursor-pointer {
 }
 #notifications .notification {
   pointer-events: all;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 @keyframes notification-slide {
@@ -495,6 +497,51 @@ a, button, .cursor-pointer {
 }
 .toggle-post-preview:hover, .toggle-post-preview:focus {
   animation: wiggle-vertical 400ms linear infinite;
+}
+
+.mark-down code {
+  background-color: #C2C3C7;
+  display: block;
+  overflow: hidden;
+  padding: 0px 8px 0px 0px;
+  box-shadow: 2px 0px #000000, 0px 2px #000000, -2px 0px #000000, 0px -2px #000000;
+}
+.mark-down code p {
+  counter-increment: line;
+}
+.mark-down code p::before {
+  content: counter(line);
+  margin-right: 8px;
+  color: #000000;
+  display: block;
+  min-width: 24px;
+  background-color: #5F574F;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-right: 2px solid #000000;
+  text-align: right;
+}
+.mark-down code * {
+  display: flex;
+  color: inherit;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+.mark-down * {
+  max-width: 100%;
+}
+.mark-down li {
+  list-style: inside disc;
+}
+.mark-down ol li {
+  list-style: inside decimal;
+}
+.mark-down p {
+  white-space: pre-wrap;
+}
+.mark-down p code {
+  padding-left: 8px;
+  display: inline-block;
 }
 
 /*# sourceMappingURL=main.css.map */
