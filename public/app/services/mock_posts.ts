@@ -11,7 +11,7 @@ export const mockPosts = [
     {
         id: 2,
         user: "max",
-        textContent: "h3nt@1",
+        textContent: "Willkommen bei mu-blog!",
         likeAmount: 0,
         commentAmount: 0,
         datePosted: Date.now() - 200000,
@@ -21,6 +21,15 @@ export const mockPosts = [
         id: 3,
         user: "anton",
         textContent: "hallo :D",
+        likeAmount: 0,
+        commentAmount: 0,
+        datePosted: Date.now() - 50000,
+        dateEdited: Date.now() - 50000
+    },
+    {
+        id: 4,
+        user: "iljushka",
+        textContent: "Ah hi! Was kann man hier so machen?",
         likeAmount: 0,
         commentAmount: 0,
         datePosted: Date.now(),

@@ -10,6 +10,7 @@ import type { Post as PostType } from "../definitions/post"
 import { User as UserService } from "../services/user"
 import { CurrentPosts as PostService }  from "../services/posts"
 import type { Types } from "../../../modules/doc/module"
+import translateMD from "../helpers/mark-down"
 
 export interface PostConstructor {
     id: number
@@ -23,7 +24,9 @@ export interface PostConstructor {
     dateEdited: number
 }
 
-export default function Post(post: PostConstructor) {
+export type PostElement = HTMLDivElement
+
+export default function Post(post: PostConstructor): PostElement {
     let { id, user: { alias, name, profileImageUrl }, textContent, datePosted } = post
 
     const PostRef = PostModel(PostService.findOne($ => $.value.id === id))
@@ -44,7 +47,7 @@ export default function Post(post: PostConstructor) {
                     Icon({ name: "calendar" })  
                 ),
                 Doc.createNode("div", { className: "user-content" },
-                    Box({ className: "text-content", innerHTML: textContent })
+                    Box({ className: "text-content", innerHTML: translateMD(textContent) })
                 ),
                 Footer({ },
                     Flex({ gap: "8px" },

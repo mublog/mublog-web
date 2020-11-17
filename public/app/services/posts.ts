@@ -8,6 +8,14 @@ import { User, Users } from "./user"
 const PostState: Types.State<Types.State<PostType>[]> = useState([])
 
 export const CurrentPosts = useMixin(PostState, {
+    sort() {
+        CurrentPosts.update(posts => {
+            posts.sort((p1, p2) => p2.value.datePosted - p1.value.datePosted)
+        })
+    },
+    load(post: PostType) {
+        CurrentPosts.update(posts => posts.push(useState(post)))
+    },
     insert(textContent: string) {
         if (!User.isLoggedIn()) {
             return false
@@ -15,7 +23,7 @@ export const CurrentPosts = useMixin(PostState, {
         CurrentPosts.update(posts => {
             posts.push(useState({
                 id: Date.now(),
-                user: Users.value.find(user => user.alias === User.value.alias),
+                user: Users.value.find(user => user.alias === User.getAlias()),
                 textContent,
                 likeAmount: 0,
                 likes: [],
@@ -48,6 +56,10 @@ export const CurrentPosts = useMixin(PostState, {
             likes: [],
             textContent: post.textContent
         }))
+    },
+    reset() {
+        CurrentPosts.value = []
+        CurrentPosts.unsubscribeAll()
     }
 })
 

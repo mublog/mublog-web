@@ -1,5 +1,6 @@
 import Doc from "../../../modules/doc/module"
 import i18n from "../../lang/de_DE.json"
+import Presentation from "../views/presentation"
 import Home from "../views/home"
 import User from "../views/user"
 import Login from "../views/login"
@@ -9,6 +10,7 @@ import { User as UserService, Users } from "../services/user"
 
 const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className: "loading" }), [
     {  path: "",  title: i18n.home, component: Home },
+    {  path: "presentation/?*",  title: i18n.presentation, component: Presentation },
     { 
         path: "login/?*", 
         title: i18n.login, 

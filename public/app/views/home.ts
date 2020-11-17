@@ -1,12 +1,13 @@
 // @ts-check
 import Doc, { useState } from "../../../modules/doc/module"
-import Post from "../components/post"
+import Post, { PostElement } from "../components/post"
 import Flex from "../components/flex"
 import Writer, { WriterElement } from "../components/writer"
 import Notifications from "../components/notifications"
 import { CurrentPosts as PostService } from "../services/posts"
-import { User as UserService } from "../services/user"
+import { User as UserService, Users } from "../services/user"
 import i18n from "../../lang/de_DE.json"
+import { Post as PostType } from "../definitions/post"
 
 export default function Home() {
     if (!UserService.isLoggedIn()) {
@@ -18,7 +19,9 @@ export default function Home() {
 const fakeWait = () => new Promise(res => setTimeout(res, 500))
 
 function UserHome() {
-    let PostArray = useState<HTMLDivElement[]>([])
+    let PostArray = useState<PostElement[]>([])
+
+    PostService.reset()
     PostService.unsubscribeAll()
     PostService.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
 
@@ -41,7 +44,7 @@ function UserHome() {
         }
         ViewWriterRef.classList.add("loading-circle")
         await fakeWait()
-        PostService.insert(ViewWriterRef.text)
+        PostService.insert(ViewWriterRef.rawText)
         ViewWriterRef.reset()
         ViewWriterRef.classList.remove("loading-circle")
     })
@@ -50,7 +53,7 @@ function UserHome() {
 }
 
 function GuestHome() {
-    let PostArray = useState<HTMLDivElement[]>([])
+    let PostArray = useState<PostElement[]>([])
     PostService.unsubscribeAll()
     PostService.subscribe(posts => PostArray.value = posts.map(({ value }) => Post(value)).reverse())
     const View = Flex({ direction: "column", gap: "8px" },

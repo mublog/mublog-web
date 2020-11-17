@@ -1,10 +1,10 @@
 import Doc, { useState } from "../../../modules/doc/module"
-import Post from "../components/post"
+import Post, { PostElement } from "../components/post"
 import Flex from "../components/flex"
 import { CurrentPosts as PostService } from "../services/posts"
 
 export default async function User({ alias }) {
-    let PostArray = useState<HTMLDivElement[]>([])
+    let PostArray = useState<PostElement[]>([])
     PostService.unsubscribeAll()
     PostService.subscribe(posts => {
         let newPosts = posts.filter(post => post.value.user.alias === alias).map(({ value }) => Post(value))

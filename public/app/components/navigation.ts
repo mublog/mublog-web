@@ -10,6 +10,7 @@ const Navigation = (function() {
         Header({}, i18n.navigation),
         Doc.createNode("div", { className: "list" },
             Doc.createNode("a", { href: "/" }, i18n.home),
+            Doc.createNode("a", { href: "/presentation" }, i18n.presentation),
             Doc.createNode("a", { href: "/login", className: "for-guest" }, i18n.login),
             Doc.createNode("a", { href: "/register", className: "for-guest" }, i18n.register),
             Doc.createNode("a", { className: "for-user action-logout" }, i18n.logout)
