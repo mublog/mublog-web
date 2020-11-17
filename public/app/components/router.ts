@@ -29,7 +29,14 @@ const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className:
         component: User,
         activates: [ 
             ({ alias }) => !!Users.value.find(user => user.alias === alias),
-            () => new Promise(resolve => setTimeout(() => resolve(true), 1000))
+            () => new Promise(resolve => setTimeout(() => resolve(true), 500))
+        ],
+        children: [
+            {
+                path: "post/:id",
+                title: ({ alias, id }) => `.${alias}//post/${id}`,
+                component: ({ alias, id }) => document.createComment(alias + "/" + id) as unknown as Element
+            }
         ]
     },
     { path: "**", title: i18n.error, component: RouteNotFound }
