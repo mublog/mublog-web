@@ -1,9 +1,9 @@
 // @ts-check
-import Doc, { mount } from "../modules/doc/module.js"
-import Router from "./app/components/router.js"
-import Header from "./app/components/header.js"
-import Navigation from "./app/components/navigation.js"
-import Notifications from "./app/components/notifications.js"
+import Doc, { mount } from "../modules/doc/module"
+import Router from "./app/components/router"
+import Header from "./app/components/header"
+import Navigation from "./app/components/navigation"
+import Notifications from "./app/components/notifications"
 
 const App = Doc.createNode("div", { id: "app" },
     Header,

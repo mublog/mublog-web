@@ -26,6 +26,10 @@ body, html {
   width: 100%;
 }
 
+img {
+  max-width: 100%;
+}
+
 *, .cursor-default {
   cursor: url("svg/cursor-default.svg") 3 3, default !important;
 }
@@ -78,6 +82,29 @@ a, button, .cursor-pointer {
   gap: 10px;
 }
 
+.user-image-wrap {
+  height: max-content;
+}
+.user-image-wrap .user-image {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  display: inherit;
+  background-size: cover;
+  border-radius: 6px;
+  top: 6px;
+  left: 6px;
+  background-color: #FFF1E8;
+  background-position: 50% 50%;
+}
+.user-image-wrap .user-image-frame {
+  display: block;
+  width: 48px;
+  height: 48px;
+  background-image: url("svg/circle-transparent.svg");
+  background-size: cover;
+}
+
 #header {
   border: 12px solid transparent;
   border-image: url("svg/header.svg") 12 fill round;
@@ -89,7 +116,14 @@ a, button, .cursor-pointer {
   z-index: 99;
 }
 #header .header-content {
-  margin: -4px 0px 0px 0px;
+  margin: -8px 0px -4px 0px;
+  display: flex;
+}
+#header .header-content .header-profile {
+  margin-left: auto;
+}
+#header .header-content .header-profile .user-image-frame {
+  background-image: url("svg/circle-transparent-header.svg");
 }
 
 #router.loading::after {
@@ -260,28 +294,6 @@ a, button, .cursor-pointer {
     transform: translateY(0px);
   }
 }
-.post .user-image-wrap {
-  height: max-content;
-}
-.post .user-image-wrap .user-image-frame {
-  display: block;
-  width: 48px;
-  height: 48px;
-  background-image: url("svg/circle-transparent.svg");
-  background-size: cover;
-}
-.post .user-image-wrap .user-image {
-  position: absolute;
-  width: 36px;
-  height: 36px;
-  display: inherit;
-  background-size: cover;
-  border-radius: 6px;
-  top: 6px;
-  left: 6px;
-  background-color: #FFF1E8;
-  background-position: 50% 50%;
-}
 .post .title {
   display: flex;
   gap: 8px;
@@ -310,9 +322,6 @@ a, button, .cursor-pointer {
 }
 .post .post-menu {
   margin-left: auto;
-  /* &:hover, &:focus {
-      animation: wiggle-vertical 400ms linear infinite;
-  } */
 }
 .post + .post {
   margin-top: 8px;
@@ -423,7 +432,7 @@ a, button, .cursor-pointer {
 @keyframes notification-slide {
   from {
     opacity: 0;
-    transform: translateX(10px);
+    transform: translateX(50px);
   }
   to {
     opacity: 1;
