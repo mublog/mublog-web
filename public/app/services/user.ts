@@ -2,7 +2,6 @@ import { useState, useMixin } from "../../../modules/doc/module"
 import type { Types } from "../../../modules/doc/module"
 import type { User as UserType, CurrentUser as CurrentUserType } from "../definitions/user"
 import mockUsers from "./mock_users"
-import User from "../views/user"
 
 const UsersState: Types.State<UserType[]> = useState(mockUsers)
 

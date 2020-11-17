@@ -20,7 +20,7 @@ function setProperties<Target extends Element>(el: Target, props: any) {
         if (props[key].isState === true) {
             const state: State<any> = props[key]
             state.subscribe(val => el[key] = val)
-            el[key] = props[key].value
+            state.value = props[key].value
         }
         else {
             el[key] = props[key]

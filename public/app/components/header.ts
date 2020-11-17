@@ -1,6 +1,6 @@
 import Doc, { useStyles } from "../../../modules/doc/module"
 import UserImage from "./user-image"
-import { User as UserSerive } from "../services/user"
+import { UserService } from "../services/user"
 
 const Header = (function() {
     const ViewUserImage = UserImage()
@@ -11,7 +11,7 @@ const Header = (function() {
             )
         )
     )
-    UserSerive.subscribe(state => {
+    UserService.subscribe(state => {
         useStyles(View, { 
             display: state.loggedIn === false ? "none !important" : "",
         })

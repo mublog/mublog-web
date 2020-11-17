@@ -6,7 +6,7 @@ import User from "../views/user"
 import Login from "../views/login"
 import Register from "../views/register"
 import RouteNotFound from "../views/route-not-found"
-import { User as UserService, Users } from "../services/user"
+import { UserService, Users } from "../services/user"
 
 const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className: "loading" }), [
     {  path: "",  title: i18n.home, component: Home },

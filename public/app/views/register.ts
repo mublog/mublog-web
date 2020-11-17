@@ -4,7 +4,7 @@ import Box, { Seperator, Button, Label, Header } from "../components/box"
 import Flex from "../components/flex"
 import { activateRoute } from "../components/generic"
 import Notification from "../components/notifications"
-import { User as UserService } from "../services/user"
+import { UserService } from "../services/user"
 
 export default async function Register() {
     const View = Box({ id: "register" },
