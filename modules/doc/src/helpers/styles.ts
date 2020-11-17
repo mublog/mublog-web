@@ -6,6 +6,23 @@ const CSSSheet: CSSStyleSheet = styleElement.sheet
 const CSSMap: Map<string, string> = new Map()
 const Styles = Symbol("styles")
 
+export function createStyle(cssStyleDeclaration: Partial<CSSStyleDeclaration>): string {
+    let name = "s-"
+    let style = ""
+    let rule: string
+    for (let rule in cssStyleDeclaration) {
+        let property = rule.replace(/([A-Z])/g, "-$1").toLowerCase()
+        style += `${property}: ${cssStyleDeclaration[rule]};`
+    }
+    name += hash(style)
+    rule = `.${name} { ${style} }`
+    if (!CSSMap.has(name)) {
+        CSSMap.set(name, rule)
+        CSSSheet.insertRule(rule, CSSSheet.rules.length)
+    }
+    return name
+}
+
 export function useStyles<Target extends Element>(
     el: Target, 
     cssStyleDeclaration: Partial<CSSStyleDeclaration>
