@@ -1,11 +1,8 @@
 import { useState, useMixin } from "../../../modules/doc/module"
-import type { Types } from "../../../modules/doc/module"
 import type { User as UserType, CurrentUser as CurrentUserType } from "../definitions/user"
 import mockUsers from "./mock_users"
 
-const UsersState: Types.State<UserType[]> = useState(mockUsers)
-
-export const Users = useMixin(UsersState, {
+export const Users = useMixin(useState(mockUsers), {
     insert(insertedUser: UserType) {
         let find = Users.value.find(user => user.alias === insertedUser.alias)
         if (find) {
@@ -22,12 +19,7 @@ export const Users = useMixin(UsersState, {
     }
 })
 
-export const UserService = useMixin(useState<CurrentUserType>({
-    alias: undefined,
-    loggedIn: false,
-    name: undefined,
-    profileImageUrl: undefined
-}), {
+export const UserService = useMixin(useState<CurrentUserType>({} as CurrentUserType), {
     register(registerUser: UserType) {
         let success = Users.insert(registerUser)
         if (success) {
