@@ -5,9 +5,7 @@ import { PostService } from "../services/posts"
 import { Users } from "../services/user"
 import { Post as PostType } from "../definitions/post"
 
-type PresentationPost = Pick<PostType, "user" | "textContent">
-
-const presentation: PresentationPost[] = [
+const presentation: Pick<PostType, "user" | "textContent">[] = [
     {
         user: Users.findOne("iljushka"),
         textContent: "Hallo Leute :3"
@@ -31,8 +29,7 @@ const presentation: PresentationPost[] = [
 ]
 
 export default function Presentation() {
-    Notifications.push("Willkommen auf mu-blog", "Gleich ist jemand für dich da")
-    PostService.value = []
+    PostService.newestFirst()
     presentationStart()
     const View = Flex({ direction: "column", gap: "8px" },
         Doc.createNode("div", { className: "post-container" }, PostService.getCurrent())
@@ -42,6 +39,8 @@ export default function Presentation() {
 
 async function presentationStart() {
     let i = 0
+    PostService.value = []
+    Notifications.push("Willkommen auf mu-blog", "Gleich ist jemand für dich da")
     let interval = setInterval(() => {
         if (i >= presentation.length) {
             Notifications.push(null, "So das wars! Erstelle nun ein Konto und lege los :D")
