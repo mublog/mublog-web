@@ -4,13 +4,22 @@ import Post, { PostElement } from "../components/post"
 import { UserService, Users } from "./user"
 import { State } from "../../../modules/doc/src/types"
 
-let currentPosts = useState([] as PostElement[])
 export const PostService = useMixin(useState([] as PostType[]), {
+    _sort: undefined as (p1: PostType, p2: PostType) => any,
+    _limit: undefined as number,
+    _currentPosts: useState([] as PostElement[]),
+    
     getCurrent(): State<PostElement[]> {
-        return currentPosts
+        return PostService._currentPosts
     },
-    sort(): void {
-        PostService.update(posts => posts.sort((p1, p2) => p2.datePosted - p1.datePosted))
+    newestFirst() {
+        PostService.sort((p1, p2) => p2.datePosted - p1.datePosted)
+    },
+    limit(amount: number) {
+        PostService._limit = amount
+    },
+    sort(sortCallback: (p1: PostType, p2: PostType) => any): void {
+        PostService._sort = sortCallback
     },
     load(post: PostType) {
         PostService.update(posts => posts.push(post))
@@ -22,7 +31,7 @@ export const PostService = useMixin(useState([] as PostType[]), {
         PostService.update(posts => {
             posts.push({
                 id: Date.now(),
-                user: Users.value.find(user => user.alias === UserService.getAlias()),
+                user: Users.findOne(UserService.getAlias()),
                 textContent,
                 likeAmount: 0,
                 likes: [],
@@ -40,4 +49,12 @@ export const PostService = useMixin(useState([] as PostType[]), {
     }
 })
 
-PostService.subscribe(posts => currentPosts.value = posts.map(post => Post(post)).reverse())
+PostService.subscribe(posts => {
+    if (PostService._sort) {
+        posts = posts.sort(PostService._sort)
+    }
+    if (PostService._limit) {
+        posts.length = PostService._limit
+    }
+    PostService._currentPosts.value = posts.map(Post)
+})
