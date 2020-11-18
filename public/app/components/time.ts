@@ -5,7 +5,7 @@ export default function Time({ datetime, ...props }: Partial<HTMLTimeElement> & 
     let init = elapsedTime(datetime)
     const Interval = useState(init[0])
     const InnerText = useState(init[1])
-    const View = Doc.createNode("time", { ...props, innerText: InnerText })
+    const View = Doc.createElement("time", { ...props, innerText: InnerText })
     let interval = setInterval(update, Interval.value)
     function update() {
         let [ newInterval, newInnerText ] = elapsedTime(datetime)

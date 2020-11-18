@@ -9,28 +9,28 @@ import { UserService } from "../services/user"
 export default async function Register() {
     const View = Box({ id: "register" },
         Header({}, i18n.createAccount),
-        Doc.createNode("form", null,
+        Doc.createElement("form", null,
             Flex({ gap: "8px", direction: "row" },
                 Label({ labelText: i18n.alias }, 
-                    Doc.createNode("div", { className: "input" }, 
-                        Doc.createNode("input", { name: "alias", placeholder: i18n.alias })
+                    Doc.createElement("div", { className: "input" }, 
+                        Doc.createElement("input", { name: "alias", placeholder: i18n.alias })
                     )
                 ),
                 Label({ labelText: i18n.name }, 
-                    Doc.createNode("div", { className: "input" }, 
-                        Doc.createNode("input", { name: "name", placeholder: i18n.name })
+                    Doc.createElement("div", { className: "input" }, 
+                        Doc.createElement("input", { name: "name", placeholder: i18n.name })
                     )
                 )
             ),
             Flex({ gap: "8px", direction: "row" },
                 Label({ labelText: i18n.password }, 
-                    Doc.createNode("div", { className: "input" }, 
-                        Doc.createNode("input", { name: "password", placeholder: i18n.password, type: "password" })
+                    Doc.createElement("div", { className: "input" }, 
+                        Doc.createElement("input", { name: "password", placeholder: i18n.password, type: "password" })
                     )
                 ),
                 Label({ labelText: i18n.password },
-                    Doc.createNode("div", { className: "input" }, 
-                        Doc.createNode("input", { name: "password", placeholder: i18n.password, type: "password" })
+                    Doc.createElement("div", { className: "input" }, 
+                        Doc.createElement("input", { name: "password", placeholder: i18n.password, type: "password" })
                     )
                 )
             ),

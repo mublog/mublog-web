@@ -4,12 +4,12 @@ import Header from "./app/components/header"
 import Navigation from "./app/components/navigation"
 import Notifications from "./app/components/notifications"
 
-const App = Doc.createNode("div", { id: "app" },
+const App = Doc.createElement("div", { id: "app" },
     Header,
     Notifications,
-    Doc.createNode("div", { id: "app-grid" },
+    Doc.createElement("div", { id: "app-grid" },
         Navigation,
-        Doc.createNode("div", { id: "content" }, Router)
+        Doc.createElement("div", { id: "content" }, Router)
     )
 )
 

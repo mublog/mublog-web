@@ -19,9 +19,9 @@ export default function UserImage(props: UserImageConstructor): UserImageElement
         userImage = props.userImage
         delete props.userImage
     }
-    const View = Doc.createNode("div", { ...props, className },
-        Doc.createNode("div", { className: "user-image" }),
-        Doc.createNode("div", { className: "user-image-frame" })
+    const View = Doc.createElement("div", { ...props, className },
+        Doc.createElement("div", { className: "user-image" }),
+        Doc.createElement("div", { className: "user-image-frame" })
     )
     const ViewUserImageRef = Doc.query<HTMLDivElement>(View, ".user-image")
 

@@ -26,15 +26,15 @@ export default function Writer(props: Partial<HTMLDivElement> = {}): WriterEleme
     }
 
     const View = Box({ ...props, className },
-        Doc.createNode("form", { },
-            Doc.createNode("div", { },
-                Doc.createNode("div", { className: "input" }, 
-                    Doc.createNode("textarea", { className: "nested-textarea", placeholder: "Text" })
+        Doc.createElement("form", { },
+            Doc.createElement("div", { },
+                Doc.createElement("div", { className: "input" }, 
+                    Doc.createElement("textarea", { className: "nested-textarea", placeholder: "Text" })
                 ),
                 Icon({ name: "magnifier", className: "toggle-post-preview" })
             ),
             Footer({},
-                Doc.createNode("div", { className: "mark-down-wrapper" },
+                Doc.createElement("div", { className: "mark-down-wrapper" },
                     Box({ className: "mark-down" }),
                     Seperator()
                 ),

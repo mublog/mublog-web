@@ -9,7 +9,7 @@ import Register from "../views/register"
 import RouteNotFound from "../views/route-not-found"
 import { UserService, Users } from "../services/user"
 
-const Router = Doc.createRouter(Doc.createNode("div", { id: "router", className: "loading" }), [
+const Router = Doc.createRouter(Doc.createElement("div", { id: "router", className: "loading" }), [
     {  path: "",  title: i18n.home, component: Home },
     {  path: "presentation/?*",  title: i18n.presentation, component: Presentation },
     { 

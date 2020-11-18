@@ -46,8 +46,8 @@ function NotificationItem(
 }
 
 const Notifications = (function() {
-    const View = Doc.createNode("div", { id: "notifications" }, 
-        Doc.createNode("div", { className: "notification-wrapper" })
+    const View = Doc.createElement("div", { id: "notifications" }, 
+        Doc.createElement("div", { className: "notification-wrapper" })
     )
     const ViewWrapperRef = Doc.query<HTMLDivElement>(View, ".notification-wrapper")
     return useMixin(View, {

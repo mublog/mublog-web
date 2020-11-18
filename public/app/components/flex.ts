@@ -28,5 +28,5 @@ export default function Flex(
         styles.alignItems = props.alignItems
         delete props.alignItems
     }
-    return useStyleGroup(Doc.createNode("div", props, ...children), styles)
+    return useStyleGroup(Doc.createElement("div", props, ...children), styles)
 }

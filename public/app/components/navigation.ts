@@ -10,12 +10,12 @@ const styleHidden = Doc.createStyle({ display: "none !important" })
 const Navigation = (function() {
     const View = Box({ id: "navigation" },
         Header({}, i18n.navigation),
-        Doc.createNode("div", { className: "list" },
-            Doc.createNode("a", { href: "/" }, i18n.home),
-            Doc.createNode("a", { href: "/presentation" }, i18n.presentation),
-            Doc.createNode("a", { href: "/login", className: "for-guest" }, i18n.login),
-            Doc.createNode("a", { href: "/register", className: "for-guest" }, i18n.register),
-            Doc.createNode("a", { className: "for-user action-logout" }, i18n.logout)
+        Doc.createElement("div", { className: "list" },
+            Doc.createElement("a", { href: "/" }, i18n.home),
+            Doc.createElement("a", { href: "/presentation" }, i18n.presentation),
+            Doc.createElement("a", { href: "/login", className: "for-guest" }, i18n.login),
+            Doc.createElement("a", { href: "/register", className: "for-guest" }, i18n.register),
+            Doc.createElement("a", { className: "for-user action-logout" }, i18n.logout)
         )
     )
 

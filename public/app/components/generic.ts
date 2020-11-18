@@ -27,7 +27,7 @@ export function Icon(props: Partial<HTMLElement> & { name: Icons}): IconElement 
         delete props.className
     }
 
-    const View = Doc.createNode("i", { ...props, className })
+    const View = Doc.createElement("i", { ...props, className })
 
     return useMixin(View, {
         set iconName(name: Icons) {

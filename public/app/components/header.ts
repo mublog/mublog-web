@@ -5,9 +5,9 @@ import { UserService } from "../services/user"
 const styleHidden = Doc.createStyle({ display: "none !important" })
 
 const Header = (function() {
-    const View = Doc.createNode("div", { id: "header" },
-        Doc.createNode("div", { className: "header-content" },
-            Doc.createNode("div", { className: "header-profile" },
+    const View = Doc.createElement("div", { id: "header" },
+        Doc.createElement("div", { className: "header-content" },
+            Doc.createElement("div", { className: "header-profile" },
                 UserImage({ className: "user-image-header" })
             )
         )

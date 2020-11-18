@@ -9,7 +9,7 @@ export default function Box(
         className += " " + props.className
         delete props.className
     }
-    return Doc.createNode("div", { ...props, className }, ...children)
+    return Doc.createElement("div", { ...props, className }, ...children)
 }
 
 export type ArrowType = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top" | "left" | "bottom" | "right"
@@ -21,7 +21,7 @@ export type ArrowConstructor = {
 }
 
 export function Arrow(props: ArrowConstructor) {
-    const arrow = Doc.createNode("div", { className: `arrow arrow-${props.type}` })
+    const arrow = Doc.createElement("div", { className: `arrow arrow-${props.type}` })
     if (!["top-left", "top-right", "bottom-left", "bottom-right"].includes(props.type)) {
         useStyles(arrow, createPosition(props.x || 0, props.y || 0))
     }
@@ -38,7 +38,7 @@ export function Arrow(props: ArrowConstructor) {
 }
 
 export function Seperator() {
-    return Doc.createNode("div", { className: "seperator" })
+    return Doc.createElement("div", { className: "seperator" })
 }
 
 export function Title(props: Partial<HTMLDivElement>, ...children: any[]) {
@@ -47,7 +47,7 @@ export function Title(props: Partial<HTMLDivElement>, ...children: any[]) {
         className += " " + props.className
         delete props.className
     }
-    return Doc.createNode("div", { ...props, className }, ...children)
+    return Doc.createElement("div", { ...props, className }, ...children)
 }
 
 export function Header(props: Partial<HTMLDivElement>, ...children: any[]) {
@@ -56,7 +56,7 @@ export function Header(props: Partial<HTMLDivElement>, ...children: any[]) {
         className += " " + props.className
         delete props.className
     }
-    return Doc.createNode("div", { ...props, className },
+    return Doc.createElement("div", { ...props, className },
         Title({}, ...children),
         Seperator()
     )
@@ -67,9 +67,9 @@ export function Footer(props: Partial<HTMLDivElement>, ...children: any[]) {
     if (props.className) {
         className += " " + props.className
     }
-    return Doc.createNode("div", { className: "footer" },
+    return Doc.createElement("div", { className: "footer" },
         Seperator(),
-        Doc.createNode("div", { ...props, className }, ...children)
+        Doc.createElement("div", { ...props, className }, ...children)
     )
 }
 
@@ -84,8 +84,8 @@ export function Label(
         className += " " + props.className
         delete props.className
     }
-    return Doc.createNode("div", { ...props, className }, 
-        Doc.createNode("label", { className: "label-content" }, labelText),
+    return Doc.createElement("div", { ...props, className }, 
+        Doc.createElement("label", { className: "label-content" }, labelText),
         ...children
     )
 }
@@ -99,8 +99,8 @@ export function Button(
         className += " " + props.className
         delete props.className
     }
-    return Doc.createNode("button", { ...props, className },
-        Doc.createNode("div", { className: "button-content" }, ...children)
+    return Doc.createElement("button", { ...props, className },
+        Doc.createElement("div", { className: "button-content" }, ...children)
     )
 }
 

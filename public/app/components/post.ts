@@ -27,36 +27,36 @@ export interface PostElement extends HTMLDivElement {
 export default function Post(post: PostConstructor): PostElement {
     let { id, user: { alias, name, profileImageUrl }, textContent, datePosted, likeAmount, commentAmount } = post
 
-    const View = Doc.createNode("div", { className: "post" },
+    const View = Doc.createElement("div", { className: "post" },
         Flex({ gap: "8px" },
-            Doc.createNode("a", { className: "user-link", href: `/user/${alias}` }, 
+            Doc.createElement("a", { className: "user-link", href: `/user/${alias}` }, 
                 UserImage({ className: "post-avatar", userImage: profileImageUrl })
             ),
             Box({ className: "post-content" },
                 Arrow({ type: "top-left" }),
                 Header({ },
-                    Doc.createNode("a", { className: "user-link", href: `/user/${alias}` },
+                    Doc.createElement("a", { className: "user-link", href: `/user/${alias}` },
                         Flex({ gap: "8px", className: "user" },
-                            Doc.createNode("span", { className: "user-name" }, name),
-                            Doc.createNode("span", { className: "user-alias" }, alias)
+                            Doc.createElement("span", { className: "user-name" }, name),
+                            Doc.createElement("span", { className: "user-alias" }, alias)
                         )
                     ),
                     Time({ datetime: datePosted, className: "datetime" }),
                     Icon({ name: "calendar" })  
                 ),
-                Doc.createNode("div", { className: "user-content" },
+                Doc.createElement("div", { className: "user-content" },
                     Box({ className: "text-content mark-down", innerHTML: translateMD(textContent) })
                 ),
                 Footer({ },
                     Flex({ gap: "8px" },
                         Flex({ gap: "8px", alignItems: "center", className: "heart-action" },
                             Icon({ name: "heart-grey", className: "post-like" }),
-                            Doc.createNode("span", { innerText: String(likeAmount) })
+                            Doc.createElement("span", { innerText: String(likeAmount) })
                         ),
-                        Doc.createNode("a", { href: `/user/${alias}/post/${id}`, className: "comment-action" },
+                        Doc.createElement("a", { href: `/user/${alias}/post/${id}`, className: "comment-action" },
                             Flex({ gap: "8px", alignItems: "center" },
                                 Icon({ name: "comment-bubbles-grey", className: "post-comment" }),
-                                Doc.createNode("span", { innerText: String(commentAmount) })
+                                Doc.createElement("span", { innerText: String(commentAmount) })
                             ),
                         ),
                         Icon({ name: "menu-meatballs", className: "post-menu" })

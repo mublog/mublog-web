@@ -32,7 +32,7 @@ export default function Presentation() {
     PostService.newestFirst()
     presentationStart()
     const View = Flex({ direction: "column", gap: "8px" },
-        Doc.createNode("div", { className: "post-container" }, PostService.getCurrent())
+        Doc.createElement("div", { className: "post-container" }, PostService.getCurrent())
     )
     return View
 }

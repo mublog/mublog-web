@@ -19,7 +19,7 @@ export default function createElement<Tag extends keyof HTMLElementTagNameMap>(
 ): MappedElement<Tag> {
     if (typeof tag === "function") {
         /**
-         * Doc.createNode can be used as a TSX/ JSX function.
+         * Doc.createElement can be used as a TSX/ JSX function.
          * Therefore, the first real argument will be set by the component function.
          */
         // @ts-expect-error

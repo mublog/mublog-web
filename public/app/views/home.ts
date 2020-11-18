@@ -18,7 +18,7 @@ const fakeWait = () => new Promise(res => setTimeout(res, 500))
 function UserHome() {
     const View = Flex({ direction: "column", gap: "8px" },
         Writer({ className: "writer-home" }),
-        Doc.createNode("div", { className: "post-container" }, PostService.getCurrent())
+        Doc.createElement("div", { className: "post-container" }, PostService.getCurrent())
     )
 
     const ViewWriterRef = Doc.query<WriterElement>(View, ".writer-home")
@@ -45,7 +45,7 @@ function UserHome() {
 
 function GuestHome() {
     const View = Flex({ direction: "column", gap: "8px" },
-        Doc.createNode("div", { className: "post-container" }, PostService.getCurrent())
+        Doc.createElement("div", { className: "post-container" }, PostService.getCurrent())
     )
     return View
 }

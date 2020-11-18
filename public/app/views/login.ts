@@ -10,20 +10,20 @@ import { UserService } from "../services/user"
 export default async function Login() {    
     const View = Box({ id: "login" },
         Header({}, i18n.enterAccount),
-        Doc.createNode("form", null,
+        Doc.createElement("form", null,
             Flex({ gap: "8px", direction: "column" },
                 Flex({ gap: "8px", direction: "row" },
                     Label({ labelText: i18n.alias }, 
-                        Doc.createNode("div", { className: "input" }, 
-                            Doc.createNode("input", {
+                        Doc.createElement("div", { className: "input" }, 
+                            Doc.createElement("input", {
                                 name: "alias", placeholder: ". . .", 
                                 required: true, pattern: pattern.userAliasStr
                             })
                         )
                     ),
                     Label({ labelText: i18n.password }, 
-                        Doc.createNode("div", { className: "input" }, 
-                            Doc.createNode("input", {
+                        Doc.createElement("div", { className: "input" }, 
+                            Doc.createElement("input", {
                                 name: "password",
                                 placeholder: "********", type: "password", 
                                 required: true, pattern: pattern.userPasswordStr
@@ -35,7 +35,7 @@ export default async function Login() {
             Footer({},
                 Flex({ gap: "8px", direction: "row" },
                     Button({ type: "submit" }, i18n.login),
-                    Doc.createNode("a", { href: "/register" },
+                    Doc.createElement("a", { href: "/register" },
                         Button({ className: "register-button", type: "button" }, i18n.noAccount)
                     )
                 )

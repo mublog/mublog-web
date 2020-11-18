@@ -1,4 +1,4 @@
-import createNode from "./src/create-node"
+import createElement from "./src/create-node"
 import createText from "./src/create-text"
 import useState from "./src/helpers/state"
 import useMixin from "./src/helpers/mixin"
@@ -12,7 +12,7 @@ import createRouter from "./src/extras/router/module"
 import type * as Types from "./src/types"
 
 const Doc = {
-    createNode,
+    createElement,
     createText,
     createRouter,
     createStyle,
