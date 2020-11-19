@@ -1,4 +1,11 @@
-import type { KeyframeOptions } from "../types"
+export interface KeyframeOptions {
+    duration: number
+    timingFunction?: string
+    delay?: number
+    iterationCount?: number | "infinite"
+    direction?: "normal" | "alternate" | "reverse" | "alternate-reverse"
+    fillMode?: "none" | "forwards" | "backwards" | "both"
+}
 
 const styleElement: HTMLStyleElement = document.createElement("style")
 document.head.appendChild(styleElement)

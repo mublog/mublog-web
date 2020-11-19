@@ -9,7 +9,11 @@ import { mount, unmount } from "./src/helpers/mount"
 import { queryAll, query } from "./src/helpers/query"
 import { useStyles, useStyleGroup, createStyle } from "./src/helpers/styles"
 import createRouter from "./src/extras/router/module"
-import type * as Types from "./src/types"
+
+import type { HTMLProperties, MappedElement } from "./src/create-node"
+import type { State, Subscriber, Update } from "./src/helpers/state"
+import type { KeyframeOptions } from "./src/helpers/animation"
+import type { EventListener, EventObject } from "./src/helpers/events"
 
 const Doc = {
     createElement,
@@ -33,7 +37,15 @@ export {
     useStyleGroup,
     queryAll,
     query,
-    Types
+
+    State,
+    KeyframeOptions,
+    EventListener,
+    EventObject,
+    Subscriber,
+    Update,
+    HTMLProperties,
+    MappedElement
 }
 
 export default Doc

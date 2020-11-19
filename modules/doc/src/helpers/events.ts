@@ -1,4 +1,5 @@
-import { EventListener } from "../types"
+export type EventObject<Name> = GlobalEventHandlersEventMap[Name & keyof GlobalEventHandlersEventMap]
+export type EventListener<Name> = (event: EventObject<Name>) => any | Promise<any>
 
 const Events = Symbol("events")
 

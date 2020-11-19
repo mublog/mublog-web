@@ -1,4 +1,16 @@
-import { Update, State, Subscriber } from "../types"
+export type Update<Type> = (value: Type) => any | Promise<any>
+export type Subscriber<Type> = (value: Type) => any | Promise<any>
+
+export interface State<Type> {
+    readonly isState: boolean
+    update(update: Update<Type>): Promise<void>
+    value: Type
+    notify(value: Type): void
+    readonly subscribers: Subscriber<Type>[]
+    subscribe(subscriber: Subscriber<Type>): void
+    unsubscribe(subscriber: Subscriber<Type>): void
+    unsubscribeAll(): void
+} 
 
 export default function useState<Type>(initialValue: Type): State<Type> {
     let value: Type = initialValue

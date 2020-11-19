@@ -1,4 +1,28 @@
-import type { HTMLProperties, MappedElement, State, Subscriber } from "./types"
+import type { State, Subscriber } from "./helpers/state"
+
+export type HTMLProperties<Tag> = { 
+    [key in keyof HTMLElementTagNameMap[Tag & keyof HTMLElementTagNameMap]]: any
+} & { 
+    [key: string]: any
+}
+
+export type MappedElement<Tag> = HTMLElementTagNameMap[Tag & keyof HTMLElementTagNameMap]
+
+
+const ElementStates: [State<any>, Element, Subscriber<any>][] = []
+function stateWorker() {
+    let i = 0
+    while (ElementStates[i]) {
+        const state = ElementStates[i]
+        if (!state[1] || !state[1].isConnected) {
+            state[0].unsubscribe(state[2])
+            ElementStates.splice(i, 1)
+        }
+        i++
+    }
+    requestAnimationFrame(stateWorker)
+}
+requestAnimationFrame(stateWorker)
 
 /**
  * Creates an HTMLElement that can be directly appended to the **DOM**.\
@@ -40,13 +64,9 @@ function setProperties<Target extends Element>(el: Target, props: any) {
     for (const key in props) {
         if (props[key].isState === true) {
             const state: State<any> = props[key]
-            const subscription = (val: any) => {
-                if (!el) {
-                    return state.unsubscribe(subscription)
-                }
-                el[key] = val
-            }
+            const subscription = (val: any) => el[key] = val
             state.subscribe(subscription)
+            ElementStates.push([state, el, subscription])
             el[key] = props[key].value
         }
         else {
@@ -100,13 +120,21 @@ function appendChild<Target extends Element>(el: Target, child: any) {
         if (Array.isArray(child.value)) {
             const state: State<any> = child
             let subscription: Subscriber<any> = val => {
-                if (!el) {
-                    return state.unsubscribe(subscription)
-                }
                 el.innerHTML = ""
                 appendChild(el, val)
             }
+            ElementStates.push([state, el, subscription])
             state.subscribe(subscription)
+        }
+        /**
+         * 
+         */
+        else if (child.value instanceof Element) {
+            const state: State<Element> = child
+            let subscription: Subscriber<Element> = val => child.value.replaceWith(val)
+            state.subscribe(subscription)
+            ElementStates.push([state, el, subscription])
+            el.appendChild(child.value)
         }
         /**
          * You wanted to subscribe to basic values? That's okay too!
@@ -114,13 +142,9 @@ function appendChild<Target extends Element>(el: Target, child: any) {
         else if (typeof child.value === ("string" || "number")) {
             const state: State<string | number> = child
             let subDoc = document.createTextNode(state.value + "")
-            let subscription: Subscriber<string | number> = val => {
-                if (!el) {
-                    return state.unsubscribe(subscription)
-                }
-                subDoc.textContent = val + ""
-            }
+            let subscription: Subscriber<string | number> = val => subDoc.textContent = val + ""
             state.subscribe(subscription)
+            ElementStates.push([state, el, subscription])
             el.appendChild(subDoc)
         }
     }
