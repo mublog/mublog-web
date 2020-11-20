@@ -1,4 +1,4 @@
-import Doc from "./modules/doc/mod"
+import Doc, { mount } from "./modules/doc/module"
 import Router from "./app/components/router.component"
 import Header from "./app/components/header.component"
 import Navigation from "./app/components/navigation.component"
@@ -13,4 +13,4 @@ const App = Doc.createElement("div", { id: "app" },
     )
 )
 
-App.mount(document.getElementById("app"))
+mount(document.getElementById("app"), App)
