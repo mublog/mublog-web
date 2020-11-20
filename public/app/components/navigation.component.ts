@@ -1,9 +1,9 @@
 import i18n from "../../lang/de_DE.json"
-import Doc, { useEvent, useStyles } from "../../../modules/doc/module"
+import Doc, { useEvent } from "../../modules/doc/module"
 import { activateRoute } from "./generic"
-import Box, { Header } from "./box"
-import Notifications from "./notifications"
-import { UserService } from "../services/user"
+import Box, { Header } from "./box.component"
+import Notifications from "./notification.component"
+import { UserService } from "../services/user.service"
 
 const styleHidden = Doc.createStyle({ display: "none !important" })
 

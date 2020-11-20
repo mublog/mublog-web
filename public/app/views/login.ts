@@ -1,11 +1,11 @@
 import i18n from "../../lang/de_DE.json"
-import Doc, { useEvent } from "../../../modules/doc/module"
-import Box, { Button, Label, Header, Footer } from "../components/box"
-import Flex from "../components/flex"
+import Doc, { useEvent, useState } from "../../modules/doc/module"
+import Box, { Button, Label, Header, Footer } from "../components/box.component"
+import Flex from "../components/flex.component"
 import { activateRoute } from "../components/generic"
 import * as pattern from "../definitions/pattern"
-import Notification from "../components/notifications"
-import { UserService } from "../services/user"
+import Notification from "../components/notification.component"
+import { UserService } from "../services/user.service"
 
 export default async function Login() {    
     const View = Box({ id: "login" },

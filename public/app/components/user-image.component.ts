@@ -1,4 +1,4 @@
-import Doc, { useMixin, useStyles } from "../../../modules/doc/module"
+import Doc, { useMixin, useStyles } from "../../modules/doc/module"
 
 export interface UserImageElement extends HTMLDivElement {
     userImage: string

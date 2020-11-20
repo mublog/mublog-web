@@ -1,7 +1,7 @@
-import Doc, { useMixin, useStyles } from "../../../modules/doc/module"
+import Doc, { useMixin, useStyles } from "../../modules/doc/module"
 
 export default function Box(
-    props: Partial<HTMLDivElement>, 
+    props: Partial<HTMLDivElement> = {}, 
     ...children: any[]
 ) {
     let className = "box"
@@ -50,7 +50,7 @@ export function Title(props: Partial<HTMLDivElement>, ...children: any[]) {
     return Doc.createElement("div", { ...props, className }, ...children)
 }
 
-export function Header(props: Partial<HTMLDivElement>, ...children: any[]) {
+export function Header(props: Partial<HTMLDivElement> = {}, ...children: any[]) {
     let className = "header"
     if (props.className) {
         className += " " + props.className
@@ -62,7 +62,7 @@ export function Header(props: Partial<HTMLDivElement>, ...children: any[]) {
     )
 }
 
-export function Footer(props: Partial<HTMLDivElement>, ...children: any[]) {
+export function Footer(props: Partial<HTMLDivElement> = {}, ...children: any[]) {
     let className = "footer-content"
     if (props.className) {
         className += " " + props.className
@@ -91,7 +91,7 @@ export function Label(
 }
 
 export function Button(
-    props: Partial<HTMLButtonElement>, 
+    props: Partial<HTMLButtonElement> = {}, 
     ...children: any[]
 ) {
     let className = "button"

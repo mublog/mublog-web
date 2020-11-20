@@ -25,6 +25,8 @@ const Doc = {
     query
 }
 
+const h = createElement
+
 export {
     useState,
     useMixin,
@@ -37,6 +39,7 @@ export {
     useStyleGroup,
     queryAll,
     query,
+    h,
 
     State,
     KeyframeOptions,

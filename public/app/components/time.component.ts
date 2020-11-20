@@ -1,4 +1,4 @@
-import Doc, { useState, unmount } from "../../../modules/doc/module"
+import Doc, { useState, unmount } from "../../modules/doc/module"
 import i18n from "../../lang/de_DE.json"
 
 export default function Time({ datetime, ...props }: Partial<HTMLTimeElement> & { datetime: number }) {

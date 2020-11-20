@@ -1,8 +1,8 @@
-import Doc, { useEvent, useMixin, useState } from "../../../modules/doc/module"
-import Box, { Seperator, Button, Footer } from "./box"
-import Flex from "./flex"
+import Doc, { useEvent, useMixin, useState } from "../../modules/doc/module"
+import Box, { Seperator, Button, Footer } from "./box.component"
+import Flex from "./flex.component"
 import i18n from "../../lang/de_DE.json"
-import { Icon } from "./generic"
+import { Icon } from "./icon.component"
 import translateMarkDown from "../helpers/mark-down"
 
 export interface WriterElement extends HTMLDivElement {

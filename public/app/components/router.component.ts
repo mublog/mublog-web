@@ -1,4 +1,4 @@
-import Doc from "../../../modules/doc/module"
+import Doc from "../../modules/doc/module"
 import i18n from "../../lang/de_DE.json"
 import Presentation from "../views/presentation"
 import Home from "../views/home"
@@ -7,7 +7,7 @@ import UserPost from "../views/user-post"
 import Login from "../views/login"
 import Register from "../views/register"
 import RouteNotFound from "../views/route-not-found"
-import { UserService, Users } from "../services/user"
+import { UserService, Users } from "../services/user.service"
 
 const Router = Doc.createRouter(Doc.createElement("div", { id: "router", className: "loading" }), [
     {  path: "",  title: i18n.home, component: Home },
@@ -29,7 +29,7 @@ const Router = Doc.createRouter(Doc.createElement("div", { id: "router", classNa
         title: ({ alias }) => `.${alias}//`, 
         component: User,
         activates: [ 
-            ({ alias }) => !!Users.value.find(user => user.alias === alias),
+            ({ alias }) => !!Users.findOne(alias),
             () => new Promise(resolve => setTimeout(() => resolve(true), 500))
         ],
         children: [

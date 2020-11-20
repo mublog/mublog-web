@@ -1,10 +1,10 @@
-import Doc, { useEvent } from "../../../modules/doc/module"
+import Doc, { useEvent } from "../../modules/doc/module"
 import i18n from "../../lang/de_DE.json"
-import Box, { Seperator, Button, Label, Header } from "../components/box"
-import Flex from "../components/flex"
+import Box, { Seperator, Button, Label, Header } from "../components/box.component"
+import Flex from "../components/flex.component"
 import { activateRoute } from "../components/generic"
-import Notification from "../components/notifications"
-import { UserService } from "../services/user"
+import Notification from "../components/notification.component"
+import { UserService } from "../services/user.service"
 
 export default async function Register() {
     const View = Box({ id: "register" },

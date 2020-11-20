@@ -1,6 +1,6 @@
-import Doc from "../../../modules/doc/module"
-import UserImage, { UserImageElement } from "./user-image"
-import { UserService } from "../services/user"
+import Doc from "../../modules/doc/module"
+import UserImage, { UserImageElement } from "./user-image.component"
+import { UserService } from "../services/user.service"
 
 const styleHidden = Doc.createStyle({ display: "none !important" })
 

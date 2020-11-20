@@ -1,5 +1,5 @@
-import Doc, { useStyles, useMixin, unmount, useEvent } from "../../../modules/doc/module"
-import Box, { Arrow, Header } from "./box"
+import Doc, { useStyles, useMixin, unmount, useEvent } from "../../modules/doc/module"
+import Box, { Arrow, Header } from "./box.component"
 
 export interface NotificationOption {
     timeout?: number

@@ -1,23 +1,24 @@
 import type { User } from "./user"
+import type { State } from "../../modules/doc/module"
+
+export interface PostAPI {
+    id: number
+    user: User
+    textContent: string
+    likeAmount: number
+    commentAmount: number
+    datePosted: number
+    dateEdited: number
+}
 
 export interface Post {
     id: number
     user: User
     textContent: string
-    likeAmount: number
-    likes: string[]
-    commentAmount: number
-    comments: number[]
+    likeAmount: State<number>
+    likes: State<string[]>
+    commentAmount: State<number>
+    comments: State<number[]>
     datePosted: number
-    dateEdited: number
-}
-
-export interface InitPost {
-    id: number
-    user: string
-    textContent: string
-    likeAmount: number
-    commentAmount: number
-    datePosted: number
-    dateEdited: number
+    dateEdited: State<number>
 }

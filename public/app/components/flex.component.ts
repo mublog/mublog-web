@@ -1,4 +1,4 @@
-import Doc, { useStyleGroup } from "../../../modules/doc/module"
+import Doc, { useStyleGroup } from "../../modules/doc/module"
 
 export interface FlexOptions {
     gap?: string

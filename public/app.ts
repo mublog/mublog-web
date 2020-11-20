@@ -1,8 +1,8 @@
-import Doc, { mount } from "../modules/doc/module"
-import Router from "./app/components/router"
-import Header from "./app/components/header"
-import Navigation from "./app/components/navigation"
-import Notifications from "./app/components/notifications"
+import Doc from "./modules/doc/mod"
+import Router from "./app/components/router.component"
+import Header from "./app/components/header.component"
+import Navigation from "./app/components/navigation.component"
+import Notifications from "./app/components/notification.component"
 
 const App = Doc.createElement("div", { id: "app" },
     Header,
@@ -13,4 +13,4 @@ const App = Doc.createElement("div", { id: "app" },
     )
 )
 
-mount(document.getElementById("app"), App)
+App.mount(document.getElementById("app"))

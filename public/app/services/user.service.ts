@@ -1,4 +1,4 @@
-import { useState, useMixin } from "../../../modules/doc/module"
+import { useState, useMixin } from "../../modules/doc/module"
 import type { User as UserType, CurrentUser as CurrentUserType } from "../definitions/user"
 import mockUsers from "./mock_users"
 
@@ -19,7 +19,7 @@ export const Users = useMixin(useState(mockUsers), {
     }
 })
 
-export const UserService = useMixin(useState<CurrentUserType>({} as CurrentUserType), {
+export const UserService = useMixin(useState({} as CurrentUserType), {
     register(registerUser: UserType) {
         let success = Users.insert(registerUser)
         if (success) {
@@ -66,3 +66,5 @@ UserService.subscribe(state => {
         state.profileImageUrl = undefined
     }
 })
+
+export default UserService
