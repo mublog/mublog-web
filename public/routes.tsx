@@ -1,12 +1,12 @@
-import { createElement } from "./modules/doc/mod"
 import UserService from "./app/services/user.service"
-import "./app/services/notification.service"
+import PostService from "./app/services/post.service"
 import i18n from "./lang/de_DE.json"
 
 import HomeView from "./app/views/home.view"
 import PresentationView from "./app/views/presentation.view"
 import LoginView from "./app/views/login.view"
 import UserView from "./app/views/user.view"
+import UserPostView from "./app/views/user-post.view"
 import RegisterView from "./app/views/register.view"
 import RouteNotFoundView from "./app/views/route-not-found.view"
 
@@ -35,16 +35,19 @@ const Routes: RouteConstructor[] = [
   },
   {
     path: "user/:alias",
-    title: ({ alias }) => `.${alias}//`,
+    title: ({ alias }) => `\$\{${alias}\}`,
     component: UserView,
     activates: [
-      () => new Promise(resolve => setTimeout(() => resolve(true), 500))
+      ({ alias }) => UserService.hasUser(alias)
     ],
     children: [
       {
         path: "post/:id",
-        title: ({ alias, id }) => `.${alias}//post/${id}`,
-        component: () => <div>post</div>,
+        title: ({ alias, id }) => `\$\{${alias + ".post." + id}\}`,
+        component: UserPostView,
+        activates: [
+          ({ alias, id }) => PostService.hasPost(parseInt(id))
+        ]
       }
     ]
   },
