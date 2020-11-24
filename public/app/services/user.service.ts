@@ -55,7 +55,16 @@ function UserService() {
     return pub
   }
 
-  async function register() {
+  async function register({ alias, name, password }) {
+    let success = !users.find(user => user.alias === alias && user.name === name)
+    if (success) {
+      users.push({ alias, name, password })
+      NotificationService.push(null, i18n.registerSuccess, cfg.notification)
+      service.activateRoute("/login")
+    }
+    else {
+      NotificationService.push(null, i18n.registerFailed, cfg.notification)
+    }
     return pub
   }
 

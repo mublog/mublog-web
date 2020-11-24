@@ -443,7 +443,8 @@ nav#navigation .list a {
 }
 #notifications .notification {
   pointer-events: all;
-  white-space: pre-line;
+}
+#notifications .notification-message {
   word-break: break-word;
 }
 

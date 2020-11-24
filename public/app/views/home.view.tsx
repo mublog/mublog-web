@@ -1,8 +1,10 @@
 import { createElement, useRef } from "../../modules/doc/mod"
 import * as µ from "../components/mu.component"
+import i18n from "../../lang/de_DE.json"
 import PostService from "../services/post.service"
 import UserService from "../services/user.service"
 import Post from "../components/post.component"
+import NotificationService from "../services/notification.service"
 
 export default function HomeView(): HTMLDivElement {
   const WriterRef = useRef<µ.WriterElement>()
@@ -12,7 +14,7 @@ export default function HomeView(): HTMLDivElement {
       <form onsubmit={tryPost} if={UserService.isUser}>
         <µ.Writer ref={WriterRef}>
           <div styles={{ display: "flex", gap: "8px" }}>
-            <µ.Button onclick={getValues}>Submit</µ.Button>
+            <µ.Button onclick={getValues}>{i18n.send}</µ.Button>
           </div>
         </µ.Writer>
       </form>
@@ -27,6 +29,7 @@ export default function HomeView(): HTMLDivElement {
   function tryPost(event: Event) {
     event.preventDefault()
     if (!UserService.isUser.get()) {
+      NotificationService.push(null, i18n.authError)
       return false
     }
     const values = getValues()
@@ -41,6 +44,9 @@ export default function HomeView(): HTMLDivElement {
         likeNames: []
       })
       WriterRef.get().textArea.get().value = ""
+    }
+    else {
+      NotificationService.push(null, i18n.messageCriteriaError)
     }
   }
 }

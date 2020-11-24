@@ -46,14 +46,27 @@ export default function RegisterView(): HTMLDivElement {
   function getValues() {
     return {
       alias: InputAlias.get().value,
+      name: InputName.get().value,
       passwords: [InputPasswords[0].get().value, InputPasswords[1].get().value]
     }
   }
 
+  function equalPasswords() {
+    return [...new Set(getValues().passwords)].length !== 1
+  }
+
   async function tryRegister(event: Event) {
     event.preventDefault()
-    console.log(getValues())
-    UserService.register()
-    NotificationService.push(null, "Du hast versucht dich einzuloggen :D")
+    let values = getValues()
+    if (equalPasswords()) {
+      NotificationService.push(null, i18n.passwordsNotSame)
+      return
+    }
+
+    UserService.register({
+      alias: values.alias,
+      name: values.name,
+      password: values.passwords[0]
+    })
   }
 }

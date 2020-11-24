@@ -1,4 +1,4 @@
-import { createElement, useRef, useState } from "../../modules/doc/mod"
+import { createElement, onInterval, useRef, useState } from "../../modules/doc/mod"
 import Time from "./time.component"
 import UserService from "../services/user.service"
 import * as µ from "./mu.component"
@@ -27,50 +27,71 @@ export default function Post(post: PostModel): HTMLDivElement {
             <µ.Icon name="calendar" />
           </µ.Header>
           <div className="user-content">
-            <div className="box text-content mark-down" innerHTML={translateMarkDown(post.textContent)} />
+            <TextContainer postId={post.id} text={post.textContent} />
           </div>
-          <div className="footer">
-            <span className="seperator" />
-            <div className="footer-content">
-              <div styles={{ display: "flex", gap: "8px" }}>
-                <HeartContainer heartAmount={post.likeAmount} postId={post.id} heartNames={post.likeNames} />
-                <CommentContainer userAlias={post.user.alias} postId={post.id} />
-                <µ.Icon name="menu-meatballs" className="post-menu" />
-              </div>
+          <µ.Footer>
+            <div styles={{ display: "flex", gap: "8px" }}>
+              <HeartContainer likeAmount={post.likeAmount} postId={post.id} />
+              <CommentContainer userAlias={post.user.alias} postId={post.id} />
+              <µ.Icon name="menu-meatballs" className="post-menu" />
             </div>
-          </div>
+          </µ.Footer>
         </div>
       </div>
     </div>
   )
 }
 
-function HeartContainer({ heartAmount, postId, heartNames }): HTMLDivElement {
-  const hearts = useState(heartAmount)
+function TextContainer({ postId, text }: { postId: number, text: string }) {
+  const Text = useState<string>(text)
+  const MD = useState<string>("")
+  Text.subscribe(txt => MD.set(translateMarkDown(txt)))
+
+  const View = (
+    <div className="box text-content mark-down" innerHTML={MD} />
+  )
+
+  onInterval(refresh, 10000)
+
+  return View
+
+  function refresh() {
+    let post = PostService.getPosts().find(({ id }) => id === postId)
+    if (post && post.textContent && (post.textContent !== Text.get())) {
+      Text.set(post.textContent)
+    }
+  }
+}
+
+function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: number }): HTMLDivElement {
+  const likes = useState(likeAmount)
   const HeartRefs = [useRef<µ.IconElement>(), useRef<µ.IconElement>()]
-  return (
+
+  const View = (
     <div className="heart-action" styles={{ display: "flex", gap: "8px", alignItems: "center" }}>
-      <µ.Icon ref={HeartRefs[0]} name="heart-grey" if={UserService.isUser} className="post-like clickable cursor-action" onclick={like} />
-      <µ.Icon ref={HeartRefs[1]} name="heart-grey" if={UserService.isGuest} className="post-like cursor-disabled" />
-      <span>{hearts}</span>
+      <µ.Icon
+        ref={HeartRefs[0]}
+        name="heart-grey"
+        if={UserService.isUser}
+        className="post-like clickable cursor-action"
+      />
+      <µ.Icon
+        ref={HeartRefs[1]}
+        name="heart-grey"
+        if={UserService.isGuest}
+        className="post-like cursor-disabled"
+      />
+      <span>{likes}</span>
     </div>
   )
-  function like() {
-    PostService.getPosts().updateOne($ => $.id === postId, $ => {
-      let idx = heartNames.indexOf(UserService.currentUser().alias)
-      if (idx >= 0) {
-        heartNames.splice(idx, 1)
-        HeartRefs.forEach(heartRef => heartRef.get().setIcon("heart-grey"))
-      }
-      else {
-        heartNames.push(UserService.currentUser().alias)
-        HeartRefs.forEach(heartRef => heartRef.get().setIcon("heart-red"))
-      }
-      hearts.set(heartNames.length)
-      $.likeNames = heartNames
-      $.likeAmount = heartNames.length
-      return $
-    })
+
+  onInterval(refresh, 10000)
+
+  return View
+
+  function refresh() {
+    let post = PostService.getPosts().find(({ id }) => id === postId)
+    likes.set(post.likeAmount)
   }
 }
 

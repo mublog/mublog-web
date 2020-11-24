@@ -8,5 +8,4 @@ declare interface PostModel {
   datePosted: number
   dateEdited: number
   likeAmount: number
-  likeNames: string[]
 }

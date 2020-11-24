@@ -6,9 +6,7 @@ import * as µ from "./mu.component"
 export default function Navigation() {
   return (
     <nav id="navigation" className="box">
-      <µ.Header>
-        {i18n.navigation}
-      </µ.Header>
+      <µ.Header>{i18n.navigation}</µ.Header>
       <div className="list">
         <a href="/">{i18n.home}</a>
         <a href="/presentation">{i18n.presentation}</a>

@@ -1,11 +1,9 @@
 declare type HTMLComponent<Type extends HTMLElement> = (...args: any[]) => Type
-
 declare type HTMLProperties<Type extends HTMLElement> =
   & Partial<{ [key in keyof Omit<Type, keyof Element | "accessKey" | "accessKeyLabel">]: any }>
   & Partial<{ [key in keyof Pick<Type, keyof Element | "className" | "id">]: any }>
   & Partial<DocDirectives>
   & { [key: string]: any }
-
 declare interface DocDirectives {
   for: {
     of: State<any[]> | Store<any> | any[]
@@ -52,6 +50,7 @@ declare interface Store<Type extends StoreItem> {
   clear(): Store<Type>
   del(fn: StorePredicate<Type>): Store<Type>
   find(fn: StorePredicate<Type>): Type
+  filter(fn: StorePredicate<Type>): Type[]
   subscribe(fn: (items: Type[]) => any): () => void
 }
 declare interface Reference<Type> {
@@ -63,6 +62,9 @@ declare interface Reference<Type> {
 declare type RouteActivator = (params?: URLParams) => boolean | Promise<boolean>
 declare type RouterComponent = (params?: URLParams) => HTMLElement | Promise<HTMLElement>
 declare type URLParams = { [parameter: string]: string }
+declare type URLQuery = {
+  [parameter: string]: string | string[]
+}
 declare type RouteTitle = string | ((params: URLParams) => string)
 declare interface LoadedRoute {
   params: URLParams

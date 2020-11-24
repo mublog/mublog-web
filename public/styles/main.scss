@@ -536,7 +536,9 @@ nav#navigation {
 
   .notification {
     pointer-events: all;
-    white-space: pre-line;
+  }
+
+  .notification-message {
     word-break: break-word;
   }
 }

@@ -1,7 +1,7 @@
 export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
   let local: Type[] = data || []
   const changeFns: ((items: Type[]) => any)[] = []
-  const pub = { get, add, del, subscribe, clear, size, each, isStore, find, updateOne }
+  const pub = { get, add, del, subscribe, clear, size, each, isStore, find, filter, updateOne }
   function isStore() {
     return true
   }
@@ -38,6 +38,9 @@ export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
   }
   function find(fn: StorePredicate<Type>) {
     return local.find(fn)
+  }
+  function filter(fn: StorePredicate<Type>) {
+    return local.filter(fn)
   }
   function add(item: Type) {
     local.push(item)
