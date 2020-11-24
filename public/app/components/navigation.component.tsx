@@ -15,7 +15,6 @@ export default function Navigation() {
         <a if={UserService.isGuest} href="/login">{i18n.login}</a>
         <a if={UserService.isGuest} href="/register">{i18n.register}</a>
         <a if={UserService.isUser} onclick={UserService.logout}>{i18n.logout}</a>
-        <a href="/error">{i18n.error}</a>
       </div>
     </nav>
   ) as HTMLElement

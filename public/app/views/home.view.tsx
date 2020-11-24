@@ -6,7 +6,6 @@ import Post from "../components/post.component"
 
 export default function HomeView(): HTMLDivElement {
   const WriterRef = useRef<µ.WriterElement>()
-  PostService.getPosts().clear()
 
   return (
     <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -36,7 +35,8 @@ export default function HomeView(): HTMLDivElement {
         id: Math.round(Math.random() * 10000000),
         textContent: values.raw,
         user: UserService.currentUser(),
-        datePost: Date.now(),
+        datePosted: Date.now(),
+        dateEdited: Date.now(),
         likeAmount: 0,
         likeNames: []
       })

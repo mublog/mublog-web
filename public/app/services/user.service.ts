@@ -13,19 +13,24 @@ export default UserService()
 function UserService() {
   const isUser = useState(false)
   const isGuest = useState(true)
-  const userImageUrl = useState("")
   let userAlias: string
   let userName: string
+  let userImageUrl: string
 
-  const pub = { isUser, isGuest, userImageUrl, logout, login, register, currentUser }
+  const pub = { isUser, isGuest, logout, login, register, currentUser, hasUser }
 
   function currentUser() {
     if (isUser.get()) {
       return {
         alias: userAlias,
-        name: userName
+        name: userName,
+        imageUrl: userImageUrl
       }
     }
+  }
+
+  function hasUser(alias: string) {
+    return !!users.find(user => user.alias === alias)
   }
 
   async function logout() {
@@ -54,7 +59,14 @@ function UserService() {
     return pub
   }
 
-  isUser.subscribe(state => isGuest.set(state ? false : true))
+  isUser.subscribe(state => {
+    isGuest.set(state ? false : true)
+    if (isGuest.get()) {
+      userAlias = undefined
+      userName = undefined
+      userImageUrl = undefined
+    }
+  })
 
   return pub
 }

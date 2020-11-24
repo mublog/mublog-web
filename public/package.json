@@ -3,7 +3,7 @@
   "version": "1.5.0",
   "description": "",
   "scripts": {
-    "build": "esbuild app.tsx --loader:.js=jsx --jsx-factory=createElement --bundle --target=chrome58,firefox57,safari11 --outfile=app.js; sass styles/main.scss styles/main.css"
+    "build": "esbuild app.tsx --loader:.js=jsx --jsx-factory=createElement --minify --bundle --target=chrome58,firefox57,safari11 --outfile=app.js; sass styles/main.scss styles/main.css"
   },
   "repository": {
     "type": "git",

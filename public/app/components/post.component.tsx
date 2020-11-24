@@ -3,11 +3,9 @@ import Time from "./time.component"
 import UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
-import type { Post as PostType } from "../services/post.service"
 import PostService from "../services/post.service"
 
-
-export default function Post(post: PostType): HTMLDivElement {
+export default function Post(post: PostModel): HTMLDivElement {
   return (
     <div className="post">
       <div styles={{ display: "flex", gap: "8px" }}>
@@ -25,7 +23,7 @@ export default function Post(post: PostType): HTMLDivElement {
                 <span className="user-alias">{post.user.alias}</span>
               </div>
             </a>
-            <Time datetime={post.datePost} className="datetime" />
+            <Time datetime={post.datePosted} className="datetime" />
             <µ.Icon name="calendar" />
           </µ.Header>
           <div className="user-content">

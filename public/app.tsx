@@ -1,5 +1,4 @@
 import { createElement, mount } from "./modules/doc/mod"
-import "./app/services/notification.service"
 import * as generic from "./app/services/generic.service"
 import Router from "./app/components/router.component"
 import Navigation from "./app/components/navigation.component"
