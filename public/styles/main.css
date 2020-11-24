@@ -21,7 +21,8 @@ html {
   height: 100%;
 }
 
-body, html {
+body,
+html {
   margin: 0;
   width: 100%;
 }
@@ -30,29 +31,40 @@ img {
   max-width: 100%;
 }
 
-*, .cursor-default {
+*,
+.cursor-default {
   cursor: url("svg/cursor-default.svg") 3 3, default !important;
 }
 
-input, textarea, .cursor-text {
+input,
+textarea,
+.cursor-text {
   cursor: url("svg/cursor-text.svg") 3 3, default !important;
 }
-input:invalid, textarea:invalid, .cursor-text:invalid {
+input:invalid,
+textarea:invalid,
+.cursor-text:invalid {
   box-shadow: none;
 }
-input::placeholder, textarea::placeholder, .cursor-text::placeholder {
+input::placeholder,
+textarea::placeholder,
+.cursor-text::placeholder {
   color: #5F574F;
 }
 
-a, button, .cursor-pointer {
+a,
+button,
+.cursor-pointer {
   cursor: url("svg/cursor-hover.svg") 3 3, default !important;
 }
 
-.cursor-disabled, :disabled {
+.cursor-disabled,
+:disabled {
   cursor: url("svg/cursor-disabled.svg") 3 3, default !important;
 }
 
-.cursor-active:active, :any-link {
+.cursor-active:active,
+:any-link {
   cursor: url("svg/cursor-active.svg") 3 3, default !important;
 }
 
@@ -105,7 +117,7 @@ a, button, .cursor-pointer {
   background-size: cover;
 }
 
-#header {
+header#header {
   border: 12px solid transparent;
   border-image: url("svg/header.svg") 12 fill round;
   background-color: transparent;
@@ -115,19 +127,18 @@ a, button, .cursor-pointer {
   left: 0;
   z-index: 99;
 }
-#header .header-content {
+header#header .header-content {
   margin: -8px 0px -4px 0px;
   display: flex;
 }
-#header .header-content .header-profile {
+header#header .header-content .header-profile {
   margin-left: auto;
 }
-#header .header-content .header-profile .user-image-frame {
+header#header .header-content .header-profile .user-image-frame {
   background-image: url("svg/circle-transparent-header.svg");
 }
 
-#router.loading::after {
-  content: "";
+#loading-bar {
   display: block;
   position: fixed;
   top: 0;
@@ -171,7 +182,8 @@ a, button, .cursor-pointer {
 .input:hover, .input:active {
   transform: translateY(2px);
 }
-.input textarea, .input input {
+.input textarea,
+.input input {
   margin: -8px;
   padding: 2px 8px 2px 8px;
   background-color: transparent;
@@ -185,6 +197,7 @@ a, button, .cursor-pointer {
 
 .box {
   display: block;
+  width: 100%;
   border: 12px solid transparent;
   border-image: url("svg/box.svg") 12 fill round;
   background-color: transparent;
@@ -355,8 +368,8 @@ a, button, .cursor-pointer {
   font-style: normal;
   display: flex;
   /* overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; */
+        text-overflow: ellipsis;
+        white-space: nowrap; */
   padding: 2px 4px 2px 4px;
   display: block;
 }
@@ -369,27 +382,22 @@ a, button, .cursor-pointer {
   height: max-content;
 }
 
-#navigation {
+nav#navigation {
   width: 200px;
   height: max-content;
 }
-#navigation .list a {
+nav#navigation .list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+nav#navigation .list a {
   text-decoration: none;
   width: 100%;
-  transition: 250ms;
-  display: block;
-}
-#navigation .list a span {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-#navigation .list a + a {
-  margin-top: 4px;
-}
-#navigation .list a:hover {
-  cursor: pointer;
-  box-shadow: 0px 2px #5F574F;
+  padding: 2px;
 }
 
 .loading-circle {
@@ -547,6 +555,12 @@ a, button, .cursor-pointer {
 .mark-down p code {
   padding-left: 8px;
   display: inline-block;
+}
+
+[hidden],
+[hidden=""],
+[hidden=true] {
+  display: none !important;
 }
 
 /*# sourceMappingURL=main.css.map */

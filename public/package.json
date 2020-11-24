@@ -1,0 +1,29 @@
+{
+  "name": "mublog-web",
+  "version": "1.5.0",
+  "description": "",
+  "scripts": {
+    "build": "esbuild app.tsx --loader:.js=jsx --jsx-factory=createElement --bundle --target=chrome58,firefox57,safari11 --outfile=app.js; sass styles/main.scss styles/main.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mublog/mublog-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mublog/mublog-web/issues"
+  },
+  "homepage": "https://github.com/mublog/mublog-web#readme",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
+  "dependencies": {
+    "esbuild": "^0.8.5",
+    "jsrsasign": "^10.0.5"
+  },
+  "devDependencies": {
+    "sass": "^1.29.0"
+  }
+}

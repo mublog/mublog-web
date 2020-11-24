@@ -1,0 +1,25 @@
+{
+  "name": "doc",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "esbuild examples/todo/app.tsx --minify --bundle --target=chrome58,firefox57,safari11 --outfile=examples/todo/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/iljushka/doc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/iljushka/doc/issues"
+  },
+  "homepage": "https://gitlab.com/iljushka/doc#readme",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
+  "dependencies": {
+    "esbuild": "^0.8.5"
+  }
+}

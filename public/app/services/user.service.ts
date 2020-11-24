@@ -1,70 +1,60 @@
-import { useState, useMixin } from "../../modules/doc/module"
-import type { User as UserType, CurrentUser as CurrentUserType } from "../definitions/user"
-import mockUsers from "./mock_users"
+import { useState } from "../../modules/doc/mod"
+import i18n from "../../lang/de_DE.json"
+import NotificationService from "./notification.service"
+import * as service from "../services/generic.service"
+import * as cfg from "../config/settings"
 
-export const Users = useMixin(useState(mockUsers), {
-    insert(insertedUser: UserType) {
-        let find = Users.value.find(user => user.alias === insertedUser.alias)
-        if (find) {
-            return false
-        }
-        Users.update(users => users.push(insertedUser))
-        return true
-    },
-    findOne(alias: string) {
-        return Users.value.find(user => user.alias === alias)
-    },
-    find(predicate: (user: UserType) => any): UserType {
-        return Users.value.find(predicate)
+const users = [
+  { alias: "iljushka", name: "Ilja", password: "password" }
+]
+
+export default UserService()
+
+function UserService() {
+  const isUser = useState(false)
+  const isGuest = useState(true)
+  const userImageUrl = useState("")
+  let userAlias: string
+  let userName: string
+
+  const pub = { isUser, isGuest, userImageUrl, logout, login, register, currentUser }
+
+  function currentUser() {
+    if (isUser.get()) {
+      return {
+        alias: userAlias,
+        name: userName
+      }
     }
-})
+  }
 
-export const UserService = useMixin(useState({} as CurrentUserType), {
-    register(registerUser: UserType) {
-        let success = Users.insert(registerUser)
-        if (success) {
-            return true
-        }
-        else {
-            return false
-        }
-    },
-    login({ alias }: { alias: string }) {
-        let user = Users.findOne(alias)
-        if (user) {
-            UserService.update(state => {
-                state.loggedIn = true
-                state.alias = user.alias
-                state.name = user.name
-                state.profileImageUrl = user.profileImageUrl
-            })
-            return true
-        }
-        return false
-    },
-    logout(callback?: () => any) {
-        UserService.update(state => state.loggedIn = false)
-        if (callback) {
-            callback()
-        }
-    },
-    isLoggedIn() {
-        return !!UserService.value.loggedIn
-    },
-    getAlias() {
-        return UserService.value.alias
-    },
-    ping() {
-        // API
+  async function logout() {
+    isUser.set(false)
+    NotificationService.push(null, i18n.logoutMessage, cfg.notification)
+    service.activateRoute("/login")
+    return pub
+  }
+
+  async function login({ alias, password }) {
+    let success = users.find(user => user.alias === alias && user.password === password)
+    if (success) {
+      isUser.set(true)
+      userAlias = alias
+      userName = success.name
+      NotificationService.push(null, i18n.loginSuccessMessage, cfg.notification)
     }
-})
-
-UserService.subscribe(state => {
-    if (state.loggedIn === false) {
-        state.alias = undefined
-        state.name = undefined
-        state.profileImageUrl = undefined
+    else {
+      isUser.set(false)
+      NotificationService.push(null, i18n.loginFailedMessage, cfg.notification)
     }
-})
+    return pub
+  }
 
-export default UserService
+  async function register() {
+    return pub
+  }
+
+  isUser.subscribe(state => isGuest.set(state ? false : true))
+
+  return pub
+}

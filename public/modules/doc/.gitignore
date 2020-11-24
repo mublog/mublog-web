@@ -1,3 +1,4 @@
-dist
 node_modules
-examples
+public/app.js
+ignore
+dist
