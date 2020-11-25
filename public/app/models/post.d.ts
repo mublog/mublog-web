@@ -8,4 +8,5 @@ declare interface PostModel {
   datePosted: number
   dateEdited: number
   likeAmount: number
+  likedByUser?: boolean
 }
