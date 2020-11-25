@@ -382,6 +382,10 @@ header#header .header-content .header-profile .user-image-frame {
   height: max-content;
 }
 
+#side {
+  height: max-content;
+}
+
 nav#navigation {
   width: 200px;
   height: max-content;
