@@ -124,7 +124,7 @@ export interface WriterElement extends HTMLDivElement {
     raw: string
     rich: string
   },
-  textArea: Reference<HTMLTextAreaElement>
+  clear(): void
 }
 
 export interface WriterElementConstructor {
@@ -139,7 +139,7 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
   const Visible = useState(false)
 
   return (
-    <div className="box writer" getValues={getValues} ref={ref} textArea={TextAreaRef}>
+    <div className="box writer" getValues={getValues} ref={ref} clear={clear}>
       <div>
         <TextArea ref={TextAreaRef} oninput={writeMarkDown} placeholder={placeholder || ""} value={value || ""} />
         <Icon name="magnifier" className="toggle-post-preview" onclick={toggleVisibility} />
@@ -153,6 +153,12 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
       </Footer>
     </div>
   )
+
+  function clear() {
+    TextAreaRef.get().value = ""
+    MarkDownContent.get().innerHTML = ""
+    Visible.set(false)
+  }
 
   function getValues() {
     const el = MarkDownContent.get()
