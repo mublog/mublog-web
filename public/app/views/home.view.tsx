@@ -18,7 +18,11 @@ export default function HomeView(): HTMLDivElement {
           </div>
         </µ.Writer>
       </form>
-      <div for={{ of: PostService.getPosts(), do: Post }}></div>
+      <div for={{
+        of: PostService.getPosts(),
+        do: Post,
+        sort: (a, b) => b.datePosted - a.datePosted
+      }} />
     </div>
   )
 
@@ -40,10 +44,9 @@ export default function HomeView(): HTMLDivElement {
         user: UserService.currentUser(),
         datePosted: Date.now(),
         dateEdited: Date.now(),
-        likeAmount: 0,
-        likeNames: []
+        likeAmount: 0
       })
-      WriterRef.get().textArea.get().value = ""
+      WriterRef.get().clear()
     }
     else {
       NotificationService.push(null, i18n.messageCriteriaError)

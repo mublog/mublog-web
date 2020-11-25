@@ -4,7 +4,13 @@ import UserService from "../services/user.service"
 import Post from "../components/post.component"
 
 export default function PresentationView(): HTMLDivElement {
-  const View = <div for={{ of: PostService.getPosts(), do: Post }} />
+  const View = (
+    <div for={{
+      of: PostService.getPosts(),
+      do: Post,
+      sort: (a, b) => b.datePosted - a.datePosted
+    }} />
+  )
 
   if (UserService.isUser.get()) {
     onInterval(() => {
@@ -14,24 +20,9 @@ export default function PresentationView(): HTMLDivElement {
         user: UserService.currentUser(),
         datePosted: Date.now(),
         dateEdited: Date.now(),
-        likeAmount: 0,
-        likeNames: []
+        likeAmount: 0
       })
     }, 500)
-  }
-  else {
-    PostService.add({
-      id: Math.round(Math.random() * 10000000),
-      textContent: "Logge dich ein, um dich zuspamen zu lassen :3",
-      user: {
-        alias: "admin",
-        name: "Ilja"
-      },
-      datePosted: Date.now(),
-      dateEdited: Date.now(),
-      likeAmount: 0,
-      likeNames: []
-    })
   }
 
   return View

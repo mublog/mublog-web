@@ -3,6 +3,12 @@ import PostService from "../services/post.service"
 import Post from "../components/post.component"
 
 export default function UserPostView({ alias, id }: URLParams): HTMLDivElement {
-  let posts = PostService.getPosts().filter(post => post.id === parseInt(id))
-  return <div for={{ of: posts, do: Post }}></div>
+  return (
+    <div for={{
+      of: PostService.getPosts(),
+      do: Post,
+      filter: p => p.id == id && p.user.alias === alias,
+      sort: (a, b) => b.datePosted - a.datePosted
+    }} />
+  )
 }
