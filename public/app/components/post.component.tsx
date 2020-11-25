@@ -74,6 +74,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
         name="heart-grey"
         if={UserService.isUser}
         className="post-like clickable cursor-action"
+        onclick={like}
       />
       <µ.Icon
         ref={HeartRefs[1]}
@@ -85,6 +86,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
     </div>
   )
 
+  refresh()
   onInterval(refresh, 10000)
 
   return View
@@ -92,6 +94,16 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
   function refresh() {
     let post = PostService.getPosts().find(({ id }) => id === postId)
     likes.set(post.likeAmount)
+    HeartRefs[0].get().setIcon(post.likedByUser ? "heart-red" : "heart-grey")
+  }
+
+  function like() {
+    PostService.getPosts().updateOne(post => post.id === postId, post => {
+      post.likedByUser = post.likedByUser ? false : true
+      post.likeAmount -= post.likedByUser ? -1 : +1
+      refresh()
+      return post
+    })
   }
 }
 
