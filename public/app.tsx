@@ -1,4 +1,4 @@
-import { createElement, mount } from "./modules/doc/mod"
+import { createElement } from "./modules/doc/mod"
 import * as generic from "./app/services/generic.service"
 import Router from "./app/components/router.component"
 import Navigation from "./app/components/navigation.component"
@@ -11,7 +11,9 @@ function Application(): HTMLDivElement {
       <div id="loading-bar" if={generic.isLoading} />
       <Header />
       <div id="app-grid">
-        <Navigation />
+        <div id="side">
+          <Navigation />
+        </div>
         <div id="content">
           <Router routes={Routes} />
         </div>
@@ -20,4 +22,4 @@ function Application(): HTMLDivElement {
   )
 }
 
-mount(<Application />, document.getElementById("app"))
+document.getElementById("app").replaceWith(<Application />)

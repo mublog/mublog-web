@@ -22,7 +22,7 @@ export function useState<Type>(initialValue: Type): State<Type> {
   }
   function subscribe(fn: Subscription<Type>) {
     subscribers.push(fn)
-    notify()
+    fn(value)
     return function unsubscribe() {
       const index = subscribers.indexOf(fn)
       if (index !== -1) {

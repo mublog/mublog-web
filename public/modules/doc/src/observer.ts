@@ -1,11 +1,10 @@
-import { Hooks, Mount } from "./symbols"
-import { onDestroy } from "./lifecycle"
-import { cursor, destroy, runAll } from "./element"
+import { Hooks, Destroy } from "./symbols"
+import { cursor, runMount, runDestroy } from "./element"
 
 export function onAttributeChange(fn: AttributeChangedCallback, attributes: string[]) {
   let el = cursor()
   AttributeCallbacks.push(fn)
-  onDestroy(() => {
+  el[Hooks][Destroy].push(() => {
     const index = AttributeCallbacks.indexOf(fn)
     if (index !== -1) {
       AttributeCallbacks.splice(index, 1)
@@ -23,12 +22,12 @@ const DOMObserver = new MutationObserver(rec => rec.forEach(({ type, removedNode
   if (type !== "childList") return
   if (removedNodes.length > 0) {
     Array.from(removedNodes).forEach((el: HTMLElement) => {
-      if (el[Hooks]) destroy(el)
+      if (el[Hooks]) runDestroy(el)
     })
   }
   if (addedNodes.length > 0) {
     Array.from(addedNodes).forEach((el: HTMLElement) => {
-      if (el[Hooks]) runAll(el[Hooks][Mount])
+      if (el[Hooks]) runMount(el)
     })
   }
 }))

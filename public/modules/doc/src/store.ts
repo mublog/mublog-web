@@ -1,6 +1,6 @@
 export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
   let local: Type[] = data || []
-  const changeFns: ((items: Type[]) => any)[] = []
+  const subscribers: ((items: Type[]) => any)[] = []
   const pub = { get, add, del, subscribe, clear, size, each, isStore, find, filter, updateOne }
   function isStore() {
     return true
@@ -17,7 +17,7 @@ export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
     return false
   }
   function notify() {
-    changeFns.forEach(fn => fn(local))
+    subscribers.forEach(fn => fn(local))
     return pub
   }
   function clear() {
@@ -56,12 +56,12 @@ export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
     return pub
   }
   function subscribe(fn: (items: Type[]) => void) {
-    changeFns.push(fn)
-    notify()
+    subscribers.push(fn)
+    fn(local)
     return function () {
-      let index = changeFns.indexOf(fn)
+      let index = subscribers.indexOf(fn)
       if (index >= 0) {
-        changeFns.splice(index, 1)
+        subscribers.splice(index, 1)
       }
     }
   }

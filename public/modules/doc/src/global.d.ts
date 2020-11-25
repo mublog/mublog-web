@@ -6,8 +6,10 @@ declare type HTMLProperties<Type extends HTMLElement> =
   & { [key: string]: any }
 declare interface DocDirectives {
   for: {
-    of: State<any[]> | Store<any> | any[]
+    of: Subscribable<any[]> | any[]
     do: HTMLComponent<any>
+    sort?: (a: any, b: any) => number
+    filter?: (value: any, index: number) => unknown
   }
   if: State<boolean> | boolean
   ref: Reference<HTMLElement>
@@ -84,4 +86,10 @@ declare interface RouteConstructor {
   title?: RouteTitle
   activates?: RouteActivator[]
   children?: RouteConstructor[]
+}
+declare interface Subscribable<Type> {
+  subscribe(fn: (value: Type) => any): () => void
+  get?(): Type
+  set?(newValue: Type): void
+  update?(fn: (value: Type) => Type): void
 }

@@ -1,7 +1,7 @@
 import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy } from "./symbols"
-import { onDestroy } from "./lifecycle"
 import { onEvent } from "./events"
 import { useStyles } from "./styles"
+import { onDestroy } from "./lifecycle"
 
 let currentElement: HTMLElement
 
@@ -12,18 +12,22 @@ export function cursor(el?: HTMLElement): HTMLElement {
   return currentElement
 }
 
-export function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[Tag] {
+function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[Tag] {
   let el = document.createElement(type)
   cursor(el)
   prepareHooks()
   return el
 }
 
-export function fragment() {
+function text(content: string | number) {
+  return document.createTextNode(content + "")
+}
+
+function fragment() {
   return document.createDocumentFragment()
 }
 
-export function comment(text: string) {
+function comment(text: string) {
   return document.createComment(text)
 }
 
@@ -47,11 +51,6 @@ function prepareHooks() {
   el[Hooks][Destroy] = []
 }
 
-function removeHooks() {
-  let el = cursor()
-  delete el[Hooks]
-}
-
 export function render(target: HTMLElement, ...children: HTMLElement[]) {
   target.innerHTML = ""
   cursor(target)
@@ -72,12 +71,13 @@ function appendChildren(children: any[]) {
     else if (child instanceof Element) {
       frag.appendChild(child)
     }
-    else if (child.isState) {
+    else if (child.subscribe) {
       let stateValue = child.get()
       if (typeof stateValue === "string" || typeof stateValue === "number") {
-        let state: State<number | string> = child
+        let state: Subscribable<number | string> = child
         let content = text(state.get())
         frag.appendChild(content)
+        cursor(el)
         onDestroy(state.subscribe(val => {
           runAll(el[Hooks][BeforeUpdate])
           let newVal = val + ""
@@ -88,8 +88,9 @@ function appendChildren(children: any[]) {
         }))
       }
       else if (stateValue instanceof Element) {
-        let state: State<Element> = child
+        let state: Subscribable<Element> = child
         frag.appendChild(state.get())
+        cursor(el)
         onDestroy(state.subscribe(val => {
           runAll(el[Hooks][BeforeUpdate])
           state.get().replaceWith(val)
@@ -101,10 +102,6 @@ function appendChildren(children: any[]) {
   el.appendChild(frag)
 }
 
-export function text(content: string | number) {
-  return document.createTextNode(content + "")
-}
-
 function attribute(el: HTMLElement, name: string, value?: string) {
   if (value === undefined) {
     el.removeAttribute(name)
@@ -114,77 +111,120 @@ function attribute(el: HTMLElement, name: string, value?: string) {
   }
 }
 
-function properties(props: any) {
+function writeFor(property: any) {
   let el = cursor()
-  for (let key in props) {
-    if (key === "for") {
-      if (props[key].of && Array.isArray(props[key].of)) {
-        let list: any[] = props[key].of
-        let com: HTMLComponent<any> = props[key].do
-        render(el, ...list.map(com))
-      }
-      else if (props[key].of && (props[key].of.isStore || props[key].of.isState)) {
-        let list: State<any[]> | Store<any> = props[key].of
-        let com: HTMLComponent<any> = props[key].do
-        onDestroy(list.subscribe(val => {
-          runAll(el[Hooks][BeforeUpdate])
-          render(el, ...val.map(com))
-          runAll(el[Hooks][AfterUpdate])
-        }))
-      }
-    }
-    else if (key === "styles") {
-      if (props[key].isState) {
-        let state: State<Partial<CSSStyleDeclaration>> = props[key]
-        onDestroy(state.subscribe(rules => {
-          runAll(el[Hooks][BeforeUpdate])
-          useStyles(el, rules)
-          runAll(el[Hooks][AfterUpdate])
-        }))
-      }
-      else {
-        useStyles(el, props[key])
-      }
-    }
-    else if (key === "if") {
-      if (props[key].isState) {
-        let state: State<boolean> = props[key]
-        onDestroy(state.subscribe(val => {
-          if (val === true) {
-            runAll(el[Hooks][BeforeUpdate])
-            attribute(el, "hidden")
-            runAll(el[Hooks][AfterUpdate])
-          }
-          else if (val === false) {
-            attribute(el, "hidden", "")
-          }
-        }))
-      }
-      else {
-        if (!props[key]) {
-          attribute(el, "hidden", "true")
-        }
-      }
-    }
-    else if (props[key].isState) {
-      let state: State<any> = props[key]
-      el[key] = state.get()
-      onDestroy(state.subscribe(val => {
+  let sort: (a: any, b: any) => number = property.sort
+  let filter: (value: any, index: number) => unknown = property.filter
+  if (property.of && Array.isArray(property.of)) {
+    let com: HTMLComponent<any> = property.do
+    let copy: any[] = [...property.of]
+    if (sort) copy = copy.sort(sort)
+    if (filter) copy = copy.filter(filter)
+    render(el, ...copy.map(com))
+  }
+  else if (property.of && property.of.subscribe) {
+    let list: Subscribable<any[]> = property.of
+    let com: HTMLComponent<any> = property.do
+    cursor(el)
+    onDestroy(list.subscribe(val => {
+      runAll(el[Hooks][BeforeUpdate])
+      let copy = [...val]
+      if (sort) copy = copy.sort(sort)
+      if (filter) copy = copy.filter(filter)
+      render(el, ...copy.map(com))
+      runAll(el[Hooks][AfterUpdate])
+    }))
+  }
+}
+
+function writeStyle(property: any) {
+  let el = cursor()
+  if (property.subscribe) {
+    let state: Subscribable<Partial<CSSStyleDeclaration>> = property
+    onDestroy(state.subscribe(rules => {
+      runAll(el[Hooks][BeforeUpdate])
+      useStyles(el, rules)
+      runAll(el[Hooks][AfterUpdate])
+    }))
+  }
+  else {
+    useStyles(el, property)
+  }
+}
+
+function writeIf(property: any) {
+  let el = cursor()
+  if (property.subscribe) {
+    let state: Subscribable<boolean> = property
+    onDestroy(state.subscribe(val => {
+      if (val === true) {
         runAll(el[Hooks][BeforeUpdate])
-        if (el[key] !== val) {
-          el[key] = val
-        }
+        attribute(el, "hidden")
         runAll(el[Hooks][AfterUpdate])
-      }))
+      }
+      else if (val === false) {
+        attribute(el, "hidden", "")
+      }
+    }))
+  }
+  else {
+    if (property === false) {
+      attribute(el, "hidden", "true")
     }
-    else if (key === "ref" && props[key].isRef) {
-      props[key].set(el)
+  }
+}
+
+function writeSubscribableProperty(key: string, property: Subscribable<any>) {
+  let el = cursor()
+  let state: Subscribable<any> = property
+  el[key] = state.get()
+  onDestroy(state.subscribe(val => {
+    runAll(el[Hooks][BeforeUpdate])
+    if (el[key] !== val) {
+      el[key] = val
     }
-    else if (key.startsWith("on") && typeof props[key] === "function") {
-      onEvent(key.slice(2) as EventNames, props[key])
-    }
-    else {
-      el[key] = props[key]
+    runAll(el[Hooks][AfterUpdate])
+  }))
+}
+
+function writeRest(key: string, property: any) {
+  let el = cursor()
+  if (property.subscribe) {
+    writeSubscribableProperty(key, property)
+  }
+  else if (key.startsWith("on") && typeof property === "function") {
+    onEvent(key.slice(2) as EventNames, property)
+  }
+  else {
+    el[key] = property
+  }
+}
+
+function writeRef(property: any) {
+  let el = cursor()
+  if (property.isRef) {
+    property.set(el)
+  }
+}
+
+function properties(props: any) {
+  for (let key in props) {
+    switch (key) {
+      case "for":
+        writeFor(props[key])
+        break
+      case "styles":
+        writeStyle(props[key])
+        break
+      case "if":
+        writeIf(props[key])
+        break
+      case "ref":
+        writeRef(props[key])
+        break
+      default:
+        writeRest(key, props[key])
+        break
     }
   }
 }
@@ -193,41 +233,15 @@ export function runAll(fns: ((...args: any[]) => any)[]) {
   fns && fns.length ? fns.forEach(fn => fn()) : void null
 }
 
-export function destroy(el: HTMLElement) {
-  cursor(el)
+export function runMount(el: HTMLElement) {
+  if (el[Hooks]) {
+    runAll(el[Hooks][Mount])
+  }
+}
+
+export function runDestroy(el: HTMLElement) {
   if (el[Hooks]) {
     runAll(el[Hooks][Destroy])
   }
-  removeHooks()
-  Array.from(el.children).forEach(destroy)
-}
-
-export function mount(el: HTMLElement, target: HTMLElement) {
-  if (el && target) {
-    cursor(el)
-    target.replaceWith(el)
-  }
-}
-
-export function query<Target extends HTMLElement>(selector: string): Target {
-  let el = cursor()
-  if (el) {
-    return el.querySelector(selector) as Target
-  }
-}
-
-export function queryAll<Target extends HTMLElement>(selector: string): Target[] {
-  let el = cursor()
-  if (el) {
-    return Array.from(el.querySelectorAll(selector)) as Target[]
-  }
-  return []
-}
-
-export function filter<Target extends HTMLElement>(predicate: (value: Target, index: number, array: Target[]) => unknown): Target[] {
-  return queryAll<Target>("*").filter(predicate)
-}
-
-export function find<Target extends HTMLElement>(predicate: (value: Target, index: number, array: Target[]) => unknown): Target {
-  return queryAll<Target>("*").find(predicate)
+  Array.from(el.children).forEach(runDestroy)
 }

@@ -23,6 +23,27 @@ export function onGlobalEvent<Name extends EventNames>(name: Name, fn: (event: E
   }
 }
 
+export function onExplicitEvent<Name extends EventNames>(el: HTMLElement, name: Name, fn: (event: EventMap[Name]) => any) {
+  if (!window[Hooks]) {
+    el[Hooks] = Object.create(null)
+  }
+  let fns = ((el[Hooks][name]) || (el[Hooks][name] = [])) as any[]
+  let event = (ev: any) => fns.forEach((cb: (arg: any) => any) => cb(ev))
+  fns.push(fn)
+  if (fns.length === 1) {
+    el.addEventListener(name, event, false)
+  }
+  onDestroy(() => {
+    const index = fns.indexOf(fn)
+    if (index !== -1) {
+      fns.splice(index, 1)
+      if (fns.length === 0) {
+        el.removeEventListener(name, event, false)
+      }
+    }
+  })
+}
+
 export function onEvent<Name extends EventNames>(name: Name, fn: (event: EventMap[Name]) => any) {
   let el = cursor()
   let fns = ((el[Hooks][name]) || (el[Hooks][name] = [])) as any[]
