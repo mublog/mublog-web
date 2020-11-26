@@ -22,44 +22,48 @@ const H4 = /[\\#]{4} (.+)/g
 const H5 = /[\\#]{5} (.+)/g
 const H6 = /[\\#]{6} (.+)/g
 
+
+function replace(text: string, find: string | RegExp, value: any) {
+  return text.replace(find, value)
+}
+
 export default function translateMarkDown(text: string): string {
   text = buildLists(text)
   text = buildHeaders(text)
-  text = text.replace(IMG, `<img loading="lazy" src="$2" alt="$1">`)
-  text = text.replace(A, `<a target="_blank" href="$2">$1</a>`)
+  text = replace(text, IMG, `<img loading="lazy" src="$2" alt="$1">`)
+  text = replace(text, A, `<a target="_blank" href="$2">$1</a>`)
   text = buildFontStyles(text)
-  text = text.replace(PRE0, `<pre class="$2">`)
-  text = text.replace(PRE1, "</pre>\n\n")
-  text = text.replace(CODE0, "<code>$1</code>")
-  text = text.replace(P0, m => P1.test(m) ? m : `<p>${m}</p>`)
-  text = text.replace(PRE2, "$1$2")
+  text = replace(text, PRE0, `<pre class="$2">`)
+  text = replace(text, PRE1, "</pre>\n\n")
+  text = replace(text, CODE0, "<code>$1</code>")
+  text = replace(text, P0, m => P1.test(m) ? m : `<p>${m}</p>`)
+  text = replace(text, PRE2, "$1$2")
   return text
 }
 
 function buildHeaders(t: string): string {
-  t = t.replace(H6, "<h6>$1</h6>")
-  t = t.replace(H5, "<h5>$1</h5>")
-  t = t.replace(H4, "<h4>$1</h4>")
-  t = t.replace(H3, "<h3>$1</h3>")
-  t = t.replace(H2, "<h2>$1</h2>")
-  t = t.replace(H1, "<h1>$1</h1>")
+  t = replace(t, H6, "<h6>$1</h6>")
+  t = replace(t, H5, "<h5>$1</h5>")
+  t = replace(t, H4, "<h4>$1</h4>")
+  t = replace(t, H3, "<h3>$1</h3>")
+  t = replace(t, H2, "<h2>$1</h2>")
+  t = replace(t, H1, "<h1>$1</h1>")
   return t
 }
 
 function buildFontStyles(t: string): string {
-  t = t.replace(B, "<b>$1</b>") // **bold**, __bold__
-  t = t.replace(I, "<i>$1</i>") // *italic*, _italic_
-  t = t.replace(DEL, "<del>$1</del>") // ~~delete~~
+  t = replace(t, B, "<b>$1</b>")
+  t = replace(t, I, "<i>$1</i>")
+  t = replace(t, DEL, "<del>$1</del>")
   return t
 }
 
 function buildLists(t: string): string {
-  t = t.replace(UL0, "<ul>\n*")
-  t = t.replace(UL1, "$1\n</ul>\n\n$2")
-  t = t.replace(UL2, "<li>$1</li>")
-  //ol
-  t = t.replace(OL0, "<ol>\n1.")
-  t = t.replace(OL1, "$1\n</ol>\n\n$2")
-  t = t.replace(OL2, "<li>$1</li>")
+  t = replace(t, UL0, "<ul>\n*")
+  t = replace(t, UL1, "$1\n</ul>\n\n$2")
+  t = replace(t, UL2, "<li>$1</li>")
+  t = replace(t, OL0, "<ol>\n1.")
+  t = replace(t, OL1, "$1\n</ol>\n\n$2")
+  t = replace(t, OL2, "<li>$1</li>")
   return t
 }
