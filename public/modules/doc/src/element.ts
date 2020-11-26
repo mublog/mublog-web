@@ -189,9 +189,7 @@ function writeSubscribableProperty(key: string, property: Subscribable<any>) {
   el[key] = state.get()
   onDestroy(state.subscribe(val => {
     eachFn(el[Hooks][BeforeUpdate])
-    if (el[key] !== val) {
-      el[key] = val
-    }
+    if (el[key] !== val) el[key] = val
     eachFn(el[Hooks][AfterUpdate])
   }))
 }
@@ -254,4 +252,5 @@ export function runDestroy(el: HTMLElement) {
   if (el.children) {
     each(Array.from(el.children), runDestroy)
   }
+  el = undefined
 }

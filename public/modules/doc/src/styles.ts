@@ -39,13 +39,11 @@ function insertRule(rule: string) {
   let style = `.${name} { ${rule} }`
   if (!CSSMap.has(name)) {
     CSSMap.set(name, style)
-    styleElement.insertAdjacentText("beforeend", style)
     CSSSheet.insertRule(style, CSSSheet.rules.length)
   }
   else {
     if (CSSMap.get(name) !== style) {
       name += "_"
-      styleElement.insertAdjacentText("beforeend", style)
       CSSSheet.insertRule(style, CSSSheet.rules.length)
     }
   }
