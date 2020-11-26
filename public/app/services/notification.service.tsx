@@ -36,14 +36,14 @@ function NotificationService() {
 
 function Notification({ title, message, options }: { title: string; message: string; options: NotificationOption }) {
   const View = (
-    <div className="notification box">
+    <µ.Box className="notification" arrow="bottom-right">
       <µ.Header if={!!title}>
         {title || ""}
       </µ.Header>
       <div className="notification-message">
         {message}
       </div>
-    </div>
+    </µ.Box>
   ) as HTMLDivElement
 
   if (options.timeout) {
