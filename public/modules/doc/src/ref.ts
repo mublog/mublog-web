@@ -1,21 +1,23 @@
+import { eachFn } from "./helper"
+
 export function useRef<Type>(): Reference<Type> {
-  let value = undefined
+  let current = undefined
   const subscribers = []
   const pub = { get, set, isRef, subscribe }
   function get() {
-    return value
+    return current
   }
   function set(newValue: Type) {
-    value = newValue
+    current = newValue
     notify()
     return pub
   }
   function notify() {
-    subscribers.forEach(sub => sub(value))
+    eachFn(subscribers, current)
   }
   function subscribe(fn: Subscription<Type>) {
     subscribers.push(fn)
-    fn(value)
+    fn(current)
     return function unsubscribe() {
       const index = subscribers.indexOf(fn)
       if (index !== -1) {

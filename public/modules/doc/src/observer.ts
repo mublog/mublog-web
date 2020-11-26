@@ -1,10 +1,11 @@
-import { Hooks, Destroy } from "./symbols"
 import { cursor, runMount, runDestroy } from "./element"
+import { each, eachFn } from "./helper"
+import { onDestroy } from "./lifecycle"
 
 export function onAttributeChange(fn: AttributeChangedCallback, attributes: string[]) {
   let el = cursor()
   AttributeCallbacks.push(fn)
-  el[Hooks][Destroy].push(() => {
+  onDestroy(() => {
     const index = AttributeCallbacks.indexOf(fn)
     if (index !== -1) {
       AttributeCallbacks.splice(index, 1)
@@ -14,21 +15,20 @@ export function onAttributeChange(fn: AttributeChangedCallback, attributes: stri
 }
 
 const AttributeCallbacks = []
-const AttributeObserver = new MutationObserver(rec => rec.forEach(({ type, attributeName, oldValue, }) => {
-  if (type === "attributes") AttributeCallbacks.forEach(cb => cb(attributeName, oldValue))
-}))
+const AttributeObserver = new MutationObserver(attributeNotifer)
+function attributeNotifer(recs: MutationRecord[]) {
+  each(recs, ({ type, attributeName, oldValue }: MutationRecord) => {
+    if (type !== "attributes") return
+    eachFn(AttributeCallbacks, attributeName, oldValue)
+  })
+}
 
-const DOMObserver = new MutationObserver(rec => rec.forEach(({ type, removedNodes, addedNodes }) => {
-  if (type !== "childList") return
-  if (removedNodes.length > 0) {
-    Array.from(removedNodes).forEach((el: HTMLElement) => {
-      if (el[Hooks]) runDestroy(el)
-    })
-  }
-  if (addedNodes.length > 0) {
-    Array.from(addedNodes).forEach((el: HTMLElement) => {
-      if (el[Hooks]) runMount(el)
-    })
-  }
-}))
+const DOMObserver = new MutationObserver(DOMNotifier)
+function DOMNotifier(recs: MutationRecord[]) {
+  each(recs, ({ type, removedNodes, addedNodes }: MutationRecord) => {
+    if (type !== "childList") return
+    each(Array.from(removedNodes), runDestroy)
+    each(Array.from(addedNodes), runMount)
+  })
+}
 DOMObserver.observe(document.body, { subtree: true, childList: true })

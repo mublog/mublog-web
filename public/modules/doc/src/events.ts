@@ -1,13 +1,17 @@
-import { Hooks } from "./symbols"
+import { Hooks, Events } from "./symbols"
 import { onDestroy } from "./lifecycle"
 import { cursor } from "./element"
+import { blank, eachFn } from "./helper"
 
 export function onGlobalEvent<Name extends EventNames>(name: Name, fn: (event: EventMap[Name]) => any) {
   if (!window[Hooks]) {
-    window[Hooks] = Object.create(null)
+    window[Hooks] = blank()
+    if (!window[Hooks][Events]) {
+      window[Hooks][Events] = blank()
+    }
   }
-  let fns = ((window[Hooks][name]) || (window[Hooks][name] = [])) as any[]
-  let event = (ev: any) => fns.forEach((cb: (arg: any) => any) => cb(ev))
+  let fns = ((window[Hooks][Events][name]) || (window[Hooks][Events][name] = [])) as any[]
+  let event = (ev: any) => eachFn(fns, ev)
   fns.push(fn)
   if (fns.length === 1) {
     addEventListener(name, event, false)
@@ -25,10 +29,13 @@ export function onGlobalEvent<Name extends EventNames>(name: Name, fn: (event: E
 
 export function onExplicitEvent<Name extends EventNames>(el: HTMLElement, name: Name, fn: (event: EventMap[Name]) => any) {
   if (!window[Hooks]) {
-    el[Hooks] = Object.create(null)
+    window[Hooks] = blank()
+    if (!window[Hooks][Events]) {
+      window[Hooks][Events] = blank()
+    }
   }
-  let fns = ((el[Hooks][name]) || (el[Hooks][name] = [])) as any[]
-  let event = (ev: any) => fns.forEach((cb: (arg: any) => any) => cb(ev))
+  let fns = ((window[Hooks][Events][name]) || (window[Hooks][Events][name] = [])) as any[]
+  let event = (ev: any) => eachFn(fns, ev)
   fns.push(fn)
   if (fns.length === 1) {
     el.addEventListener(name, event, false)
@@ -46,8 +53,8 @@ export function onExplicitEvent<Name extends EventNames>(el: HTMLElement, name: 
 
 export function onEvent<Name extends EventNames>(name: Name, fn: (event: EventMap[Name]) => any) {
   let el = cursor()
-  let fns = ((el[Hooks][name]) || (el[Hooks][name] = [])) as any[]
-  let event = (ev: any) => fns.forEach((cb: (arg: any) => any) => cb(ev))
+  let fns = ((el[Hooks][Events][name]) || (el[Hooks][Events][name] = [])) as any[]
+  let event = (ev: any) => eachFn(fns, ev)
   fns.push(fn)
   if (fns.length === 1) {
     el.addEventListener(name, event, false)

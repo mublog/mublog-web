@@ -1,4 +1,5 @@
 import hash from "./hash"
+import { blank } from "./helper"
 import { Styles } from "./symbols"
 
 const styleElement = document.createElement("style")
@@ -8,7 +9,7 @@ const CSSMap: Map<string, string> = new Map()
 
 export function useStyles(el: HTMLElement, rules: Partial<CSSStyleDeclaration>) {
   if (!el[Styles]) {
-    el[Styles] = Object.create(null)
+    el[Styles] = blank()
   }
   let add: string[] = []
   let del: string[] = []

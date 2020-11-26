@@ -1,3 +1,5 @@
+import { eachFn } from "./helper"
+
 export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
   let local: Type[] = data || []
   const subscribers: ((items: Type[]) => any)[] = []
@@ -17,7 +19,7 @@ export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
     return false
   }
   function notify() {
-    subscribers.forEach(fn => fn(local))
+    eachFn(subscribers, local)
     return pub
   }
   function clear() {

@@ -14,23 +14,23 @@ function onAction(type: any, fn: (...args: any[]) => any) {
   return removeAction
 }
 
-export function beforeUpdate(fn: () => any) {
-  return onAction(BeforeUpdate, fn)
+export function beforeUpdate(fn: () => any): void {
+  onAction(BeforeUpdate, fn)
 }
 
-export function afterUpdate(fn: () => any) {
-  return onAction(AfterUpdate, fn)
+export function afterUpdate(fn: () => any): void {
+  onAction(AfterUpdate, fn)
 }
 
-export function onMount(fn: () => any) {
-  return onAction(Mount, fn)
+export function onMount(fn: () => any): void {
+  onAction(Mount, fn)
 }
 
-export function onDestroy(fn: () => any) {
-  return onAction(Destroy, fn)
+export function onDestroy(fn: () => any): void {
+  onAction(Destroy, fn)
 }
 
 export function onInterval(fn: IntervalFn, interval: number = 0) {
   let id = setInterval(fn, interval)
-  onDestroy(() => clearInterval(id))
+  onDestroy((): void => clearInterval(id))
 }

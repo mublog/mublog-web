@@ -10,6 +10,7 @@ declare interface DocDirectives {
     do: HTMLComponent<any>
     sort?: (a: any, b: any) => number
     filter?: (value: any, index: number) => unknown
+    limit?: number
   }
   if: State<boolean> | boolean
   ref: Reference<HTMLElement>
