@@ -5,7 +5,7 @@ import * as µ from "./mu.component"
 
 export default function Navigation() {
   return (
-    <nav id="navigation" className="box">
+    <µ.Box id="navigation">
       <µ.Header>{i18n.navigation}</µ.Header>
       <div className="list">
         <a href="/">{i18n.home}</a>
@@ -14,6 +14,6 @@ export default function Navigation() {
         <a if={UserService.isGuest} href="/register">{i18n.register}</a>
         <a if={UserService.isUser} onclick={UserService.logout}>{i18n.logout}</a>
       </div>
-    </nav>
+    </µ.Box>
   ) as HTMLElement
 }
