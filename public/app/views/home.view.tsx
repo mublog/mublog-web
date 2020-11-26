@@ -6,7 +6,7 @@ import UserService from "../services/user.service"
 import Post from "../components/post.component"
 import NotificationService from "../services/notification.service"
 
-export default function HomeView(): HTMLDivElement {
+export default async function HomeView() {
   const WriterRef = useRef<µ.WriterElement>()
 
   return (
@@ -24,7 +24,7 @@ export default function HomeView(): HTMLDivElement {
         sort: (a, b) => b.datePosted - a.datePosted
       }} />
     </div>
-  )
+  ) as HTMLDivElement
 
   function getValues() {
     return WriterRef.get().getValues()

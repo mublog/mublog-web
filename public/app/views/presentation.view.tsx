@@ -3,14 +3,14 @@ import PostService from "../services/post.service"
 import UserService from "../services/user.service"
 import Post from "../components/post.component"
 
-export default function PresentationView(): HTMLDivElement {
+export default async function PresentationView() {
   const View = (
     <div for={{
       of: PostService.getPosts(),
       do: Post,
       sort: (a, b) => b.datePosted - a.datePosted
     }} />
-  )
+  ) as HTMLDivElement
 
   if (UserService.isUser.get()) {
     onInterval(() => {
