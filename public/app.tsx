@@ -11,12 +11,12 @@ function Application(): HTMLDivElement {
       <div id="loading-bar" if={generic.isLoading} />
       <Header />
       <div id="app-grid">
-        <div id="side">
+        <aside id="side">
           <Navigation />
-        </div>
-        <div id="content">
+        </aside>
+        <main id="content">
           <Router routes={Routes} />
-        </div>
+        </main>
       </div>
     </div>
   )
