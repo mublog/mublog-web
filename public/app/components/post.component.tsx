@@ -8,10 +8,10 @@ export default function Post(post: PostModel) {
   return (
     <div className="post">
       <div styles={{ display: "flex", gap: "8px" }}>
-        <UserImageContainer postId={post.id} userAlias={post.user.alias} />
-        <div className="box post-content">
+        <UserImageContainer userAlias={post.user.alias} />
+        <µ.Box className="post-content" arrow="top-left">
           <µ.Header>
-            <UserContainer postId={post.id} userAlias={post.user.alias} userName={post.user.name} />
+            <UserContainer userAlias={post.user.alias} userName={post.user.name} />
             <µ.Time datetime={post.datePosted} className="datetime" />
             <µ.Icon name="calendar" />
           </µ.Header>
@@ -25,25 +25,25 @@ export default function Post(post: PostModel) {
               <µ.Icon name="menu-meatballs" className="post-menu" />
             </div>
           </µ.Footer>
-        </div>
+        </µ.Box>
       </div>
     </div>
   ) as HTMLDivElement
 }
 
-function UserContainer({ postId, userAlias, userName }) {
+function UserContainer({ userAlias, userName }) {
   let UserName = useState(userName)
   return (
     <a className="user-link" href={`/user/${userAlias}`}>
-      <div className="user" styles={{ display: "flex", gap: "8px" }}>
-        <span className="user-name">{UserName}</span>
-        <span className="user-alias">{userAlias}</span>
-      </div>
+      { UserName}
+      <span className="user-alias">
+        @{userAlias}
+      </span>
     </a>
   ) as HTMLAnchorElement
 }
 
-function UserImageContainer({ postId, userAlias }) {
+function UserImageContainer({ userAlias }) {
   return (
     <a className="user-link" href={`/user/${userAlias}`}>
       <div className="user-image-wrap">
@@ -60,7 +60,9 @@ function TextContainer({ postId, data }: { postId: number, data: string }) {
   Text.subscribe(txt => MD.set(translateMarkDown(txt)))
 
   const View = (
-    <div className="box text-content mark-down" innerHTML={MD} />
+    <µ.Box className="text-content">
+      <div innerHTML={MD} className="mark-down" />
+    </µ.Box>
   ) as HTMLDivElement
 
   onInterval(refresh, 10000)
