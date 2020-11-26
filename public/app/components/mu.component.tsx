@@ -2,6 +2,26 @@ import { createElement, useRef, useState, onInterval } from "../../modules/doc/m
 import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
 
+export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPositions }, ...children: Child[]) {
+  if (!props) {
+    props = {}
+  }
+  let className = "box"
+  if (props.className) {
+    className += " " + props.className
+    delete props.className
+  }
+  delete props.labelText
+  return (
+    <div {...props} className={className}>
+      <div className={"arrow arrow-" + props.arrow} if={!!props.arrow} />
+      <div className="box-content">{...children}</div>
+    </div>
+  ) as HTMLDivElement
+}
+
+declare type ArrowPositions = "top-left" | "top-right" | "bottom-left" | "bottom-right"
+
 export function Label(
   props: HTMLProperties<HTMLDivElement> & { labelText: string },
   ...children: Child[]
@@ -93,7 +113,7 @@ export function Seperator(): HTMLSpanElement {
 
 export type IconName =
   "menu-kebab" | "menu-meatballs" | "menu-bento" |
-  "heart-grey" | "heart-pink" | "heart-red" |
+  "heart-grey" | "heart-red" |
   "comment-bubbles-grey" | "comment-bubbles" |
   "magnifier" | "clock" | "calendar"
 
@@ -189,7 +209,20 @@ export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & {
   const InnerText = useState(elapsedTime(datetime))
   const View = <time {...props} dateTime={datetime} innerText={InnerText} /> as HTMLTimeElement
   onInterval(() => {
-    InnerText.set(elapsedTime(datetime))
-  }, 1000)
+    if (onScreen(View)) {
+      InnerText.set(elapsedTime(datetime))
+    }
+  }, 5000)
   return View
+}
+
+function onScreen(el: HTMLElement) {
+  if (!(el instanceof Element)) {
+    return false
+  }
+  const { top, bottom } = el.getBoundingClientRect()
+  if ((top && bottom) === 0) {
+    return false
+  }
+  return top < innerHeight && bottom >= 0
 }
