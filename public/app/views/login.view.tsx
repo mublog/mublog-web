@@ -4,12 +4,12 @@ import * as services from "../services/generic.service"
 import * as µ from "../components/mu.component"
 import UserService from "../services/user.service"
 
-export default function LoginView(): HTMLDivElement {
+export default async function LoginView() {
   const InputAlias = useRef<HTMLInputElement>()
   const InputPassword = useRef<HTMLInputElement>()
 
   return (
-    <div id="login" className="box">
+    <µ.Box id="login">
       <µ.Header>{i18n.enterAccount}</µ.Header>
       <form onsubmit={tryLogin}>
         <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -31,8 +31,8 @@ export default function LoginView(): HTMLDivElement {
           </µ.Footer>
         </div>
       </form>
-    </div>
-  )
+    </µ.Box>
+  ) as HTMLDivElement
 
   function getValues() {
     return {

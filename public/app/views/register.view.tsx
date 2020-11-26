@@ -4,13 +4,13 @@ import * as µ from "../components/mu.component"
 import UserService from "../services/user.service"
 import NotificationService from "../services/notification.service"
 
-export default function RegisterView(): HTMLDivElement {
+export default async function RegisterView() {
   const InputAlias = useRef<HTMLInputElement>()
   const InputName = useRef<HTMLInputElement>()
   const InputPasswords = [useRef<HTMLInputElement>(), useRef<HTMLInputElement>()]
 
   return (
-    <div id="register" className="box">
+    <µ.Box id="register">
       <µ.Header>{i18n.createAccount}</µ.Header>
       <form onsubmit={tryRegister}>
         <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -40,8 +40,8 @@ export default function RegisterView(): HTMLDivElement {
           </µ.Footer>
         </div>
       </form>
-    </div>
-  )
+    </µ.Box>
+  ) as HTMLDivElement
 
   function getValues() {
     return {
