@@ -1,29 +1,18 @@
 import { createElement, onInterval, useRef, useState } from "../../modules/doc/mod"
-import Time from "./time.component"
 import UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
 import PostService from "../services/post.service"
 
-export default function Post(post: PostModel): HTMLDivElement {
+export default function Post(post: PostModel) {
   return (
     <div className="post">
       <div styles={{ display: "flex", gap: "8px" }}>
-        <a className="user-link" href={`/user/${post.user.alias}`}>
-          <div className="user-image-wrap">
-            <div className="user-image" />
-            <div className="user-image-frame" />
-          </div>
-        </a>
+        <UserImageContainer postId={post.id} userAlias={post.user.alias} />
         <div className="box post-content">
           <µ.Header>
-            <a className="user-link" href={`/user/${post.user.alias}`}>
-              <div className="user" styles={{ display: "flex", gap: "8px" }}>
-                <span className="user-name">{post.user.name}</span>
-                <span className="user-alias">{post.user.alias}</span>
-              </div>
-            </a>
-            <Time datetime={post.datePosted} className="datetime" />
+            <UserContainer postId={post.id} userAlias={post.user.alias} userName={post.user.name} />
+            <µ.Time datetime={post.datePosted} className="datetime" />
             <µ.Icon name="calendar" />
           </µ.Header>
           <div className="user-content">
@@ -39,7 +28,30 @@ export default function Post(post: PostModel): HTMLDivElement {
         </div>
       </div>
     </div>
-  )
+  ) as HTMLDivElement
+}
+
+function UserContainer({ postId, userAlias, userName }) {
+  let UserName = useState(userName)
+  return (
+    <a className="user-link" href={`/user/${userAlias}`}>
+      <div className="user" styles={{ display: "flex", gap: "8px" }}>
+        <span className="user-name">{UserName}</span>
+        <span className="user-alias">{userAlias}</span>
+      </div>
+    </a>
+  ) as HTMLAnchorElement
+}
+
+function UserImageContainer({ postId, userAlias }) {
+  return (
+    <a className="user-link" href={`/user/${userAlias}`}>
+      <div className="user-image-wrap">
+        <div className="user-image" />
+        <div className="user-image-frame" />
+      </div>
+    </a>
+  ) as HTMLAnchorElement
 }
 
 function TextContainer({ postId, text }: { postId: number, text: string }) {
@@ -49,7 +61,7 @@ function TextContainer({ postId, text }: { postId: number, text: string }) {
 
   const View = (
     <div className="box text-content mark-down" innerHTML={MD} />
-  )
+  ) as HTMLDivElement
 
   onInterval(refresh, 10000)
 
@@ -63,7 +75,7 @@ function TextContainer({ postId, text }: { postId: number, text: string }) {
   }
 }
 
-function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: number }): HTMLDivElement {
+function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: number }) {
   const likes = useState(likeAmount)
   const HeartRefs = [useRef<µ.IconElement>(), useRef<µ.IconElement>()]
 
@@ -84,7 +96,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
       />
       <span>{likes}</span>
     </div>
-  )
+  ) as HTMLDivElement
 
   refresh()
   onInterval(refresh, 10000)
@@ -107,7 +119,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
   }
 }
 
-function CommentContainer({ userAlias, postId }: { userAlias: string, postId: number }): HTMLAnchorElement {
+function CommentContainer({ userAlias, postId }: { userAlias: string, postId: number }) {
   return (
     <a href={`/user/${userAlias}/post/${postId}`} className="comment-action">
       <div styles={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -115,5 +127,5 @@ function CommentContainer({ userAlias, postId }: { userAlias: string, postId: nu
         <span>comments</span>
       </div>
     </a>
-  )
+  ) as HTMLAnchorElement
 }

@@ -1,5 +1,6 @@
-import { createElement, useRef, useState } from "../../modules/doc/mod"
+import { createElement, useRef, useState, onInterval } from "../../modules/doc/mod"
 import translateMarkDown from "../helpers/mark-down"
+import elapsedTime from "../helpers/elapsed-time"
 
 export function Label(
   props: HTMLProperties<HTMLDivElement> & { labelText: string },
@@ -182,4 +183,13 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
   function toggleVisibility() {
     Visible.set(Visible.get() ? false : true)
   }
+}
+
+export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & { datetime: number }) {
+  const InnerText = useState(elapsedTime(datetime))
+  const View = <time {...props} dateTime={datetime} innerText={InnerText} /> as HTMLTimeElement
+  onInterval(() => {
+    InnerText.set(elapsedTime(datetime))
+  }, 1000)
+  return View
 }
