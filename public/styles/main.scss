@@ -1,39 +1,34 @@
-/**
-    Thanks to the PICO-8 team for their color palette!
-    I used the hexadecimal values from: https://lospec.com/palette-list/pico-8
-*/
-
-$black: #000000;
-$dark-blue: #1D2B53;
-$dark-purple: #7E2553;
-$dark-green: #008751;
-$brown: #AB5236;
-$dark-grey: #5F574F;
-$light-grey: #C2C3C7;
-$white: #FFF1E8;
-$red: #FF004D;
-$orange: #FFA300;
-$yellow: #FFEC27;
-$green: #00E436;
-$blue: #29ADFF;
-$lavender: #83769C;
-$pink: #FF77A8;
-$light-peach: #FFCCAA;
+$dark-green:  #216c4b;
+$green:       #46af45;
+$light-green: #a1d685;
+$black:       #000000;
+$dark-grey:   #191028;
+$grey:        #afaab9;
+$white:       #f5f4eb;
+$dark-blue:   #453e78;
+$blue:        #7664fe;
+$light-blue:  #9ec2e8;
+$dark-red:    #833129;
+$red:         #dc534b;
+$light-red:   #e18d79;
+$dark-beige:  #d6b97b;
+$beige:       #e9d8a1;
+$pink:        #d365c8;
 
 @font-face {
   font-family: battlenet;
-  src: url("battlenet.ttf");
+  src: url("battlenet.woff2") format("woff");
   font-style: normal;
   font-weight: normal;
+  font-display: swap;
 }
 
 :root {
-  background: $lavender;
+  background: $dark-blue;
 }
 
 ::selection {
-  color: $white;
-  background: $pink;
+  background: $dark-beige;
 }
 
 html {
@@ -50,16 +45,8 @@ img {
   max-width: 100%;
 }
 
-*,
-.cursor-default {
-  cursor: url("svg/cursor-default.svg") 3 3, default !important;
-}
-
 input,
-textarea,
-.cursor-text {
-  cursor: url("svg/cursor-text.svg") 3 3, default !important;
-
+textarea {
   &:invalid {
     box-shadow: none;
   }
@@ -69,24 +56,8 @@ textarea,
   }
 }
 
-a,
-button,
-.cursor-pointer {
-  cursor: url("svg/cursor-hover.svg") 3 3, default !important;
-}
-
-.cursor-disabled,
-:disabled {
-  cursor: url("svg/cursor-disabled.svg") 3 3, default !important;
-}
-
-.cursor-active:active,
-:any-link {
-  cursor: url("svg/cursor-active.svg") 3 3, default !important;
-}
-
-.cursor-ns-resize {
-  cursor: url("svg/cursor-ns-resize.svg") 3 3, default !important;
+a {
+  cursor: pointer;
 }
 
 * {
@@ -123,7 +94,7 @@ button,
     border-radius: 6px;
     top: 6px;
     left: 6px;
-    background-color: #FFF1E8;
+    background-color: $white;
     background-position: 50% 50%;
   }
 
@@ -132,6 +103,7 @@ button,
     width: 48px;
     height: 48px;
     background-image: url("svg/circle-transparent.svg");
+    background-position: 0px 0px;
     background-size: cover;
   }
 }
@@ -147,14 +119,16 @@ header#header {
   z-index: 99;
 
   .header-content {
-    margin: -8px 0px -4px 0px;
+    margin: -12px -12px -8px -12px;
     display: flex;
+    padding: 4px;
 
     .header-profile {
       margin-left: auto;
 
       .user-image-frame {
-        background-image: url("svg/circle-transparent-header.svg");
+        background-image: url("svg/circle-transparent.svg");
+        background-position: 0px 0px;
       }
     }
   }
@@ -184,7 +158,7 @@ header#header {
 
 .label {
   .label-content {
-    text-shadow: 0px 2px $light-grey;
+    text-shadow: 0px 2px $grey;
     margin: 0px 4px 4px 4px;
     display: block;
 
@@ -214,7 +188,7 @@ header#header {
   textarea,
   input {
     margin: -8px;
-    padding: 2px 8px 2px 8px;
+    padding: 4px 8px 4px 8px;
     background-color: transparent;
     flex: auto;
     width: 100%;
@@ -233,76 +207,48 @@ header#header {
   border-image: url("svg/box.svg") 12 fill round;
   background-color: transparent;
 
+  .box-content, .box .box-content, header .header-content, footer .footer-content {
+    margin: -8px;
+    padding: 8px;
+  }
+
   .arrow {
     background-image: url("svg/arrow-min.svg");
     position: absolute;
     display: block;
     background-repeat: no-repeat;
-
-    &.arrow-top-left,
-    &.arrow-top-right,
-    &.arrow-bottom-left,
-    &.arrow-bottom-right,
-    &.arrow-top,
-    &.arrow-bottom,
-    &.arrow-left,
-    &.arrow-right {
-      width: 12px;
-      height: 10px;
-    }
-
-    &.arrow-top,
-    &.arrow-bottom,
-    &.arrow-left,
-    &.arrow-right {
-      background-position: 0 -12px;
-    }
-
-    &.arrow-top {
-      top: -15px;
-      transform: rotate(90deg);
-    }
-
-    &.arrow-bottom {
-      bottom: -15px;
-      transform: rotate(-90deg);
-    }
-
-    &.arrow-left {
-      left: -16px;
-    }
-
-    &.arrow-right {
-      right: -16px;
-      transform: rotate(180deg);
-    }
+    width: 14px;
+    height: 14px;
 
     &.arrow-top-left {
+      background-position: 0px 0px;
       top: -12px;
       left: -16px;
     }
 
     &.arrow-top-right {
+      background-position: 0px 0px;
+      transform: scaleX(-1);
       top: -12px;
+      right: -16px;
+    }
+
+    &.arrow-bottom-right {
+      background-position: -14px 0px;
+      bottom: -14px;
       right: -16px;
       transform: scaleX(-1);
     }
 
     &.arrow-bottom-left {
-      bottom: -12px;
+      background-position: -14px 0px;
+      bottom: -14px;
       left: -16px;
-      transform: scaleY(-1);
-    }
-
-    &.arrow-bottom-right {
-      bottom: -12px;
-      right: -16px;
-      transform: scaleX(-1) scaleY(-1);
     }
   }
 
   .box {
-    border-image: url("svg/box-inner.svg") 12 fill round;
+    border-image: url("svg/box.svg") 12 fill round;
   }
 
   .button {
@@ -315,8 +261,7 @@ header#header {
     transition: 100ms;
     transform: translateY(0px);
 
-    &:hover,
-    &:focus {
+    &:hover {
       animation: wiggle-vertical 400ms linear infinite;
     }
 
@@ -338,7 +283,7 @@ header#header {
   }
 
   .title {
-    text-shadow: 0px 2px $light-grey;
+    text-shadow: 0px 2px $grey;
   }
 
   .seperator {
@@ -372,8 +317,6 @@ header#header {
 }
 
 .post {
-  animation: wiggle-vertical 250ms linear 1;
-
   .title {
     display: flex;
     gap: 8px;
@@ -393,26 +336,25 @@ header#header {
     height: max-content;
   }
 
-  .user {
-    .user-alias {
-      color: $blue;
-
-      &::before {
-        content: "@";
-      }
-    }
-  }
+  .user-alias {
+    color: $blue;
+    margin-left: 8px;
+}
 
   .post-content {
     flex: 1;
     position: relative;
   }
 
+  .user-content {
+    margin: -8px;
+    padding: 4px;
+  }
+
   .post-like {
     &.clickable {
       &:hover {
         animation: wiggle-vertical 400ms linear infinite;
-        background-position: -32px -32px;
       }
     }
   }
@@ -451,9 +393,6 @@ header#header {
     li {
       font-style: normal;
       display: flex;
-      /* overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap; */
       padding: 2px 4px 2px 4px;
       display: block;
 
@@ -473,7 +412,7 @@ header#header {
   height: max-content;
 }
 
-nav#navigation {
+#navigation {
   width: 200px;
   height: max-content;
 
@@ -598,20 +537,16 @@ nav#navigation {
     background-position: 0px -32px;
   }
 
-  &.icon-heart-pink {
+  &.icon-heart-red {
     background-position: -32px -32px;
   }
 
-  &.icon-heart-red {
+  &.icon-comment-bubbles-grey {
     background-position: -64px -32px;
   }
 
-  &.icon-comment-bubbles-grey {
-    background-position: -96px -32px;
-  }
-
   &.icon-comment-bubbles {
-    background-position: -128px -32px;
+    background-position: -96px -32px;
   }
 }
 
@@ -629,7 +564,7 @@ nav#navigation {
 
 .mark-down {
   code {
-    background-color: $light-grey;
+    background-color: $grey;
     display: block;
     overflow: hidden;
     padding: 0px 8px 0px 0px;
@@ -688,4 +623,9 @@ nav#navigation {
 [hidden=""],
 [hidden="true"] {
   display: none !important;
+  height: 0px !important;
+  width: 0px !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
