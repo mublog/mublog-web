@@ -1,4 +1,4 @@
-import { createElement, onInterval, useRef, useState } from "../../modules/doc/mod"
+import { createElement, onInterval, onMount, useRef, useState } from "../../modules/doc/mod"
 import UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
@@ -16,7 +16,7 @@ export default function Post(post: PostModel) {
             <µ.Icon name="calendar" />
           </µ.Header>
           <div className="user-content">
-            <TextContainer postId={post.id} text={post.textContent} />
+            <TextContainer postId={post.id} data={post.textContent} />
           </div>
           <µ.Footer>
             <div styles={{ display: "flex", gap: "8px" }}>
@@ -54,8 +54,8 @@ function UserImageContainer({ postId, userAlias }) {
   ) as HTMLAnchorElement
 }
 
-function TextContainer({ postId, text }: { postId: number, text: string }) {
-  const Text = useState<string>(text)
+function TextContainer({ postId, data }: { postId: number, data: string }) {
+  const Text = useState<string>(data)
   const MD = useState<string>("")
   Text.subscribe(txt => MD.set(translateMarkDown(txt)))
 
@@ -98,7 +98,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
     </div>
   ) as HTMLDivElement
 
-  refresh()
+  onMount(refresh)
   onInterval(refresh, 10000)
 
   return View

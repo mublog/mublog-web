@@ -163,10 +163,10 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
 
   function getValues() {
     const el = MarkDownContent.get()
-    const text = TextAreaRef.get().value
+    const text = TextAreaRef.get()
     if (el && text) {
       return {
-        raw: text,
+        raw: text.value,
         rich: el.innerHTML
       }
     }
@@ -174,9 +174,9 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
 
   function writeMarkDown() {
     const el = MarkDownContent.get()
-    const text = TextAreaRef.get().value
+    const text = TextAreaRef.get()
     if (el && text) {
-      el.innerHTML = translateMarkDown(text)
+      el.innerHTML = translateMarkDown(text.value)
     }
   }
 

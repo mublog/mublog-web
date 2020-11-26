@@ -8,7 +8,8 @@ export default function UserPostView({ alias, id }: URLParams): HTMLDivElement {
       of: PostService.getPosts(),
       do: Post,
       filter: p => p.id == id && p.user.alias === alias,
-      sort: (a, b) => b.datePosted - a.datePosted
+      sort: (a, b) => b.datePosted - a.datePosted,
+      limit: 1
     }} />
   )
 }
