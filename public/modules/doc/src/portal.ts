@@ -4,14 +4,14 @@ export function usePortal<Type extends (...args: any[]) => HTMLElement>(componen
   let current: any
   const isPortal = true
   const pub = { isPortal, open, close, set }
-  function open(arg: Parameters<Type>[0]) {
+  function open(props: Parameters<Type>[0], ...children: Child[]) {
     if (!isSet) {
-      current = component(arg)
+      current = component(props, ...children)
       anchor.appendChild(current)
     }
     else {
       close()
-      open(arg)
+      open(props, ...children)
     }
     return current
   }
