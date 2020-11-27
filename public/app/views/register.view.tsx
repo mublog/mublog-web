@@ -45,9 +45,9 @@ export default async function RegisterView() {
 
   function getValues() {
     return {
-      alias: InputAlias.get().value,
-      name: InputName.get().value,
-      passwords: [InputPasswords[0].get().value, InputPasswords[1].get().value]
+      alias: InputAlias.current.value,
+      name: InputName.current.value,
+      passwords: [InputPasswords[0].current.value, InputPasswords[1].current.value]
     }
   }
 

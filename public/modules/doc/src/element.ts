@@ -207,9 +207,16 @@ function writeDefault(key: string, property: any) {
   }
 }
 
-function writeRef(property: any) {
+function writeRef(property: Reference<any>) {
   let el = cursor()
   if (property.isRef) {
+    property.current = el
+  }
+}
+
+function writePortal(property: Portal<any>) {
+  let el = cursor()
+  if (property.isPortal) {
     property.set(el)
   }
 }
@@ -228,6 +235,9 @@ function properties(props: any) {
         break
       case "ref":
         writeRef(props[key])
+        break
+      case "portal":
+        writePortal(props[key])
         break
       default:
         writeDefault(key, props[key])

@@ -176,14 +176,14 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
   )
 
   function clear() {
-    TextAreaRef.get().value = ""
-    MarkDownContent.get().innerHTML = ""
+    TextAreaRef.current.value = ""
+    MarkDownContent.current.innerHTML = ""
     Visible.set(false)
   }
 
   function getValues() {
-    const el = MarkDownContent.get()
-    const text = TextAreaRef.get()
+    const el = MarkDownContent.current
+    const text = TextAreaRef.current
     if (el && text) {
       return {
         raw: text.value,
@@ -193,8 +193,8 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
   }
 
   function writeMarkDown() {
-    const el = MarkDownContent.get()
-    const text = TextAreaRef.get()
+    const el = MarkDownContent.current
+    const text = TextAreaRef.current
     if (el && text) {
       el.innerHTML = translateMarkDown(text.value)
     }

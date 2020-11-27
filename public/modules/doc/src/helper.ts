@@ -19,3 +19,16 @@ export function eachFn(list: any[], ...args: any[]) {
 export function blank() {
   return Object.create(null)
 }
+
+export function addSubscription(subscribers: Subscription<any>[], fn: Subscription<any>, cb?: (...args: any[]) => any) {
+  subscribers.push(fn)
+  if (cb) {
+    cb()
+  }
+  return function unsubscribe() {
+    const index = subscribers.indexOf(fn)
+    if (index !== -1) {
+      subscribers.splice(index, 1)
+    }
+  }
+}

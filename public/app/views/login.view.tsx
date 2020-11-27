@@ -36,8 +36,8 @@ export default async function LoginView() {
 
   function getValues() {
     return {
-      alias: InputAlias.get().value,
-      password: InputPassword.get().value
+      alias: InputAlias.current.value,
+      password: InputPassword.current.value
     }
   }
 

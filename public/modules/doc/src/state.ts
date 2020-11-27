@@ -1,19 +1,13 @@
-import { eachFn } from "./helper"
+import { eachFn, addSubscription } from "./helper"
 
 export function useState<Type>(initialValue: Type): State<Type> {
   let current = initialValue
+  const isState = true
   const subscribers: Subscription<Type>[] = []
   const pub = { set, get, subscribe, isState, update }
-  function isState() {
-    return true
-  }
-  function notify() {
-    eachFn(subscribers, current)
-    return pub
-  }
   function set(newValue: Type) {
     current = newValue
-    notify()
+    eachFn(subscribers, current)
     return pub
   }
   function update(fn: Update<Type>) {
@@ -23,15 +17,7 @@ export function useState<Type>(initialValue: Type): State<Type> {
     return current
   }
   function subscribe(fn: Subscription<Type>) {
-    subscribers.push(fn)
-    fn(current)
-    return function unsubscribe() {
-      const index = subscribers.indexOf(fn)
-      if (index !== -1) {
-        subscribers.splice(index, 1)
-      }
-    }
+    return addSubscription(subscribers, fn, () => fn(current))
   }
-  notify()
   return pub
 }

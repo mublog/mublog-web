@@ -14,6 +14,7 @@ declare interface DocDirectives {
   }
   if: State<boolean> | boolean
   ref: Reference<HTMLElement>
+  portal: Portal<any>
   styles: Partial<CSSStyleDeclaration> | State<Partial<CSSStyleDeclaration>>
 }
 declare namespace JSX {
@@ -22,7 +23,7 @@ declare namespace JSX {
 declare type Update<Type> = (value: Type) => Type
 declare type Subscription<Type> = (value: Type) => any
 declare interface State<Type> {
-  isState(): boolean
+  isState: boolean
   get(): Type
   set(value: Type): State<Type>
   update(fn: Update<Type>): State<Type>
@@ -44,7 +45,7 @@ declare interface StoreItem {
 }
 declare type StoreUpdate<Type> = (value: Type) => Type
 declare interface Store<Type extends StoreItem> {
-  isStore(): boolean
+  isStore: boolean
   get(): Type[]
   size(): number
   updateOne(fn: StorePredicate<Type>, up: StoreUpdate<Type>): boolean
@@ -57,10 +58,14 @@ declare interface Store<Type extends StoreItem> {
   subscribe(fn: (items: Type[]) => any): () => void
 }
 declare interface Reference<Type> {
-  isRef(): boolean
-  get(): Type
-  set(newValue: Type): Reference<Type>
-  subscribe(fn: Subscription<Type>): () => void
+  isRef: boolean
+  current: Type
+}
+declare interface Portal<Type extends (...args: any[]) => HTMLElement> {
+  isPortal: boolean
+  set(newAnchor: HTMLElement): Portal<Type>
+  open(arg: Parameters<Type>[0]): ReturnType<Type>
+  close(): Portal<Type>
 }
 declare type RouteActivator = (params?: URLParams) => boolean | Promise<boolean>
 declare type RouterComponent = (params?: URLParams) => HTMLElement | Promise<HTMLElement>

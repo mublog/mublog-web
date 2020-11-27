@@ -27,7 +27,7 @@ export default async function HomeView() {
   ) as HTMLDivElement
 
   function getValues() {
-    return WriterRef.get().getValues()
+    return WriterRef.current.getValues()
   }
 
   function tryPost(event: Event) {
@@ -46,7 +46,7 @@ export default async function HomeView() {
         dateEdited: Date.now(),
         likeAmount: 0
       })
-      WriterRef.get().clear()
+      WriterRef.current.clear()
     }
     else {
       NotificationService.push(null, i18n.messageCriteriaError)

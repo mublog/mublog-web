@@ -1,12 +1,10 @@
-import { eachFn } from "./helper"
+import { eachFn, addSubscription } from "./helper"
 
 export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
   let local: Type[] = data || []
+  const isStore = true
   const subscribers: ((items: Type[]) => any)[] = []
   const pub = { get, add, del, subscribe, clear, size, each, isStore, find, filter, updateOne }
-  function isStore() {
-    return true
-  }
   function size() {
     return local.length
   }
@@ -58,14 +56,7 @@ export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
     return pub
   }
   function subscribe(fn: (items: Type[]) => void) {
-    subscribers.push(fn)
-    fn(local)
-    return function () {
-      let index = subscribers.indexOf(fn)
-      if (index >= 0) {
-        subscribers.splice(index, 1)
-      }
-    }
+    return addSubscription(subscribers, fn, () => fn(local))
   }
   return pub
 }

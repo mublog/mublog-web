@@ -23,7 +23,7 @@ function NotificationService() {
     removeOnClick: false,
     timeout: 5000
   }) {
-    const wrapper = bottomRight.get()
+    const wrapper = bottomRight.current
     if (wrapper) {
       wrapper.appendChild(<Notification title={title} message={message} options={options} />)
       wrapper.scrollBy(0, wrapper.scrollHeight)

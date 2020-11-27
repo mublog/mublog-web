@@ -108,7 +108,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
   function refresh() {
     let post = PostService.getPosts().find(({ id }) => id === postId)
     likes.set(post.likeAmount)
-    HeartRefs[0].get().setIcon(post.likedByUser ? "heart-red" : "heart-grey")
+    HeartRefs[0].current.setIcon(post.likedByUser ? "heart-red" : "heart-grey")
   }
 
   function like() {
