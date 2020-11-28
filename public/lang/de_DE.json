@@ -8,6 +8,7 @@
     "navigation": "Navigation",
     "send": "Senden",
     "name": "Name",
+    "uploadImage": "Bild hochladen",
     "authError": "Du bist zu dieser Aktion keine Berechtigungen.",
     "alias": "Benutzername",
     "password": "Passwort",

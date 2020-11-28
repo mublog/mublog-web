@@ -1,6 +1,7 @@
 import { createElement, useRef, useState, onInterval } from "../../modules/doc/mod"
 import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
+import onScreen from "../helpers/onscreen"
 
 export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPositions }, ...children: Child[]) {
   if (!props) {
@@ -13,7 +14,7 @@ export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPosit
   }
   delete props.labelText
   return (
-    <div {...props} className={className}>
+    <div className={className} {...props}>
       <div className={"arrow arrow-" + props.arrow} if={!!props.arrow} />
       <div className="box-content">{...children}</div>
     </div>
@@ -131,7 +132,7 @@ export function Icon({ name, ...props }: HTMLProperties<HTMLElement> & { name: I
     className += " " + props.className
     delete props.className
   }
-  const View = <i {...props} className={className} setIcon={setIcon} /> as IconElement
+  const View = <i className={className} setIcon={setIcon} {...props} /> as IconElement
   return View
 
   function setIcon(name: IconName) {
@@ -163,11 +164,11 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
     <div className="box writer" getValues={getValues} ref={ref} clear={clear}>
       <div>
         <TextArea ref={TextAreaRef} oninput={writeMarkDown} placeholder={placeholder || ""} value={value || ""} />
-        <Icon name="magnifier" className="toggle-post-preview" onclick={toggleVisibility} />
+        <Icon name="magnifier" className="toggle-post-preview" onclick={toggleVisibility} styles={{ cursor: "pointer" }} />
       </div>
       <Footer>
         <div className="mark-down-wrapper" if={Visible}>
-          <div className="box" ref={MarkDownContent} />
+          <div className="box mark-down" ref={MarkDownContent} />
           <Seperator />
         </div>
         {...children}
@@ -214,15 +215,4 @@ export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & {
     }
   }, 5000)
   return View
-}
-
-function onScreen(el: HTMLElement) {
-  if (!(el instanceof Element)) {
-    return false
-  }
-  const { top, bottom } = el.getBoundingClientRect()
-  if ((top && bottom) === 0) {
-    return false
-  }
-  return top < innerHeight && bottom >= 0
 }

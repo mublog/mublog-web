@@ -14,7 +14,8 @@ export default async function HomeView() {
       <form onsubmit={tryPost} if={UserService.isUser}>
         <µ.Writer ref={WriterRef}>
           <div styles={{ display: "flex", gap: "8px" }}>
-            <µ.Button onclick={getValues}>{i18n.send}</µ.Button>
+            <µ.Button>{i18n.send}</µ.Button>
+            <µ.Button type="button">{i18n.uploadImage}</µ.Button>
           </div>
         </µ.Writer>
       </form>

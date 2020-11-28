@@ -4,6 +4,7 @@ declare interface PostModel {
   user: {
     alias: string
     name: string
+    imageUrl?: string
   }
   datePosted: number
   dateEdited: number

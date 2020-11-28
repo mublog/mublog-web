@@ -13,7 +13,7 @@ export default async function LoginView() {
       <µ.Header>{i18n.enterAccount}</µ.Header>
       <form onsubmit={tryLogin}>
         <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <div styles={{ display: "flex", flexDirection: "row", gap: "8px" }}>
+          <div styles={{ display: "flex", gap: "8px" }}>
             <µ.Label labelText={i18n.alias}>
               <µ.Input ref={InputAlias} type="text" placeholder={i18n.alias} required="true" />
             </µ.Label>
