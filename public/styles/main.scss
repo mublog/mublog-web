@@ -591,6 +591,7 @@ a {
 
     p {
       counter-increment: line;
+      white-space: pre-wrap;
 
       &::before {
         content: counter(line);
@@ -629,11 +630,10 @@ a {
   }
 
   p {
-    white-space: pre-wrap;
-
     code {
       padding-left: 8px;
       display: inline-block;
+      white-space: pre-wrap;
     }
   }
 }
@@ -665,4 +665,12 @@ a {
   pointer-events: auto;
   position: absolute;
   z-index: 99999;
+}
+
+.noscript {
+  width: 500px;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  position: fixed;
 }
