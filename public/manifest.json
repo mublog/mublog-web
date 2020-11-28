@@ -1,0 +1,33 @@
+{
+  "short_name": "µblog",
+  "name": "µblog",
+  "icons": [
+    {
+      "src": "./assets/icon-180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "./assets/icon-196.png",
+      "type": "image/png",
+      "sizes": "196x196"
+    },
+    {
+      "src": "./assets/splash.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "./assets/maskable-196.png",
+      "type": "image/png",
+      "sizes": "196x196",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#f5f4eb",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#7664fe",
+  "shortcuts": []
+}
