@@ -3,12 +3,17 @@ import UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
 import PostService from "../services/post.service"
+import onScreen from "../helpers/onscreen"
+import UserCardPortal from "./user-card.component"
 
 export default function Post(post: PostModel) {
-  return (
-    <div className="post">
+  const PostRef = useRef<HTMLDivElement>()
+  const visible = useState<string>("post opacity-0")
+
+  const View = (
+    <div className={visible} ref={PostRef}>
       <div styles={{ display: "flex", gap: "8px" }}>
-        <UserImageContainer userAlias={post.user.alias} />
+        <UserImageContainer userAlias={post.user.alias} userImageUrl={post.user.imageUrl} />
         <µ.Box className="post-content" arrow="top-left">
           <µ.Header>
             <UserContainer userAlias={post.user.alias} userName={post.user.name} />
@@ -29,13 +34,17 @@ export default function Post(post: PostModel) {
       </div>
     </div>
   ) as HTMLDivElement
+
+  onInterval(() => visible.set(`post opacity-${onScreen(View) ? "1" : "0"}`), 100)
+
+  return View
 }
 
 function UserContainer({ userAlias, userName }) {
   let UserName = useState(userName)
   return (
     <a className="user-link" href={`/user/${userAlias}`}>
-      { UserName}
+      {UserName}
       <span className="user-alias">
         @{userAlias}
       </span>
@@ -43,15 +52,23 @@ function UserContainer({ userAlias, userName }) {
   ) as HTMLAnchorElement
 }
 
-function UserImageContainer({ userAlias }) {
+function UserImageContainer({ userAlias, userImageUrl }: { userAlias: string, userImageUrl: string }) {
   return (
-    <a className="user-link" href={`/user/${userAlias}`}>
+    <a className="user-link" onmouseenter={openCard}>
       <div className="user-image-wrap">
-        <div className="user-image" />
+        <div className="user-image" styles={{ backgroundImage: `url(${userImageUrl})` }} />
         <div className="user-image-frame" />
       </div>
     </a>
   ) as HTMLAnchorElement
+
+  function openCard(event: MouseEvent) {
+    UserCardPortal.open({
+      alias: userAlias,
+      top: event.clientY,
+      left: event.clientX
+    })
+  }
 }
 
 function TextContainer({ postId, data }: { postId: number, data: string }) {
@@ -70,9 +87,11 @@ function TextContainer({ postId, data }: { postId: number, data: string }) {
   return View
 
   function refresh() {
-    let post = PostService.getPosts().find(({ id }) => id === postId)
-    if (post && post.textContent && (post.textContent !== Text.get())) {
-      Text.set(post.textContent)
+    if (onScreen(View)) {
+      let post = PostService.getPosts().find(({ id }) => id === postId)
+      if (post && post.textContent && (post.textContent !== Text.get())) {
+        Text.set(post.textContent)
+      }
     }
   }
 }
@@ -87,15 +106,11 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
         ref={HeartRefs[0]}
         name="heart-grey"
         if={UserService.isUser}
-        className="post-like clickable cursor-action"
         onclick={like}
+        className="wiggle-vertical"
+        styles={{ cursor: "pointer" }}
       />
-      <µ.Icon
-        ref={HeartRefs[1]}
-        name="heart-grey"
-        if={UserService.isGuest}
-        className="post-like cursor-disabled"
-      />
+      <µ.Icon ref={HeartRefs[1]} name="heart-grey" if={UserService.isGuest} />
       <span>{likes}</span>
     </div>
   ) as HTMLDivElement
@@ -106,9 +121,11 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
   return View
 
   function refresh() {
-    let post = PostService.getPosts().find(({ id }) => id === postId)
-    likes.set(post.likeAmount)
-    HeartRefs[0].current.setIcon(post.likedByUser ? "heart-red" : "heart-grey")
+    if (onScreen(View)) {
+      let post = PostService.getPosts().find(({ id }) => id === postId)
+      likes.set(post.likeAmount)
+      HeartRefs[0].current.setIcon(post.likedByUser ? "heart-red" : "heart-grey")
+    }
   }
 
   function like() {
