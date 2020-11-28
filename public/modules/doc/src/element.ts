@@ -140,8 +140,8 @@ function writeFor(property: any) {
 
 function prepareForList(list: any[], { sort, filter, limit }) {
   let copy = [...list]
-  if (sort) copy = copy.sort(sort)
   if (filter) copy = copy.filter(filter)
+  if (sort) copy = copy.sort(sort)
   if (typeof limit === "number") copy.length = limit
   return copy
 }

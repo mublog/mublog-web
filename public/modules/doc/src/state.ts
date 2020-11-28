@@ -6,8 +6,10 @@ export function useState<Type>(initialValue: Type): State<Type> {
   const subscribers: Subscription<Type>[] = []
   const pub = { set, get, subscribe, isState, update }
   function set(newValue: Type) {
-    current = newValue
-    eachFn(subscribers, current)
+    if (newValue !== current) {
+      current = newValue
+      eachFn(subscribers, current)
+    }
     return pub
   }
   function update(fn: Update<Type>) {

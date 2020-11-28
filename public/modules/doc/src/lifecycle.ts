@@ -1,17 +1,13 @@
 import { Hooks, Mount, AfterUpdate, BeforeUpdate, Destroy } from "./symbols"
 import { cursor } from "./element"
+import { addSubscription } from "./helper"
+
+addSubscription
 
 function onAction(type: any, fn: (...args: any[]) => any) {
   const el = cursor()
   let fns = (el[Hooks][type]) || (el[Hooks][type] = []) as any[]
-  el && fns.push(fn)
-  function removeAction() {
-    const index = fns.indexOf(fn)
-    if (index !== -1) {
-      fns.splice(index, 1)
-    }
-  }
-  return removeAction
+  return addSubscription(fns, fn)
 }
 
 export function beforeUpdate(fn: () => any): void {
