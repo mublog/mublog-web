@@ -5,18 +5,19 @@ const filesToCache = [
   "/app.js",
   "/styles/main.css",
   "/styles/battlenet.woff2",
-  "/styles/svg/arrow-min.svg",
-  "/styles/svg/box.svg",
-  "/styles/svg/button-active.svg",
-  "/styles/svg/button-invalid.svg",
-  "/styles/svg/button-normal.svg",
-  "/styles/svg/circle-transparent.svg",
-  "/styles/svg/favicon.svg",
-  "/styles/svg/icons.svg",
-  "/styles/svg/input.svg",
-  "/styles/svg/loading.svg",
-  "/styles/svg/loading-circle.svg",
-  "/styles/svg/seperator.svg"
+  "/assets/assets-2x.png",
+  "/assets/icon-180.png",
+  "/assets/icon-196.png",
+  "/assets/maskable-196.png",
+  "/assets/mu-logo.png",
+  "/assets/mu-logo.svg.png",
+  "/assets/splash.png",
+  "/assets/sprite-green-button-1.png",
+  "/assets/sprite-green-button-2.png",
+  "/assets/sprite-input-1.png",
+  "/assets/sprite-loading-bar.png",
+  "/assets/sprite-seperator.png",
+  "/assets/sprite-white-box.png"
 ]
 
 addEventListener("install", event => {
