@@ -2,8 +2,6 @@ import { Hooks, Mount, AfterUpdate, BeforeUpdate, Destroy } from "./symbols"
 import { cursor } from "./element"
 import { addSubscription } from "./helper"
 
-addSubscription
-
 function onAction(type: any, fn: (...args: any[]) => any) {
   const el = cursor()
   let fns = (el[Hooks][type]) || (el[Hooks][type] = []) as any[]

@@ -1,5 +1,4 @@
-import hash from "./hash"
-import { blank } from "./helper"
+import { blank, createHash } from "./helper"
 import { Styles } from "./symbols"
 
 const styleElement = document.createElement("style")
@@ -35,7 +34,7 @@ function createProperty(ruleName: string) {
 }
 
 function insertRule(rule: string) {
-  let name = "r-" + hash(rule)
+  let name = "r-" + createHash(rule)
   let style = `.${name} { ${rule} }`
   if (!CSSMap.has(name)) {
     CSSMap.set(name, style)
