@@ -1,19 +1,6 @@
-$dark-green: #216c4b;
-$green: #46af45;
-$light-green: #a1d685;
-$black: #000000;
-$dark-grey: #191028;
-$grey: #afaab9;
-$white: #f5f4eb;
-$dark-blue: #453e78;
-$blue: #7664fe;
-$light-blue: #9ec2e8;
-$dark-red: #833129;
-$red: #dc534b;
-$light-red: #e18d79;
-$dark-beige: #d6b97b;
-$beige: #e9d8a1;
-$pink: #d365c8;
+@import "normalize.scss";
+@import "assets.scss";
+@import "colors.scss";
 
 @font-face {
   font-family: battlenet;
@@ -24,11 +11,11 @@ $pink: #d365c8;
 }
 
 :root {
-  background: $dark-blue;
+  background: $color-15;
 }
 
 ::selection {
-  background: $dark-beige;
+  background: $color-23;
 }
 
 html {
@@ -52,7 +39,7 @@ textarea {
   }
 
   &::placeholder {
-    color: $dark-grey;
+    color: $color-22;
   }
 }
 
@@ -68,7 +55,7 @@ a {
   position: relative;
   word-wrap: break-word;
   word-break: break-all;
-  color: $black;
+  color: $color-2;
   font-family: battlenet;
   font-size: 32px;
   line-height: 26px;
@@ -94,17 +81,8 @@ a {
     border-radius: 6px;
     top: 6px;
     left: 6px;
-    background-color: $white;
+    background-color: $color-24;
     background-position: 50% 50%;
-  }
-
-  .user-image-frame {
-    display: block;
-    width: 48px;
-    height: 48px;
-    background-image: url("svg/circle-transparent.svg");
-    background-position: 0px 0px;
-    background-size: cover;
   }
 }
 
@@ -115,7 +93,7 @@ a {
   left: 0;
   width: 100%;
   height: 12px;
-  background-image: url("svg/loading.svg");
+  background-image: $loading-bar;
   animation: loading-bar 5s linear infinite;
   z-index: 999;
 }
@@ -132,7 +110,7 @@ a {
 
 .label {
   .label-content {
-    text-shadow: 0px 2px $grey;
+    text-shadow: 0px 2px $color-23;
     margin: 0px 4px 4px 4px;
     display: block;
 
@@ -144,7 +122,7 @@ a {
 
 .input {
   border: 12px solid transparent;
-  border-image: url("svg/input.svg") 12 fill round;
+  border-image: $input-1;
   background-color: transparent;
   width: 100%;
   display: flex;
@@ -178,7 +156,7 @@ a {
   display: block;
   width: 100%;
   border: 12px solid transparent;
-  border-image: url("svg/box.svg") 12 fill round;
+  border-image: $box;
   background-color: transparent;
 
   .box-content,
@@ -189,49 +167,10 @@ a {
     padding: 8px;
   }
 
-  .arrow {
-    background-image: url("svg/arrow-min.svg");
-    position: absolute;
-    display: block;
-    background-repeat: no-repeat;
-    width: 14px;
-    height: 14px;
-
-    &.arrow-top-left {
-      background-position: 0px 0px;
-      top: -12px;
-      left: -16px;
-    }
-
-    &.arrow-top-right {
-      background-position: 0px 0px;
-      transform: scaleX(-1);
-      top: -12px;
-      right: -16px;
-    }
-
-    &.arrow-bottom-right {
-      background-position: -14px 0px;
-      bottom: -14px;
-      right: -16px;
-      transform: scaleX(-1);
-    }
-
-    &.arrow-bottom-left {
-      background-position: -14px 0px;
-      bottom: -14px;
-      left: -16px;
-    }
-  }
-
-  .box {
-    border-image: url("svg/box.svg") 12 fill round;
-  }
-
   .button {
     padding: 0px 4px 0px 4px;
     border: 15px solid transparent;
-    border-image: url("svg/button-normal.svg") 15 fill round;
+    border-image: $button-green-1;
     display: inline-block;
     background: transparent;
     cursor: pointer;
@@ -245,7 +184,7 @@ a {
     &:active {
       animation: none;
       transform: translateY(2px);
-      border-image: url("svg/button-active.svg") 15 fill round;
+      border-image: $button-green-2;
     }
 
     * {
@@ -260,13 +199,13 @@ a {
   }
 
   .title {
-    text-shadow: 0px 2px $grey;
+    text-shadow: 0px 2px $color-23;
   }
 
   .seperator {
     display: block;
     border: 2px solid transparent;
-    border-image: url("svg/seperator.svg") 2 fill round;
+    border-image: $seperator;
     height: 10px;
     width: calc(100% + 16px);
     margin-left: -8px;
@@ -317,7 +256,7 @@ a {
   }
 
   .user-alias {
-    color: $blue;
+    color: $color-16;
     margin-left: 8px;
   }
 
@@ -413,22 +352,6 @@ a {
   }
 }
 
-.loading-circle {
-  position: relative;
-  pointer-events: none;
-
-  &::after {
-    content: "";
-    width: 32px;
-    height: 32px;
-    position: absolute;
-    top: calc(50% - 16px);
-    left: calc(50% - 16px);
-    background-image: url("svg/loading-circle.svg");
-    animation: loading-circle 0.5s steps(4) infinite;
-  }
-}
-
 @keyframes loading-circle {
   from {
     transform: rotate(0deg);
@@ -483,54 +406,6 @@ a {
   display: block !important;
 }
 
-.icon {
-  width: 32px;
-  height: 32px;
-  background-image: url("svg/icons.svg");
-  background-position: 0px 0px;
-  display: inline-block;
-
-  &.icon-magnifier {
-    background-position: 0px 0px;
-  }
-
-  &.icon-clock {
-    background-position: -32px 0px;
-  }
-
-  &.icon-calendar {
-    background-position: -64px 0px;
-  }
-
-  &.icon-menu-kebab {
-    background-position: -96px 0px;
-  }
-
-  &.icon-menu-meatballs {
-    background-position: -128px 0px;
-  }
-
-  &.icon-menu-bento {
-    background-position: -162px 0px;
-  }
-
-  &.icon-heart-grey {
-    background-position: 0px -32px;
-  }
-
-  &.icon-heart-red {
-    background-position: -32px -32px;
-  }
-
-  &.icon-comment-bubbles-grey {
-    background-position: -64px -32px;
-  }
-
-  &.icon-comment-bubbles {
-    background-position: -96px -32px;
-  }
-}
-
 .toggle-post-preview {
   position: absolute;
   bottom: -8px;
@@ -554,40 +429,40 @@ a {
   }
 
   h1 {
-    box-shadow: 0px 2px $black, 0px 4px $grey;
-    text-shadow: 0px 2px $grey;
+    box-shadow: 0px 2px $color-2, 0px 4px $color-23;
+    text-shadow: 0px 2px $color-23;
     margin-bottom: 14px;
   }
 
   h2 {
-    box-shadow: 0px 2px $black;
-    text-shadow: 0px 2px $grey;
+    box-shadow: 0px 2px $color-2;
+    text-shadow: 0px 2px $color-23;
     margin-bottom: 10px;
   }
 
   h3 {
-    box-shadow: 0px 2px $grey;
-    text-shadow: 0px 2px $grey;
+    box-shadow: 0px 2px $color-2;
+    text-shadow: 0px 2px $color-23;
     margin-bottom: 6px;
   }
 
   h4 {
-    text-shadow: 0px 2px $grey;
+    text-shadow: 0px 2px $color-23;
     margin-bottom: 4px;
   }
 
   h5,
   h6 {
-    text-shadow: 0px 2px $grey;
+    text-shadow: 0px 2px $color-23;
     margin-bottom: 2px;
   }
 
   code {
-    background-color: $grey;
+    background-color: $color-23;
     display: block;
     overflow: hidden;
     padding: 0px 8px 0px 0px;
-    box-shadow: 2px 0px $black, 0px 2px $black, -2px 0px $black, 0px -2px $black;
+    box-shadow: 2px 0px $color-2, 0px 2px $color-2, -2px 0px $color-2, 0px -2px $color-2;
 
     p {
       counter-increment: line;
@@ -596,13 +471,13 @@ a {
       &::before {
         content: counter(line);
         margin-right: 8px;
-        color: $white;
+        color: $color-24;
         display: block;
         min-width: 24px;
-        background-color: $dark-blue;
+        background-color: $color-22;
         padding-left: 8px;
         padding-right: 8px;
-        border-right: 2px solid $black;
+        border-right: 2px solid $color-2;
         text-align: right;
       }
     }
@@ -673,4 +548,10 @@ a {
   top: 50%;
   left: 50%;
   position: fixed;
+
+  img.logo {
+    margin: 0 auto;
+    display: block;
+    width: 140px;
+  }
 }

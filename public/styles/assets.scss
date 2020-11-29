@@ -1,0 +1,133 @@
+$assets-2x: url("/assets/assets-2x.png");
+
+$loading-bar: url("/assets/sprite-loading-bar.png");
+$box: url("/assets/sprite-white-box.png") 12 fill round;
+$input-1: url("/assets/sprite-input-1.png") 12 fill round;
+$button-green-1: url("/assets/sprite-green-button-1.png") 15 fill round;
+$button-green-2: url("/assets/sprite-green-button-2.png") 15 fill round;
+$seperator: url("/assets/sprite-seperator.png") 2 fill round;
+
+.avatar-circle {
+  image-rendering: crisp-edges !important;
+  background-image: $assets-2x;
+  width: 48px;
+  height: 48px;
+  background-position: 0px -106px;
+}
+
+.arrow {
+  image-rendering: crisp-edges !important;
+  background-image: $assets-2x;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  display: block;
+
+  &.arrow-top {
+    top: -16px;
+    left: 50%;
+    background-position: -14px -78px;
+    transform: scaleY(-1) translate(-50%);
+  }
+
+  &.arrow-bottom {
+    bottom: -16px;
+    left: 50%;
+    background-position: -14px -78px;
+  }
+
+  &.arrow-left {
+    top: 50%;
+    left: -16px;
+    transform: translateY(-50%);
+    background-position: 0px -78px;
+  }
+
+  &.arrow-right {
+    top: 50%;
+    right: -16px;
+    background-position: 0px -78px;
+    transform: scaleX(-1) translateY(-50%);
+  }
+
+  &.arrow-top-left {
+    top: -14px;
+    left: -16px;
+    background-position: 0px -64px;
+  }
+
+  &.arrow-top-right {
+    right: -16px;
+    top: -14px;
+    background-position: 0px -64px;
+    transform: scaleX(-1);
+  }
+
+  &.arrow-bottom-right {
+    right: -16px;
+    bottom: -12px;
+    background-position: -14px -64px;
+    transform: scaleX(-1);
+  }
+
+  &.arrow-bottom-left {
+    left: -16px;
+    bottom: -12px;
+    background-position: -14px -64px;
+  }
+}
+
+.icon {
+  image-rendering: crisp-edges !important;
+  background-image: $assets-2x;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+
+  &.icon-magnifier {
+    background-position: 0px 0px;
+  }
+
+  &.icon-clock {
+    background-position: -32px 0px;
+  }
+
+  &.icon-calendar {
+    background-position: -64px 0px;
+  }
+
+  &.icon-menu-kebab {
+    background-position: -96px 0px;
+  }
+
+  &.icon-menu-meatballs {
+    background-position: -128px 0px;
+  }
+
+  &.icon-menu-bento {
+    background-position: -162px 0px;
+  }
+
+  &.icon-heart-grey {
+    background-position: 0px -32px;
+  }
+
+  &.icon-heart-red {
+    background-position: -32px -32px;
+  }
+
+  &.icon-comment-bubbles-grey {
+    background-position: -64px -32px;
+  }
+
+  &.icon-comment-bubbles {
+    background-position: -96px -32px;
+  }
+
+  &.icon-loading-circle {
+    background-position: -192px 0px;
+  }
+}
