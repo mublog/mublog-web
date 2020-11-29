@@ -10,7 +10,7 @@ const filesToCache = [
   "/assets/icon-196.png",
   "/assets/maskable-196.png",
   "/assets/mu-logo.png",
-  "/assets/mu-logo.svg.png",
+  "/assets/mu-logo.svg",
   "/assets/splash.png",
   "/assets/sprite-green-button-1.png",
   "/assets/sprite-green-button-2.png",
