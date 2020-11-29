@@ -20,32 +20,33 @@ const filesToCache = [
 ]
 
 addEventListener("install", event => {
-  console.log("[ServiceWorker] Install")
+  console.info("[ServiceWorker] Install")
   event.waitUntil(
-    caches.open(cacheName).then(cache => {
-      console.log("[ServiceWorker] Caching app shell")
-      return cache.addAll(filesToCache)
-    })
+    caches.open(cacheName)
+      .then(c => c.addAll(filesToCache))
+      .then(() => console.info("[ServiceWorker] Cache"))
+      .catch(e => console.error("[ServiceWorker] Cache/Error", e))
   )
 })
 
 addEventListener("activate", event => {
-  caches.keys().then(keyList => {
-    return Promise.all(
-      keyList.map(key => {
-        if (key !== cacheName) {
-          console.log("[ServiceWorker] - Removing old cache", key)
-          return caches.delete(key)
-        }
-      })
-    )
-  })
+  caches.keys()
+    .then(keyList => {
+      return Promise.all(
+        keyList.map(key => {
+          if (key !== cacheName) {
+            return caches.delete(key)
+          }
+        })
+      )
+    })
+    .catch(e => console.error("[ServiceWorker] Cache/Error", e))
 })
 
 addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then(response => {
-      return response || fetch(event.request)
-    })
+    caches.match(event.request, { ignoreSearch: true })
+      .then(r => r || fetch(event.request))
+      .catch(e => console.error("[ServiceWorker] Fetch/Error", e))
   )
 })

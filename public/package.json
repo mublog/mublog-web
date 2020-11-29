@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build-css": "sass styles/main.scss styles/main.css --style=compressed --no-source-map",
-    "build-js": "esbuild app.tsx --loader:.js=jsx --jsx-factory=createElement --minify --bundle --target=chrome58,firefox57,safari11 --outfile=app.js",
+    "build-js": "esbuild app.tsx --loader:.js=jsx --jsx-factory=Doc.createElement --minify --bundle --target=chrome58,firefox57,safari11 --outfile=app.js",
     "build": "npm run build-css && npm run build-js"
   },
   "repository": {
