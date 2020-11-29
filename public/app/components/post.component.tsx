@@ -58,7 +58,7 @@ function UserImageContainer({ userAlias, userImageUrl }: { userAlias: string, us
     <div className="user-link" onmouseenter={openCard}>
       <div className="user-image-wrap">
         <div className="user-image" />
-        <div className="user-image-frame" />
+        <div className="avatar-circle" />
       </div>
     </div>
   ) as HTMLAnchorElement
