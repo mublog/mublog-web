@@ -1,5 +1,4 @@
 $assets-2x: url("/assets/assets-2x.png");
-
 $loading-bar: url("/assets/sprite-loading-bar.png");
 $box: url("/assets/sprite-white-box.png") 12 fill round;
 $input-1: url("/assets/sprite-input-1.png") 12 fill round;
@@ -7,19 +6,25 @@ $button-green-1: url("/assets/sprite-green-button-1.png") 15 fill round;
 $button-green-2: url("/assets/sprite-green-button-2.png") 15 fill round;
 $seperator: url("/assets/sprite-seperator.png") 2 fill round;
 
-.avatar-circle {
+@mixin sprite {
   image-rendering: crisp-edges !important;
+}
+
+@mixin assets {
+  @include sprite;
   background-image: $assets-2x;
+  background-repeat: no-repeat;
+}
+
+.avatar-circle {
+  @include assets;
   width: 48px;
   height: 48px;
   background-position: 0px -106px;
 }
 
 .arrow {
-  image-rendering: crisp-edges !important;
-  background-image: $assets-2x;
-  background-position: 0 0;
-  background-repeat: no-repeat;
+  @include assets;
   width: 14px;
   height: 14px;
   position: absolute;
@@ -80,10 +85,7 @@ $seperator: url("/assets/sprite-seperator.png") 2 fill round;
 }
 
 .icon {
-  image-rendering: crisp-edges !important;
-  background-image: $assets-2x;
-  background-position: 0 0;
-  background-repeat: no-repeat;
+  @include assets();
   width: 32px;
   height: 32px;
 
