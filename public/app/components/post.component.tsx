@@ -1,4 +1,4 @@
-import { createElement, onInterval, onMount, useRef, useState } from "../../modules/doc/mod"
+import Doc, { onInterval, onMount, useRef, useState } from "../../modules/doc/mod"
 import UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
@@ -53,13 +53,14 @@ function UserContainer({ userAlias, userName }) {
 }
 
 function UserImageContainer({ userAlias, userImageUrl }: { userAlias: string, userImageUrl: string }) {
+  //  styles={{ backgroundImage: `url(${userImageUrl})` }}
   return (
-    <a className="user-link" onmouseenter={openCard}>
+    <div className="user-link" onmouseenter={openCard}>
       <div className="user-image-wrap">
-        <div className="user-image" styles={{ backgroundImage: `url(${userImageUrl})` }} />
+        <div className="user-image" />
         <div className="user-image-frame" />
       </div>
-    </a>
+    </div>
   ) as HTMLAnchorElement
 
   function openCard(event: MouseEvent) {

@@ -1,5 +1,5 @@
-import { createElement } from "./modules/doc/mod"
-import * as generic from "./app/services/generic.service"
+import Doc from "./modules/doc/mod"
+import * as service from "./app/services/generic.service"
 import Router from "./app/components/router.component"
 import Navigation from "./app/components/navigation.component"
 import UserCardPortal from "./app/components/user-card.component"
@@ -14,7 +14,7 @@ if ("serviceWorker" in navigator) {
 function Application(): HTMLDivElement {
   return (
     <div id="app">
-      <div id="loading-bar" if={generic.isLoading} />
+      <div id="loading-bar" if={service.isLoading} />
       <div id="app-grid">
         <aside id="side">
           <Navigation />

@@ -1,4 +1,4 @@
-import { createElement, usePortal } from "../../modules/doc/mod"
+import Doc, { usePortal } from "../../modules/doc/mod"
 import * as µ from "./mu.component"
 
 const UserCardPortal = usePortal(UserCard)

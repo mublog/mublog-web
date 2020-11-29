@@ -1,4 +1,4 @@
-import { createElement, onClick, useRef } from "../../modules/doc/mod"
+import Doc, { onClick, useRef } from "../../modules/doc/mod"
 import * as µ from "../components/mu.component"
 
 declare interface NotificationOption {

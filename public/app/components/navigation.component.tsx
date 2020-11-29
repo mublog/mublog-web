@@ -1,4 +1,4 @@
-import { createElement } from "../../modules/doc/mod"
+import Doc from "../../modules/doc/mod"
 import UserService from "../services/user.service"
 import i18n from "../../lang/de_DE.json"
 import * as µ from "./mu.component"

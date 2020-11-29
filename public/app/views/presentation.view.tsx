@@ -1,4 +1,4 @@
-import { createElement, onInterval } from "../../modules/doc/mod"
+import Doc, { onInterval } from "../../modules/doc/mod"
 import PostService from "../services/post.service"
 import UserService from "../services/user.service"
 import Post from "../components/post.component"

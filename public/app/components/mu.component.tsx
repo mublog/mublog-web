@@ -1,4 +1,4 @@
-import { createElement, useRef, useState, onInterval } from "../../modules/doc/mod"
+import Doc, { useRef, useState, onInterval } from "../../modules/doc/mod"
 import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
 import onScreen from "../helpers/onscreen"

@@ -5,7 +5,7 @@ import * as service from "../services/generic.service"
 import * as cfg from "../config/settings"
 
 const users = [
-  { alias: "iljushka", name: "Ilja", password: "password", image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.c1UHJDlTjQie1j7L1eLhFQHaHa%26pid%3DApi&f=1" }
+  { alias: "iljushka", name: "Ilja", password: "password" }
 ]
 
 export default UserService()
@@ -58,7 +58,7 @@ function UserService() {
   async function register({ alias, name, password }) {
     let success = !users.find(user => user.alias === alias && user.name === name)
     if (success) {
-      users.push({ alias, name, password, image: "" })
+      users.push({ alias, name, password })
       NotificationService.push(null, i18n.registerSuccess, cfg.notification)
       service.activateRoute("/login")
     }

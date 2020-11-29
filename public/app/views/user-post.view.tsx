@@ -1,4 +1,4 @@
-import { createElement } from "../../modules/doc/mod"
+import Doc from "../../modules/doc/mod"
 import PostService from "../services/post.service"
 import Post from "../components/post.component"
 
