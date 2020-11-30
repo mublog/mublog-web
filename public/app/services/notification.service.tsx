@@ -1,4 +1,4 @@
-import Doc, { onClick, useRef } from "../../modules/doc/mod"
+import Doc, { useRef, onEvent } from "../../modules/doc/mod"
 import * as µ from "../components/mu.component"
 
 declare interface NotificationOption {
@@ -50,7 +50,7 @@ function Notification({ title, message, options }: { title: string; message: str
     setTimeout(() => View.remove(), options.timeout)
   }
   if (options.removeOnClick) {
-    onClick(() => View.remove())
+    onEvent("click", () => View.remove())
   }
   return View
 }
