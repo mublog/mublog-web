@@ -1,5 +1,4 @@
-import { Hooks, Mount, AfterUpdate, BeforeUpdate, Destroy } from "./symbols"
-import { cursor } from "./element"
+import { Hooks, Mount, AfterUpdate, BeforeUpdate, Destroy, cursor } from "./globals"
 import { addSubscription } from "./helper"
 
 function onAction(type: any, fn: (...args: any[]) => any) {

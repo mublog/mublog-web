@@ -1,17 +1,9 @@
-import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy, Events } from "./symbols"
+import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy, Events, Directives, cursor } from "./globals"
 import { onEvent } from "./events"
 import { blank, each, eachFn } from "./helper"
 import { useStyles } from "./styles"
 import { onDestroy } from "./lifecycle"
-
-let cur: HTMLElement
-
-export function cursor(el?: HTMLElement): HTMLElement {
-  if (el) {
-    cur = el
-  }
-  return cur
-}
+import { useDirective } from "./directives"
 
 function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[Tag] {
   let el = document.createElement(type)
@@ -116,71 +108,12 @@ function attribute(el: HTMLElement, name: string, value?: string) {
   }
 }
 
-function writeFor(property: any) {
-  let el = cursor()
-  let sort: (a: any, b: any) => number = property.sort
-  let filter: (value: any, index: number) => unknown = property.filter
-  let limit: number = property.limit
-  if (property.of && Array.isArray(property.of)) {
-    let com: HTMLComponent<any> = property.do
-    let copy = prepareForList(property.of, { sort, filter, limit })
-    render(el, ...copy.map(com))
-  }
-  else if (property.of && property.of.subscribe) {
-    let list: Subscribable<any[]> = property.of
-    let com: HTMLComponent<any> = property.do
-    onDestroy(list.subscribe(val => {
-      eachFn(el[Hooks][BeforeUpdate])
-      let copy = prepareForList(val, { sort, filter, limit })
-      render(el, ...copy.map(com))
-      eachFn(el[Hooks][AfterUpdate])
-    }))
-  }
-}
-
 function prepareForList(list: any[], { sort, filter, limit }) {
   let copy = [...list]
   if (filter) copy = copy.filter(filter)
   if (sort) copy = copy.sort(sort)
   if (typeof limit === "number") copy.length = limit
   return copy
-}
-
-function writeStyles(property: any) {
-  let el = cursor()
-  if (property.subscribe) {
-    let state: Subscribable<Partial<CSSStyleDeclaration>> = property
-    onDestroy(state.subscribe(rules => {
-      eachFn(el[Hooks][BeforeUpdate])
-      useStyles(el, rules)
-      eachFn(el[Hooks][AfterUpdate])
-    }))
-  }
-  else {
-    useStyles(el, property)
-  }
-}
-
-function writeIf(property: any) {
-  let el = cursor()
-  if (property.subscribe) {
-    let state: Subscribable<boolean> = property
-    onDestroy(state.subscribe(val => {
-      if (val === true) {
-        eachFn(el[Hooks][BeforeUpdate])
-        attribute(el, "hidden")
-        eachFn(el[Hooks][AfterUpdate])
-      }
-      else if (val === false) {
-        attribute(el, "hidden", "")
-      }
-    }))
-  }
-  else {
-    if (property === false) {
-      attribute(el, "hidden", "true")
-    }
-  }
 }
 
 function writeSubscribableProperty(key: string, property: Subscribable<any>) {
@@ -207,41 +140,86 @@ function writeDefault(key: string, property: any) {
   }
 }
 
-function writeRef(property: Reference<any>) {
+useDirective("for", property => {
+  let el = cursor()
+  let sort: (a: any, b: any) => number = property.sort
+  let filter: (value: any, index: number) => unknown = property.filter
+  let limit: number = property.limit
+  if (property.of && Array.isArray(property.of)) {
+    let com: HTMLComponent<any> = property.do
+    let copy = prepareForList(property.of, { sort, filter, limit })
+    render(el, ...copy.map(com))
+  }
+  else if (property.of && property.of.subscribe) {
+    let list: Subscribable<any[]> = property.of
+    let com: HTMLComponent<any> = property.do
+    onDestroy(list.subscribe(val => {
+      eachFn(el[Hooks][BeforeUpdate])
+      let copy = prepareForList(val, { sort, filter, limit })
+      render(el, ...copy.map(com))
+      eachFn(el[Hooks][AfterUpdate])
+    }))
+  }
+})
+
+useDirective("styles", property => {
+  let el = cursor()
+  if (property.subscribe) {
+    let state: Subscribable<Partial<CSSStyleDeclaration>> = property
+    onDestroy(state.subscribe(rules => {
+      eachFn(el[Hooks][BeforeUpdate])
+      useStyles(el, rules)
+      eachFn(el[Hooks][AfterUpdate])
+    }))
+  }
+  else {
+    useStyles(el, property)
+  }
+})
+
+useDirective("if", property => {
+  let el = cursor()
+  if (property.subscribe) {
+    let state: Subscribable<boolean> = property
+    onDestroy(state.subscribe(val => {
+      if (val === true) {
+        eachFn(el[Hooks][BeforeUpdate])
+        attribute(el, "hidden")
+        eachFn(el[Hooks][AfterUpdate])
+      }
+      else if (val === false) {
+        attribute(el, "hidden", "")
+      }
+    }))
+  }
+  else {
+    if (property === false) {
+      attribute(el, "hidden", "true")
+    }
+  }
+})
+
+useDirective("ref", (property: Reference<any>) => {
   let el = cursor()
   if (property.isRef) {
     property.current = el
   }
-}
+})
 
-function writePortal(property: Portal<any>) {
+useDirective("portal", (property: Portal<any>) => {
   let el = cursor()
   if (property.isPortal) {
     property.set(el)
   }
-}
+})
 
 function properties(props: any) {
   for (let key in props) {
-    switch (key) {
-      case "for":
-        writeFor(props[key])
-        break
-      case "styles":
-        writeStyles(props[key])
-        break
-      case "if":
-        writeIf(props[key])
-        break
-      case "ref":
-        writeRef(props[key])
-        break
-      case "portal":
-        writePortal(props[key])
-        break
-      default:
-        writeDefault(key, props[key])
-        break
+    if (Directives[key]) {
+      Directives[key](props[key])
+    }
+    else {
+      writeDefault(key, props[key])
     }
   }
 }

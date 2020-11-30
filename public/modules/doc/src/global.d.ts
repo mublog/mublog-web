@@ -48,13 +48,9 @@ declare interface Store<Type extends StoreItem> {
   isStore: boolean
   get(): Type[]
   size(): number
-  updateOne(fn: StorePredicate<Type>, up: StoreUpdate<Type>): boolean
-  each(fn: StorePredicate<Type>): Store<Type>
   add(item: Type): Store<Type>
   clear(): Store<Type>
   del(fn: StorePredicate<Type>): Store<Type>
-  find(fn: StorePredicate<Type>): Type
-  filter(fn: StorePredicate<Type>): Type[]
   subscribe(fn: (items: Type[]) => any): () => void
 }
 declare interface Reference<Type> {

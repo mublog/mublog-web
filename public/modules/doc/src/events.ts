@@ -1,6 +1,5 @@
-import { Hooks, Events } from "./symbols"
+import { Hooks, Events, cursor } from "./globals"
 import { onDestroy } from "./lifecycle"
-import { cursor } from "./element"
 import { blank, eachFn } from "./helper"
 
 export function onGlobalEvent<Name extends EventNames>(name: Name, fn: (event: EventMap[Name]) => any) {

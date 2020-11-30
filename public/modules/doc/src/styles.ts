@@ -1,5 +1,5 @@
 import { blank, createHash } from "./helper"
-import { Styles } from "./symbols"
+import { Styles } from "./globals"
 
 const styleElement = document.createElement("style")
 document.head.appendChild(styleElement)

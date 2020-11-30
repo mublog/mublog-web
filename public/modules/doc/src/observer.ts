@@ -1,6 +1,7 @@
-import { cursor, runMount, runDestroy } from "./element"
+import { runMount, runDestroy } from "./element"
 import { each, eachFn } from "./helper"
 import { onDestroy } from "./lifecycle"
+import { cursor } from "./globals"
 
 export function onAttributeChange(fn: AttributeChangedCallback, attributes: string[]) {
   let el = cursor()
