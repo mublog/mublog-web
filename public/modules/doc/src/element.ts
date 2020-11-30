@@ -3,7 +3,7 @@ import { onEvent } from "./events"
 import { blank, each, eachFn } from "./helper"
 import { useStyles } from "./styles"
 import { onDestroy } from "./lifecycle"
-import { useDirective } from "./directives"
+import { useDirective } from "./core"
 
 function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[Tag] {
   let el = document.createElement(type)

@@ -21,11 +21,11 @@ function PostService() {
   }, 10000)
 
   function getPosts() {
-    return posts
+    return posts.get()
   }
 
   function hasPost(id: number) {
-    return !!posts.find(post => post.id === id)
+    return !!posts.get().find(post => post.id === id)
   }
 
   function add(post: PostModel) {
