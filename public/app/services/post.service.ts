@@ -1,4 +1,4 @@
-import { useStore } from "../../modules/doc/mod"
+import { useState } from "../../modules/doc/mod"
 
 export default PostService()
 
@@ -11,32 +11,30 @@ function PostService() {
     local = []
   }
 
-  const posts = useStore<PostModel>(local)
-  const pub = { getPosts, add, hasPost, notify }
-
-  function notify() {
-    posts.notify()
-  }
+  const posts = useState<PostModel[]>(local)
+  const pub = { getPosts, add, hasPost, update }
 
   setInterval(() => {
     posts.get().forEach(post => {
       post.likeAmount += Math.round(Math.random() * 10)
     })
-    notify()
   }, 10000)
 
   function getPosts() {
-    return posts.get()
+    return posts
   }
 
   function hasPost(id: number) {
     return !!posts.get().find(post => post.id === id)
   }
 
+  function update(fn: Update<PostModel[]>) {
+    posts.update(fn)
+  }
+
   function add(post: PostModel) {
-    posts.add(post)
+    posts.update(posts => [...posts, post])
     localStorage.setItem("posts", JSON.stringify(posts.get()))
-    notify()
     return pub
   }
 
