@@ -59,3 +59,9 @@ export function prepareForList(list: any[], { sort, filter, limit, offset }) {
 export function pipe(...fns: ((...args: any[]) => any)[]) {
   return (...args: any[]) => fns.reduce((args, f) => [f.apply(this, args)], args)[0]
 }
+
+export function keysOf(obj: any) {
+  let keys: string[] = []
+  for (let key in obj) keys.push(key)
+  return keys
+}

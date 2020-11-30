@@ -1,6 +1,6 @@
 import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy, Events, Directives, cursor } from "./globals"
 import { onEvent } from "./events"
-import { blank, each, eachFn, prepareForList } from "./helper"
+import { blank, each, eachFn, keysOf, prepareForList } from "./helper"
 import { onDestroy } from "./lifecycle"
 import { useDirective } from "./core"
 import { ifDirective, portalDirective, referenceDirective, stylesDirective } from "./directives"
@@ -45,6 +45,14 @@ export function render(el: HTMLElement, ...children: HTMLElement[]) {
   appendChildren(el, children)
 }
 
+function appendElement(el: DocumentFragment | HTMLElement, child: HTMLElement) {
+  el.appendChild(child)
+}
+
+function appendTextLike(el: DocumentFragment | HTMLElement, child: string | number) {
+  el.appendChild(text(child))
+}
+
 function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
   let frag = fragment()
   let i = 0
@@ -55,10 +63,10 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
         appendChildren(frag, children[i])
       }
       else if (typeof children[i] === "string" || typeof children[i] === "number") {
-        frag.appendChild(text(children[i]))
+        appendTextLike(frag, children[i])
       }
       else if (children[i] instanceof Element) {
-        frag.appendChild(children[i])
+        appendElement(frag, children[i])
       }
       else if (children[i].subscribe) {
         let stateValue = children[i].get()
@@ -74,7 +82,7 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
             }
             eachFn(el[Hooks][AfterUpdate])
           }))
-        }
+        }/* 
         else if (stateValue instanceof Element) {
           let state: Subscribable<Element> = children[i]
           frag.appendChild(state.get())
@@ -83,7 +91,7 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
             state.get().replaceWith(val)
             eachFn(el[Hooks][AfterUpdate])
           }))
-        }
+        } */
       }
     }
     el.appendChild(frag)
@@ -106,7 +114,7 @@ function writeDefault(el: HTMLElement, key: string, property: any) {
     writeSubscribableProperty(el, key, property)
   }
   else if (key.startsWith("on") && typeof property === "function") {
-    onEvent(key.slice(2) as EventNames, property)
+    onEvent(key.slice(2).toLowerCase() as EventNames, property)
   }
   else {
     el[key] = property
@@ -143,14 +151,15 @@ useDirective("ref", referenceDirective)
 useDirective("portal", portalDirective)
 
 function properties(el: HTMLElement, props: any) {
-  for (let key in props) {
+  const keys = keysOf(props)
+  keys.forEach(key => {
     if (Directives[key]) {
       Directives[key](el, props[key])
     }
     else {
       writeDefault(el, key, props[key])
     }
-  }
+  })
 }
 
 export function runMount(el: HTMLElement) {
