@@ -1,14 +1,13 @@
 import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy, Events, Directives, cursor } from "./globals"
 import { onEvent } from "./events"
-import { blank, each, eachFn } from "./helper"
-import { useStyles } from "./styles"
+import { blank, each, eachFn, prepareForList } from "./helper"
 import { onDestroy } from "./lifecycle"
 import { useDirective } from "./core"
+import { ifDirective, portalDirective, referenceDirective, stylesDirective } from "./directives"
 
 function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[Tag] {
   let el = document.createElement(type)
-  cursor(el)
-  prepareHooks()
+  prepareHooks(el)
   return el
 }
 
@@ -20,23 +19,19 @@ function fragment() {
   return document.createDocumentFragment()
 }
 
-function comment(text: string) {
-  return document.createComment(text)
-}
-
 export function createElement<Tag extends HTMLTag>(type: Tag, props: HTMLOptions<Tag>, ...children: Child[]) {
   if (typeof type === "function") {
     // @ts-expect-error
     return type(props, ...children)
   }
   let el = element(type)
-  properties(props)
-  appendChildren(children)
+  properties(el, props)
+  appendChildren(el, children)
+  cursor(el)
   return el
 }
 
-function prepareHooks() {
-  let el = cursor()
+function prepareHooks(el: HTMLElement) {
   el[Hooks] = blank()
   el[Hooks][Mount] = []
   el[Hooks][BeforeUpdate] = []
@@ -45,22 +40,19 @@ function prepareHooks() {
   el[Hooks][Events] = blank()
 }
 
-export function render(target: HTMLElement, ...children: HTMLElement[]) {
-  target.innerHTML = ""
-  cursor(target)
-  appendChildren(children)
+export function render(el: HTMLElement, ...children: HTMLElement[]) {
+  el.innerHTML = ""
+  appendChildren(el, children)
 }
 
-function appendChildren(children: any[]) {
-  let el = cursor()
+function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
   let frag = fragment()
   let i = 0
   const len = children.length
   if (len > 0) {
     for (i; i < len; i++) {
       if (Array.isArray(children[i])) {
-        cursor(frag as unknown as HTMLElement)
-        appendChildren(children[i])
+        appendChildren(frag, children[i])
       }
       else if (typeof children[i] === "string" || typeof children[i] === "number") {
         frag.appendChild(text(children[i]))
@@ -96,28 +88,9 @@ function appendChildren(children: any[]) {
     }
     el.appendChild(frag)
   }
-  cursor(el)
 }
 
-function attribute(el: HTMLElement, name: string, value?: string) {
-  if (value === undefined) {
-    el.removeAttribute(name)
-  }
-  else {
-    el.setAttribute(name, value)
-  }
-}
-
-function prepareForList(list: any[], { sort, filter, limit }) {
-  let copy = [...list]
-  if (filter) copy = copy.filter(filter)
-  if (sort) copy = copy.sort(sort)
-  if (typeof limit === "number") copy.length = limit
-  return copy
-}
-
-function writeSubscribableProperty(key: string, property: Subscribable<any>) {
-  let el = cursor()
+function writeSubscribableProperty(el: HTMLElement, key: string, property: Subscribable<any>) {
   let state: Subscribable<any> = property
   el[key] = state.get()
   onDestroy(state.subscribe(val => {
@@ -127,10 +100,10 @@ function writeSubscribableProperty(key: string, property: Subscribable<any>) {
   }))
 }
 
-function writeDefault(key: string, property: any) {
-  let el = cursor()
+function writeDefault(el: HTMLElement, key: string, property: any) {
+  cursor(el)
   if (property.subscribe) {
-    writeSubscribableProperty(key, property)
+    writeSubscribableProperty(el, key, property)
   }
   else if (key.startsWith("on") && typeof property === "function") {
     onEvent(key.slice(2) as EventNames, property)
@@ -140,86 +113,42 @@ function writeDefault(key: string, property: any) {
   }
 }
 
-useDirective("for", property => {
-  let el = cursor()
+useDirective("for", (el: HTMLElement, property: DocDirectives["for"]) => {
   let sort: (a: any, b: any) => number = property.sort
   let filter: (value: any, index: number) => unknown = property.filter
   let limit: number = property.limit
-  if (property.of && Array.isArray(property.of)) {
-    let com: HTMLComponent<any> = property.do
-    let copy = prepareForList(property.of, { sort, filter, limit })
-    render(el, ...copy.map(com))
+  let offset: number = property.offset
+  if (Array.isArray(property.of)) {
+    if (property.of && Array.isArray(property.of)) {
+      let com: HTMLComponent<any> = property.do
+      let copy = prepareForList(property.of, { sort, filter, limit, offset })
+      render(el, ...copy.map(com))
+    }
   }
   else if (property.of && property.of.subscribe) {
     let list: Subscribable<any[]> = property.of
     let com: HTMLComponent<any> = property.do
     onDestroy(list.subscribe(val => {
       eachFn(el[Hooks][BeforeUpdate])
-      let copy = prepareForList(val, { sort, filter, limit })
+      let copy = prepareForList(val, { sort, filter, limit, offset })
       render(el, ...copy.map(com))
       eachFn(el[Hooks][AfterUpdate])
     }))
   }
 })
 
-useDirective("styles", property => {
-  let el = cursor()
-  if (property.subscribe) {
-    let state: Subscribable<Partial<CSSStyleDeclaration>> = property
-    onDestroy(state.subscribe(rules => {
-      eachFn(el[Hooks][BeforeUpdate])
-      useStyles(el, rules)
-      eachFn(el[Hooks][AfterUpdate])
-    }))
-  }
-  else {
-    useStyles(el, property)
-  }
-})
+useDirective("styles", stylesDirective)
+useDirective("if", ifDirective)
+useDirective("ref", referenceDirective)
+useDirective("portal", portalDirective)
 
-useDirective("if", property => {
-  let el = cursor()
-  if (property.subscribe) {
-    let state: Subscribable<boolean> = property
-    onDestroy(state.subscribe(val => {
-      if (val === true) {
-        eachFn(el[Hooks][BeforeUpdate])
-        attribute(el, "hidden")
-        eachFn(el[Hooks][AfterUpdate])
-      }
-      else if (val === false) {
-        attribute(el, "hidden", "")
-      }
-    }))
-  }
-  else {
-    if (property === false) {
-      attribute(el, "hidden", "true")
-    }
-  }
-})
-
-useDirective("ref", (property: Reference<any>) => {
-  let el = cursor()
-  if (property.isRef) {
-    property.current = el
-  }
-})
-
-useDirective("portal", (property: Portal<any>) => {
-  let el = cursor()
-  if (property.isPortal) {
-    property.set(el)
-  }
-})
-
-function properties(props: any) {
+function properties(el: HTMLElement, props: any) {
   for (let key in props) {
     if (Directives[key]) {
-      Directives[key](props[key])
+      Directives[key](el, props[key])
     }
     else {
-      writeDefault(key, props[key])
+      writeDefault(el, key, props[key])
     }
   }
 }

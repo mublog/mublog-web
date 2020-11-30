@@ -11,6 +11,7 @@ declare interface DocDirectives {
     sort?: (a: any, b: any) => number
     filter?: (value: any, index: number) => unknown
     limit?: number
+    offset?: number
   }
   if: State<boolean> | boolean
   ref: Reference<HTMLElement>
@@ -39,21 +40,6 @@ declare type HTMLPrimitiveChild = string | number | State<string | number>
 declare type Child = HTMLElementChild | HTMLPrimitiveChild
 declare type AnyFn = () => any
 declare type IntervalFn = () => any
-declare type StorePredicate<Type> = (value: Type, index: number) => unknown
-declare interface StoreItem {
-  [key: string]: any
-}
-declare type StoreUpdate<Type> = (value: Type) => Type
-declare interface Store<Type extends StoreItem> {
-  isStore: boolean
-  get(): Type[]
-  size(): number
-  notify(): void
-  add(item: Type): Store<Type>
-  clear(): Store<Type>
-  del(fn: StorePredicate<Type>): Store<Type>
-  subscribe(fn: (items: Type[]) => any): () => void
-}
 declare interface Reference<Type> {
   isRef: boolean
   current: Type

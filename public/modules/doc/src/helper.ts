@@ -7,7 +7,7 @@ export function each(list: any[], fn?: (val: any, idx?: number, list?: any[]) =>
   }
 }
 
-export function eachFn(list: any[], ...args: any[]) {
+export function eachFn(list: ((...args: any[]) => any)[], ...args: any[]) {
   if (!list || list.length === 0) return
   let i = 0
   const len = list.length
@@ -45,4 +45,17 @@ export function createHash(input: string): string {
     h = Math.imul(31, h) + input.charCodeAt(i) | 0
   }
   return h.toString(36)
+}
+
+export function prepareForList(list: any[], { sort, filter, limit, offset }) {
+  let copy = [...list]
+  if (filter) copy = copy.filter(filter)
+  if (sort) copy = copy.sort(sort)
+  if (typeof offset === "number") copy = copy.slice(0, offset)
+  if (typeof limit === "number") copy.length = limit
+  return copy
+}
+
+export function pipe(...fns: ((...args: any[]) => any)[]) {
+  return (...args: any[]) => fns.reduce((args, f) => [f.apply(this, args)], args)[0]
 }

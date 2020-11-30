@@ -1,4 +1,5 @@
 import { onGlobalEvent } from "../events"
+import { eachFn } from "../helper"
 import createRoutes from "./create-routes"
 import loadRoute from "./load-route"
 import renderRoute from "./render-route"
@@ -15,15 +16,15 @@ export function useRouter<Target extends HTMLElement>({ target, routes }: { targ
 
   async function listener() {
     let loadUrl = url()
-    callbacks.load.forEach(cb => cb())
+    eachFn(callbacks.load)
     let route = await loadRoute(Routes, loadUrl)
     if (route) {
       renderRoute(target, route, loadUrl)
     }
     else {
-      callbacks.loadError.forEach(cb => cb())
+      eachFn(callbacks.loadError)
     }
-    callbacks.loadEnd.forEach(cb => cb())
+    eachFn(callbacks.loadEnd)
   }
 
   function onLoad(fn: () => any) {
@@ -46,7 +47,7 @@ export function useRouter<Target extends HTMLElement>({ target, routes }: { targ
   return pub
 }
 
-onGlobalEvent("click", function routeListener(event) {
+onGlobalEvent("click", (event) => {
   let target = event.target
   while (target) {
     if (target["href"]) {

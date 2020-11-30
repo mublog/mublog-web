@@ -15,7 +15,7 @@ export function onAttributeChange(fn: AttributeChangedCallback, attributes: stri
   AttributeObserver.observe(el, { attributeFilter: attributes, attributeOldValue: true, attributes: true })
 }
 
-const AttributeCallbacks = []
+const AttributeCallbacks: ((...args: any[]) => any)[] = []
 const AttributeObserver = new MutationObserver(attributeNotifer)
 function attributeNotifer(recs: MutationRecord[]) {
   each(recs, ({ type, attributeName, oldValue }: MutationRecord) => {
@@ -28,8 +28,8 @@ const DOMObserver = new MutationObserver(DOMNotifier)
 function DOMNotifier(recs: MutationRecord[]) {
   each(recs, ({ type, removedNodes, addedNodes }: MutationRecord) => {
     if (type !== "childList") return
-    each(Array.from(removedNodes), runDestroy)
-    each(Array.from(addedNodes), runMount)
+    if (removedNodes) each(Array.from(removedNodes), runDestroy)
+    if (addedNodes) each(Array.from(addedNodes), runMount)
   })
 }
 DOMObserver.observe(document.body, { subtree: true, childList: true })
