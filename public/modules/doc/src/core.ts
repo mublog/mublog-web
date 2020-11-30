@@ -36,7 +36,7 @@ export function useStore<Type extends StoreItem>(data?: Type[]): Store<Type> {
   let local: Type[] = data || []
   const isStore = true
   const subscribers: ((items: Type[]) => any)[] = []
-  const pub = { get, add, del, subscribe, clear, size, each, isStore }
+  const pub = { get, add, del, subscribe, clear, size, each, isStore, notify }
   function size() {
     return local.length
   }

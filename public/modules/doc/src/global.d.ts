@@ -48,6 +48,7 @@ declare interface Store<Type extends StoreItem> {
   isStore: boolean
   get(): Type[]
   size(): number
+  notify(): void
   add(item: Type): Store<Type>
   clear(): Store<Type>
   del(fn: StorePredicate<Type>): Store<Type>

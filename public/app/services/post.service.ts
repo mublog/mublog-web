@@ -12,12 +12,17 @@ function PostService() {
   }
 
   const posts = useStore<PostModel>(local)
-  const pub = { getPosts, add, hasPost }
+  const pub = { getPosts, add, hasPost, notify }
+
+  function notify() {
+    posts.notify()
+  }
 
   setInterval(() => {
     posts.get().forEach(post => {
       post.likeAmount += Math.round(Math.random() * 10)
     })
+    notify()
   }, 10000)
 
   function getPosts() {
@@ -31,6 +36,7 @@ function PostService() {
   function add(post: PostModel) {
     posts.add(post)
     localStorage.setItem("posts", JSON.stringify(posts.get()))
+    notify()
     return pub
   }
 

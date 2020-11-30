@@ -127,15 +127,16 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
       likes.set(post.likeAmount)
       HeartRefs[0].current.setIcon(post.likedByUser ? "heart-red" : "heart-grey")
     }
+    PostService.notify()
   }
 
   function like() {
-    PostService.getPosts().updateOne(post => post.id === postId, post => {
+    let post = PostService.getPosts().find(post => post.id === postId)
+    if (post) {
       post.likedByUser = post.likedByUser ? false : true
       post.likeAmount -= post.likedByUser ? -1 : +1
       refresh()
-      return post
-    })
+    }
   }
 }
 
