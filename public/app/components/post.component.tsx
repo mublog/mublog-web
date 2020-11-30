@@ -4,7 +4,6 @@ import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
 import PostService from "../services/post.service"
 import onScreen from "../helpers/onscreen"
-import UserCardPortal from "./user-card.component"
 
 export default function Post(post: PostModel) {
   const PostRef = useRef<HTMLDivElement>()
@@ -34,16 +33,14 @@ export default function Post(post: PostModel) {
       </div>
     </div>
   ) as HTMLDivElement
-
-  onInterval(() => visible.set(`post opacity-${onScreen(View) ? "1" : "0"}`), 100)
-
+  onInterval(() => visible.set(`post opacity-${onScreen(View) ? "1" : "0"}`), 250)
   return View
 }
 
 function UserContainer({ userAlias, userName }) {
   let UserName = useState(userName)
   return (
-    <a className="user-link" href={`/user/${userAlias}`}>
+    <a className="user-link" href={`/user/${userAlias}`} user-card={userAlias}>
       {UserName}
       <span className="user-alias">
         @{userAlias}
@@ -55,21 +52,13 @@ function UserContainer({ userAlias, userName }) {
 function UserImageContainer({ userAlias, userImageUrl }: { userAlias: string, userImageUrl: string }) {
   //  styles={{ backgroundImage: `url(${userImageUrl})` }}
   return (
-    <div className="user-link" onmouseenter={openCard}>
+    <div className="user-link" user-card={userAlias}>
       <div className="user-image-wrap">
         <div className="user-image" />
         <div className="avatar-circle" />
       </div>
     </div>
   ) as HTMLAnchorElement
-
-  function openCard(event: MouseEvent) {
-    UserCardPortal.open({
-      alias: userAlias,
-      top: event.clientY,
-      left: event.clientX
-    })
-  }
 }
 
 function TextContainer({ postId, data }: { postId: number, data: string }) {
@@ -89,7 +78,7 @@ function TextContainer({ postId, data }: { postId: number, data: string }) {
 
   function refresh() {
     if (onScreen(View)) {
-      let post = PostService.getPosts().find(({ id }) => id === postId)
+      let post = PostService.getPosts().get().find(({ id }) => id === postId)
       if (post && post.textContent && (post.textContent !== Text.get())) {
         Text.set(post.textContent)
       }
@@ -123,20 +112,27 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
 
   function refresh() {
     if (onScreen(View)) {
-      let post = PostService.getPosts().find(({ id }) => id === postId)
-      likes.set(post.likeAmount)
-      HeartRefs[0].current.setIcon(post.likedByUser ? "heart-red" : "heart-grey")
+      PostService.update(posts => {
+        let post = posts.find(post => post.id === postId)
+        if (post) {
+          likes.set(post.likeAmount)
+          HeartRefs[0].current.setIcon(post.likedByUser ? "heart-red" : "heart-grey")
+        }
+        return posts
+      })
     }
-    PostService.notify()
   }
 
   function like() {
-    let post = PostService.getPosts().find(post => post.id === postId)
-    if (post) {
-      post.likedByUser = post.likedByUser ? false : true
-      post.likeAmount -= post.likedByUser ? -1 : +1
-      refresh()
-    }
+    PostService.update(posts => {
+      let post = posts.find(post => post.id === postId)
+      if (post) {
+        post.likedByUser = post.likedByUser ? false : true
+        post.likeAmount -= post.likedByUser ? -1 : +1
+        refresh()
+      }
+      return posts
+    })
   }
 }
 

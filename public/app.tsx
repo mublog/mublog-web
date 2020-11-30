@@ -1,4 +1,5 @@
 import Doc from "./modules/doc/mod"
+import "./app/directives/mu.directive"
 import * as service from "./app/services/generic.service"
 import Router from "./app/components/router.component"
 import Navigation from "./app/components/navigation.component"
