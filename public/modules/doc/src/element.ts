@@ -82,7 +82,7 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
             }
             eachFn(el[Hooks][AfterUpdate])
           }))
-        }/* 
+        }
         else if (stateValue instanceof Element) {
           let state: Subscribable<Element> = children[i]
           frag.appendChild(state.get())
@@ -91,7 +91,7 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
             state.get().replaceWith(val)
             eachFn(el[Hooks][AfterUpdate])
           }))
-        } */
+        }
       }
     }
     el.appendChild(frag)
@@ -121,21 +121,21 @@ function writeDefault(el: HTMLElement, key: string, property: any) {
   }
 }
 
-useDirective("for", (el: HTMLElement, property: DocDirectives["for"]) => {
-  let sort: (a: any, b: any) => number = property.sort
-  let filter: (value: any, index: number) => unknown = property.filter
-  let limit: number = property.limit
-  let offset: number = property.offset
-  if (Array.isArray(property.of)) {
-    if (property.of && Array.isArray(property.of)) {
-      let com: HTMLComponent<any> = property.do
-      let copy = prepareForList(property.of, { sort, filter, limit, offset })
+useDirective("for", (el: HTMLElement, prop: DocDirectives["for"]) => {
+  let sort: (a: any, b: any) => number = prop.sort
+  let filter: (value: any, index: number) => unknown = prop.filter
+  let limit: number = prop.limit
+  let offset: number = prop.offset
+  if (Array.isArray(prop.of)) {
+    if (prop.of && Array.isArray(prop.of)) {
+      let com: HTMLComponent<any> = prop.do
+      let copy = prepareForList(prop.of, { sort, filter, limit, offset })
       render(el, ...copy.map(com))
     }
   }
-  else if (property.of && property.of.subscribe) {
-    let list: Subscribable<any[]> = property.of
-    let com: HTMLComponent<any> = property.do
+  else if (prop.of && prop.of.subscribe) {
+    let list: Subscribable<any[]> = prop.of
+    let com: HTMLComponent<any> = prop.do
     onDestroy(list.subscribe(val => {
       eachFn(el[Hooks][BeforeUpdate])
       let copy = prepareForList(val, { sort, filter, limit, offset })
