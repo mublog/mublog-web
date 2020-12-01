@@ -11,6 +11,14 @@ const users = [
 export default UserService()
 
 function UserService() {
+  const HttpOptions: Partial<RequestInit> = {
+    cache: "no-cache",
+    mode: "cors",
+    headers: {
+     "Content-Type": "application/json"
+    },
+  }
+  const API_URL = "http://localhost:5000/api/v1"
   const isUser = useState(false)
   const isGuest = useState(true)
   let userAlias: string
@@ -29,18 +37,50 @@ function UserService() {
     }
   }
 
+  function getToken() {
+    return localStorage.getItem("token")
+  }
+
+  function setToken({ accessToken }) {
+    localStorage.setItem("token", accessToken )
+  }
+
+  function deleteToken() {
+    localStorage.removeItem("token")
+  }
+
   function hasUser(alias: string) {
     return !!users.find(user => user.alias === alias)
   }
 
   async function logout() {
     isUser.set(false)
+    deleteToken()
     NotificationService.push(null, i18n.logoutMessage, cfg.notification)
     service.activateRoute("/login")
     return pub
   }
 
+  async function auth() {
+    
+  }
+
   async function login({ alias, password }) {
+    try {
+      const token = await (await fetch(API_URL + "/auth/login", { 
+        method: "POST",
+        ...HttpOptions,
+        body: JSON.stringify({
+          username: alias,
+          password
+        })
+      })).json()
+      setToken(token)
+    }
+    catch (err) {
+      console.error(err)
+    }
+
     let success = users.find(user => user.alias === alias && user.password === password)
     if (success) {
       isUser.set(true)
