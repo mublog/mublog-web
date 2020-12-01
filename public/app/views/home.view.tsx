@@ -25,7 +25,7 @@ function HomeWriter() {
   const WriterRef = useRef<µ.WriterElement>()
 
   return (
-    <form onsubmit={tryPost} if={UserService.isUser}>
+    <form onsubmit={tryPost}>
       <µ.Writer ref={WriterRef}>
         <div styles={{ display: "flex", gap: "8px" }}>
           <µ.Button>{i18n.send}</µ.Button>
