@@ -13,12 +13,6 @@ function NotificationService() {
   const pub = { push }
   const bottomRight = useRef<HTMLElement>()
 
-  const View: HTMLDivElement = (
-    <div id="notifications">
-      <div ref={bottomRight} className="notification-wrapper" />
-    </div>
-  )
-
   function push(title: string, message: string, options: NotificationOption = {
     removeOnClick: false,
     timeout: 5000
@@ -30,7 +24,11 @@ function NotificationService() {
     }
   }
 
-  document.body.appendChild(View)
+  document.body.appendChild((
+    <div id="notifications">
+      <div ref={bottomRight} className="notification-wrapper" />
+    </div>
+  ))
   return pub
 }
 
