@@ -40,25 +40,25 @@ export default function Post(post: PostModel) {
 function UserContainer({ userAlias, userName }) {
   let UserName = useState(userName)
   return (
-    <a className="user-link" href={`/user/${userAlias}`} user-card={userAlias}>
+    <div user-card={userAlias}>
       {UserName}
       <span className="user-alias">
         @{userAlias}
       </span>
-    </a>
-  ) as HTMLAnchorElement
+    </div>
+  ) as HTMLDivElement
 }
 
 function UserImageContainer({ userAlias, userImageUrl }: { userAlias: string, userImageUrl: string }) {
   //  styles={{ backgroundImage: `url(${userImageUrl})` }}
   return (
-    <div className="user-link" user-card={userAlias}>
+    <div user-card={userAlias}>
       <div className="user-image-wrap">
         <div className="user-image" />
         <div className="avatar-circle" />
       </div>
     </div>
-  ) as HTMLAnchorElement
+  ) as HTMLDivElement
 }
 
 function TextContainer({ postId, data }: { postId: number, data: string }) {
