@@ -4,7 +4,7 @@ import { Styles } from "./globals"
 const styleElement = document.createElement("style")
 document.head.appendChild(styleElement)
 const CSSSheet: CSSStyleSheet = styleElement.sheet
-const CSSMap: Map<string, string> = new Map()
+const CSSMap = blank()
 
 export function useStyles(el: HTMLElement, rules: Partial<CSSStyleDeclaration>) {
   if (!el[Styles]) {
@@ -36,12 +36,12 @@ function createProperty(ruleName: string) {
 function insertRule(rule: string) {
   let name = "r-" + createHash(rule)
   let style = `.${name} { ${rule} }`
-  if (!CSSMap.has(name)) {
-    CSSMap.set(name, style)
+  if (!CSSMap[name]) {
+    CSSMap[name] = style
     CSSSheet.insertRule(style, CSSSheet.rules.length)
   }
   else {
-    if (CSSMap.get(name) !== style) {
+    if (CSSMap[name] !== style) {
       name += "_"
       CSSSheet.insertRule(style, CSSSheet.rules.length)
     }
