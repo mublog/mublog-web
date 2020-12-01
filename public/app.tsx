@@ -6,11 +6,11 @@ import Navigation from "./app/components/navigation.component"
 import UserCardPortal from "./app/components/user-card.component"
 import Routes from "./routes"
 
-if ("serviceWorker" in navigator) {
+/* if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("serviceworker.js").then(() => {
     console.log("[ServiceWorker] - Registered")
   })
-}
+} */
 
 function Application(): HTMLDivElement {
   return (
