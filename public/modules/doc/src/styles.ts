@@ -1,4 +1,4 @@
-import { blank, createHash } from "./helper"
+import { blank, createHash, keysOf } from "./helper"
 import { Styles } from "./globals"
 
 const styleElement = document.createElement("style")
@@ -10,11 +10,10 @@ export function useStyles(el: HTMLElement, rules: Partial<CSSStyleDeclaration>) 
   if (!el[Styles]) {
     el[Styles] = blank()
   }
-  let add: string[] = []
-  let del: string[] = []
-  for (let rule in rules) {
-    let property = createProperty(rule)
-    let name = insertRule(`${property}: ${rules[rule]};`)
+  let [add, del, keys, name, property] = declareVariables(rules)
+  for (let i = 0, len = keys.length; i < len; i++) {
+    property = keys[i].replace(/([A-Z])/g, "-$1")
+    name = insertRule(`${property}: ${rules[keys[i]]};`)
     if (!el[Styles][property]) {
       el[Styles][property] = name
       add.push(name)
@@ -29,8 +28,14 @@ export function useStyles(el: HTMLElement, rules: Partial<CSSStyleDeclaration>) 
   el.classList.add(...add)
 }
 
-function createProperty(ruleName: string) {
-  return ruleName.replace(/([A-Z])/g, "-$1").toLowerCase()
+function declareVariables(rules: Partial<CSSStyleDeclaration>): [
+  add: string[],
+  del: string[],
+  keys: string[],
+  rule: string,
+  property: string
+] {
+  return [[], [], keysOf(rules), "", ""]
 }
 
 function insertRule(rule: string) {
@@ -43,7 +48,8 @@ function insertRule(rule: string) {
   else {
     if (CSSMap[name] !== style) {
       name += "_"
-      CSSSheet.insertRule(style, CSSSheet.rules.length)
+      CSSMap[name] = `.${name} { ${rule} }`
+      CSSSheet.insertRule(CSSMap[name], CSSSheet.rules.length)
     }
   }
   return name

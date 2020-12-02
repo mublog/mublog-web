@@ -3,9 +3,7 @@ import { blank } from "./helper"
 let cur: HTMLElement
 
 export function cursor(el?: HTMLElement): HTMLElement {
-  if (el) {
-    cur = el
-  }
+  if (el) cur = el
   return cur
 }
 
