@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "jsxFactory": "Doc.createElement",
+    "jsxFactory": "Doc.h",
     "jsx": "preserve",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
