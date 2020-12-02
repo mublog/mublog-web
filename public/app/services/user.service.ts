@@ -3,23 +3,19 @@ import i18n from "../../lang/de_DE.json"
 import NotificationService from "./notification.service"
 import * as service from "./generic.service"
 import * as http from "./http.service"
-
 import * as cfg from "../config/settings"
 
-const users = [
-  { alias: "iljushka", name: "Ilja", password: "password" }
-]
-
-const httpOptions: HttpOptions = {
+const httpOptions = (): HttpOptions => ({
   contentType: "json",
   init: {
     cache: "no-cache",
     mode: "cors",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      //"Authorize": "Bearer " + getToken()
     }
   }
-}
+})
 
 export default UserService()
 
@@ -31,7 +27,11 @@ function UserService() {
   let userName: string
   let userImageUrl: string
 
-  const pub = { isUser, isGuest, logout, login, register, currentUser, hasUser }
+  const pub = { isUser, isGuest, logout, login, register, currentUser, hasUser, isLoggedIn }
+
+  function isLoggedIn(): boolean {
+    return !!getToken() && isUser.get()
+  }
 
   function currentUser() {
     if (isUser.get()) {
@@ -44,7 +44,7 @@ function UserService() {
   }
 
   function hasUser(alias: string) {
-    return !!users.find(user => user.alias === alias)
+    return true
   }
 
   async function logout() {
@@ -57,20 +57,10 @@ function UserService() {
 
   async function login({ alias, password }) {
     let body = JSON.stringify({ username: alias, password })
-    let [token, result] = await http.post<{ accessToken: string }>(API_URL + "/auth/login", body, httpOptions)
-
-    if (token?.accessToken) {
+    let [token, res] = await http.post<{ accessToken: string }>(API_URL + "/auth/login", body, httpOptions())
+    if (res?.status === 200 && token) {
       setToken(token.accessToken)
-    }
-
-    /**
-     * this will be replaced when the real login works
-     */
-    let success = users.find(user => user.alias === alias && user.password === password)
-    if (success) {
       isUser.set(true)
-      userAlias = alias
-      userName = success.name
       NotificationService.push(null, i18n.loginSuccessMessage, cfg.notification)
     }
     else {
@@ -81,9 +71,7 @@ function UserService() {
   }
 
   async function register({ alias, name, password }) {
-    let success = !users.find(user => user.alias === alias && user.name === name)
-    if (success) {
-      users.push({ alias, name, password })
+    if (false) {
       NotificationService.push(null, i18n.registerSuccess, cfg.notification)
       service.activateRoute("/login")
     }
@@ -99,6 +87,7 @@ function UserService() {
       userAlias = undefined
       userName = undefined
       userImageUrl = undefined
+      deleteToken()
     }
   })
 
