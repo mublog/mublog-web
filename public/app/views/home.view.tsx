@@ -28,7 +28,7 @@ function HomeWriter() {
     <form onsubmit={tryPost}>
       <µ.Writer ref={WriterRef}>
         <div styles={{ display: "flex", gap: "8px" }}>
-          <µ.Button>{i18n.send}</µ.Button>
+          <µ.Button type="submit">{i18n.send}</µ.Button>
           <µ.Button type="button">{i18n.uploadImage}</µ.Button>
         </div>
       </µ.Writer>
@@ -47,14 +47,14 @@ function HomeWriter() {
     }
     const values = getValues()
     if (values && values.raw) {
-      PostService.add({
+      /* PostService.add({
         id: Math.round(Math.random() * 10000000),
         textContent: values.raw,
         user: UserService.currentUser(),
         datePosted: Date.now(),
         dateEdited: Date.now(),
         likeAmount: 0
-      })
+      }) */
       WriterRef.current.clear()
     }
     else {
