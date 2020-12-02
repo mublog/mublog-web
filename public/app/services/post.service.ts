@@ -3,15 +3,7 @@ import { useState } from "../../modules/doc/mod"
 export default PostService()
 
 function PostService() {
-  let local: any = localStorage.getItem("posts")
-  if (local) {
-    local = JSON.parse(local)
-  }
-  else {
-    local = []
-  }
-
-  const posts = useState<PostModel[]>(local)
+  const posts = useState<PostModel[]>([])
   const pub = { getPosts, add, hasPost, update }
 
   setInterval(() => {
