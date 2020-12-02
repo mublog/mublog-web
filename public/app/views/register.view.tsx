@@ -7,6 +7,7 @@ import NotificationService from "../services/notification.service"
 export default async function RegisterView() {
   const InputAlias = useRef<HTMLInputElement>()
   const InputName = useRef<HTMLInputElement>()
+  const InputEmail = useRef<HTMLInputElement>()
   const InputPasswords = [useRef<HTMLInputElement>(), useRef<HTMLInputElement>()]
 
   return (
@@ -16,18 +17,21 @@ export default async function RegisterView() {
         <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <div styles={{ display: "flex", flexDirection: "row", gap: "8px" }}>
             <µ.Label labelText={i18n.alias}>
-              <µ.Input ref={InputAlias} type="text" placeholder={i18n.alias} required="true" />
+              <µ.Input name="alias" ref={InputAlias} type="text" placeholder={i18n.alias} required="true" />
             </µ.Label>
             <µ.Label labelText={i18n.name}>
-              <µ.Input ref={InputName} type="text" placeholder={i18n.name} required="true" />
+              <µ.Input name="name" ref={InputName} type="text" placeholder={i18n.name} required="true" />
             </µ.Label>
           </div>
+          <µ.Label labelText={i18n.email}>
+            <µ.Input name="email" ref={InputEmail} type="email" placeholder="your@email.com" required="true" />
+          </µ.Label>
           <div styles={{ display: "flex", flexDirection: "row", gap: "8px" }}>
             <µ.Label labelText={i18n.password}>
-              <µ.Input ref={InputPasswords[0]} type="password" placeholder="********" required="true" />
+              <µ.Input name="password" ref={InputPasswords[0]} type="password" placeholder="********" required="true" />
             </µ.Label>
             <µ.Label labelText={i18n.passwordReEnter}>
-              <µ.Input ref={InputPasswords[1]} type="password" placeholder="********" required="true" />
+              <µ.Input name="password" ref={InputPasswords[1]} type="password" placeholder="********" required="true" />
             </µ.Label>
           </div>
           <µ.Footer>
@@ -47,6 +51,7 @@ export default async function RegisterView() {
     return {
       alias: InputAlias.current.value,
       name: InputName.current.value,
+      email: InputEmail.current.value,
       passwords: [InputPasswords[0].current.value, InputPasswords[1].current.value]
     }
   }
@@ -65,7 +70,8 @@ export default async function RegisterView() {
 
     UserService.register({
       alias: values.alias,
-      name: values.name,
+      displayName: values.name,
+      email: values.email,
       password: values.passwords[0]
     })
   }
