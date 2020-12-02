@@ -8,7 +8,7 @@ const UserCardPortal = usePortal(UserCard)
 const users = [
   {
     alias: "iljushka",
-    name: "Ilja B.",
+    displayName: "Ilja B.",
     bio: "Biology is hard"
   }
 ]
@@ -37,7 +37,7 @@ async function UserCard({ alias, top, left }) {
           </div>
           <div styles={{ display: "flex", flexDirection: "column", alignItems: "center", flex: "content" }}>
             <div>
-              {user.name}
+              {user.displayName}
             </div>
             <div>
               @{alias}

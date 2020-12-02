@@ -12,10 +12,10 @@ export default function Post(post: PostModel) {
   const View = (
     <div className={visible} ref={PostRef}>
       <div styles={{ display: "flex", gap: "8px" }}>
-        <UserImageContainer userAlias={post.user.alias} userImageUrl={post.user.imageUrl} />
+        <UserImageContainer userAlias={post.user.alias} userImageUrl={post.user.profileImageUrl} />
         <µ.Box className="post-content" arrow="top-left">
           <µ.Header>
-            <UserContainer userAlias={post.user.alias} userName={post.user.name} />
+            <UserContainer userAlias={post.user.alias} userName={post.user.displayName} />
             <µ.Time datetime={post.datePosted} className="datetime" />
             <µ.Icon name="calendar" />
           </µ.Header>
