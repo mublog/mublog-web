@@ -47,7 +47,7 @@ declare interface Reference<Type> {
 declare interface Portal<Type extends (...args: any[]) => Promise<HTMLElement> | HTMLElement> {
   isPortal: boolean
   set(newAnchor: HTMLElement): Portal<Type>
-  open(props: Parameters<Type>[0], ...children: Child[]): Promise<ReturnType<Type>>
+  open(props: Parameters<Type>[0], ...children: Child[]): Promise<void>
   close(): Portal<Type>
 }
 declare type RouteActivator = (params?: URLParams) => boolean | Promise<boolean>

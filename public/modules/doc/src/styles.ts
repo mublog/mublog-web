@@ -7,20 +7,21 @@ const CSSSheet: CSSStyleSheet = styleElement.sheet
 const CSSMap = blank()
 
 export function useStyles(el: HTMLElement, rules: Partial<CSSStyleDeclaration>) {
-  if (!el[Styles]) {
-    el[Styles] = blank()
-  }
-  let [add, del, keys, name, property] = declareVariables(rules)
+  if (!el[Styles]) el[Styles] = blank()
+  const elStyles = el[Styles]
+  const add: string[] = []
+  const del: string[] = []
+  const keys = keysOf(rules)
   for (let i = 0, len = keys.length; i < len; i++) {
-    property = keys[i].replace(/([A-Z])/g, "-$1")
-    name = insertRule(`${property}: ${rules[keys[i]]};`)
-    if (!el[Styles][property]) {
-      el[Styles][property] = name
+    const property = keys[i].replace(/([A-Z])/g, "-$1")
+    const name = createRule(`${property}: ${rules[keys[i]]};`)
+    if (!elStyles[property]) {
+      elStyles[property] = name
       add.push(name)
     }
     else {
-      del.push(el[Styles][property])
-      el[Styles][property] = name
+      del.push(elStyles[property])
+      elStyles[property] = name
       add.push(name)
     }
   }
@@ -28,29 +29,23 @@ export function useStyles(el: HTMLElement, rules: Partial<CSSStyleDeclaration>) 
   el.classList.add(...add)
 }
 
-function declareVariables(rules: Partial<CSSStyleDeclaration>): [
-  add: string[],
-  del: string[],
-  keys: string[],
-  rule: string,
-  property: string
-] {
-  return [[], [], keysOf(rules), "", ""]
-}
-
-function insertRule(rule: string) {
+function createRule(rule: string) {
   let name = "r-" + createHash(rule)
   let style = `.${name} { ${rule} }`
   if (!CSSMap[name]) {
     CSSMap[name] = style
-    CSSSheet.insertRule(style, CSSSheet.rules.length)
+    insertRule(style)
   }
   else {
     if (CSSMap[name] !== style) {
       name += "_"
       CSSMap[name] = `.${name} { ${rule} }`
-      CSSSheet.insertRule(CSSMap[name], CSSSheet.rules.length)
+      insertRule(CSSMap[name])
     }
   }
   return name
+}
+
+function insertRule(rule: string) {
+  CSSSheet.insertRule(rule, CSSSheet.rules.length)
 }

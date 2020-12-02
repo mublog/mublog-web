@@ -1,3 +1,4 @@
+import { T_STRING, T_FUNCTION } from "../types"
 import findRoute from "./find-route"
 
 export default async function loadRoute(routes: Route[], url: string): Promise<LoadedRoute> {
@@ -8,10 +9,12 @@ export default async function loadRoute(routes: Route[], url: string): Promise<L
   let { component, title, params } = route
   let stateTitle = ""
   if (title) {
-    if (typeof title === "function") {
+    if (typeof title === T_FUNCTION) {
+      // @ts-expect-error
       stateTitle = title(params)
     }
-    else if (typeof title === "string") {
+    else if (typeof title === T_STRING) {
+      // @ts-expect-error
       stateTitle = title
     }
   }

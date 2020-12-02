@@ -1,3 +1,5 @@
+import { T_NUMBER } from "./types"
+
 export function each(list: any[], fn?: (val: any, idx?: number, list?: any[]) => any) {
   if (!list || list.length === 0) return
   let i = 0
@@ -22,14 +24,10 @@ export function blank() {
 
 export function addSubscription(subscribers: Subscription<any>[], fn: Subscription<any>, cb?: (...args: any[]) => any) {
   subscribers.push(fn)
-  if (cb) {
-    cb()
-  }
-  return function unsubscribe() {
+  if (cb) cb()
+  return () => {
     const index = subscribers.indexOf(fn)
-    if (index !== -1) {
-      subscribers.splice(index, 1)
-    }
+    if (index !== -1) subscribers.splice(index, 1)
   }
 }
 
@@ -49,8 +47,8 @@ export function prepareForList(list: any[], { sort, filter, limit, offset }) {
   let copy = [...list]
   if (filter) copy = copy.filter(filter)
   if (sort) copy = copy.sort(sort)
-  if (typeof offset === "number") copy = copy.slice(0, offset)
-  if (typeof limit === "number") copy.length = limit
+  if (typeof offset === T_NUMBER) copy = copy.slice(0, offset)
+  if (typeof limit === T_NUMBER) copy.length = limit
   return copy
 }
 

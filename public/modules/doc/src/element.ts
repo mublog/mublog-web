@@ -1,5 +1,6 @@
 import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy, Events, Directives, cursor } from "./globals"
 import { onEvent } from "./events"
+import { T_STRING, T_NUMBER, T_FUNCTION } from "./types"
 import { blank, each, eachFn, keysOf, prepareForList } from "./helper"
 import { onDestroy } from "./lifecycle"
 import { useDirective } from "./core"
@@ -19,17 +20,21 @@ function fragment() {
   return document.createDocumentFragment()
 }
 
+function comment(text: string) {
+  return document.createComment(text)
+}
+
 export function createElement<Tag extends HTMLTag>(type: Tag, props: HTMLOptions<Tag>, ...children: Child[]) {
-  if (typeof type === "function") {
-    // @ts-expect-error
-    return type(props, ...children)
-  }
+  // @ts-expect-error
+  if (typeof type === T_FUNCTION) return type(props, ...children)
   let el = element(type)
   properties(el, props)
   appendChildren(el, children)
   cursor(el)
   return el
 }
+
+export const h = createElement
 
 function prepareHooks(el: HTMLElement) {
   el[Hooks] = blank()
@@ -55,14 +60,13 @@ function appendTextLike(el: DocumentFragment | HTMLElement, child: string | numb
 
 function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
   let frag = fragment()
-  let i = 0
   const len = children.length
   if (len > 0) {
-    for (i; i < len; i++) {
+    for (let i = 0; i < len; i++) {
       if (Array.isArray(children[i])) {
         appendChildren(frag, children[i])
       }
-      else if (typeof children[i] === "string" || typeof children[i] === "number") {
+      else if (typeof children[i] === T_STRING || typeof children[i] === T_NUMBER) {
         appendTextLike(frag, children[i])
       }
       else if (children[i] instanceof Element) {
@@ -70,26 +74,25 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
       }
       else if (children[i].subscribe) {
         let stateValue = children[i].get()
-        if (typeof stateValue === "string" || typeof stateValue === "number") {
+        const hooks = el[Hooks]
+        if (typeof stateValue === T_STRING || typeof stateValue === T_NUMBER) {
           let state: Subscribable<number | string> = children[i]
           let content = text(state.get())
           frag.appendChild(content)
           onDestroy(state.subscribe(val => {
-            eachFn(el[Hooks][BeforeUpdate])
+            eachFn(hooks[BeforeUpdate])
             let newVal = val + ""
-            if (content.textContent !== newVal) {
-              content.textContent = newVal
-            }
-            eachFn(el[Hooks][AfterUpdate])
+            if (content.textContent !== newVal) content.textContent = newVal
+            eachFn(hooks[AfterUpdate])
           }))
         }
         else if (stateValue instanceof Element) {
           let state: Subscribable<Element> = children[i]
           frag.appendChild(state.get())
           onDestroy(state.subscribe(val => {
-            eachFn(el[Hooks][BeforeUpdate])
+            eachFn(hooks[BeforeUpdate])
             state.get().replaceWith(val)
-            eachFn(el[Hooks][AfterUpdate])
+            eachFn(hooks[AfterUpdate])
           }))
         }
       }
@@ -101,10 +104,11 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
 function writeSubscribableProperty(el: HTMLElement, key: string, property: Subscribable<any>) {
   let state: Subscribable<any> = property
   el[key] = state.get()
+  const hooks = el[Hooks]
   onDestroy(state.subscribe(val => {
-    eachFn(el[Hooks][BeforeUpdate])
+    eachFn(hooks[BeforeUpdate])
     if (el[key] !== val) el[key] = val
-    eachFn(el[Hooks][AfterUpdate])
+    eachFn(hooks[AfterUpdate])
   }))
 }
 
@@ -113,8 +117,8 @@ function writeDefault(el: HTMLElement, key: string, property: any) {
   if (property.subscribe) {
     writeSubscribableProperty(el, key, property)
   }
-  else if (key.startsWith("on") && typeof property === "function") {
-    onEvent(key.slice(2).toLowerCase() as EventNames, property)
+  else if (key.startsWith("on") && typeof property === T_FUNCTION) {
+    onEvent(key.slice(2) as EventNames, property)
   }
   else {
     el[key] = property
@@ -136,11 +140,12 @@ useDirective("for", (el: HTMLElement, prop: DocDirectives["for"]) => {
   else if (prop.of && prop.of.subscribe) {
     let list: Subscribable<any[]> = prop.of
     let com: HTMLComponent<any> = prop.do
+    const hooks = el[Hooks]
     onDestroy(list.subscribe(val => {
-      eachFn(el[Hooks][BeforeUpdate])
+      eachFn(hooks[BeforeUpdate])
       let copy = prepareForList(val, { sort, filter, limit, offset })
       render(el, ...copy.map(com))
-      eachFn(el[Hooks][AfterUpdate])
+      eachFn(hooks[AfterUpdate])
     }))
   }
 })
@@ -153,30 +158,20 @@ useDirective("portal", portalDirective)
 function properties(el: HTMLElement, props: any) {
   const keys = keysOf(props)
   keys.forEach(key => {
-    if (Directives[key]) {
-      Directives[key](el, props[key])
-    }
-    else {
-      writeDefault(el, key, props[key])
-    }
+    const directive = Directives[key]
+    directive ? directive(el, props[key]) : writeDefault(el, key, props[key])
   })
 }
 
 export function runMount(el: HTMLElement) {
-  if (el[Hooks]) {
-    eachFn(el[Hooks][Mount])
-  }
-  if (el.children) {
-    each(Array.from(el.children), runMount)
-  }
+  const hooks = el[Hooks]
+  if (hooks) eachFn(hooks[Mount])
+  if (el.children) each(Array.from(el.children), runMount)
 }
 
 export function runDestroy(el: HTMLElement) {
-  if (el[Hooks]) {
-    eachFn(el[Hooks][Destroy])
-  }
-  if (el.children) {
-    each(Array.from(el.children), runDestroy)
-  }
+  const hooks = el[Hooks]
+  if (hooks) eachFn(hooks[Destroy])
+  if (el.children) each(Array.from(el.children), runDestroy)
   el = undefined
 }
