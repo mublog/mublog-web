@@ -4,6 +4,7 @@ import NotificationService from "./notification.service"
 import * as service from "./generic.service"
 import * as http from "./http.service"
 import * as cfg from "../config/settings"
+import jwtDecode from "jwt-decode"
 
 const httpOptions = (): HttpOptions => ({
   contentType: "json",
@@ -12,7 +13,7 @@ const httpOptions = (): HttpOptions => ({
     mode: "cors",
     headers: {
       "Content-Type": "application/json",
-      //"Authorize": "Bearer " + getToken()
+      "Authorize": "Bearer " + getToken()
     }
   }
 })
@@ -24,8 +25,6 @@ function UserService() {
   const isUser = useState(false)
   const isGuest = useState(true)
   let userAlias: string
-  let userName: string
-  let userImageUrl: string
 
   const pub = { isUser, isGuest, logout, login, register, currentUser, hasUser, isLoggedIn }
 
@@ -36,9 +35,7 @@ function UserService() {
   function currentUser() {
     if (isUser.get()) {
       return {
-        alias: userAlias,
-        name: userName,
-        imageUrl: userImageUrl
+        alias: userAlias
       }
     }
   }
@@ -49,7 +46,7 @@ function UserService() {
 
   async function logout() {
     isUser.set(false)
-    deleteToken()
+    delToken()
     NotificationService.push(null, i18n.logoutMessage, cfg.notification)
     service.activateRoute("/login")
     return pub
@@ -57,9 +54,9 @@ function UserService() {
 
   async function login({ alias, password }) {
     let body = JSON.stringify({ username: alias, password })
-    let [token, res] = await http.post<{ accessToken: string }>(API_URL + "/auth/login", body, httpOptions())
-    if (res?.status === 200 && token) {
-      setToken(token.accessToken)
+    let [token, res] = await http.post<ResponseWrapper<{ accessToken: string }>>(API_URL + "/auth/login", body, httpOptions())
+    if (res?.status === 200 && token?.data?.accessToken) {
+      setToken(token.data.accessToken)
       isUser.set(true)
       NotificationService.push(null, i18n.loginSuccessMessage, cfg.notification)
     }
@@ -70,8 +67,10 @@ function UserService() {
     return pub
   }
 
-  async function register({ alias, name, password }) {
-    if (false) {
+  async function register({ alias, displayName, email, password }) {
+    let body = JSON.stringify({ email, username: alias, password, displayName })
+    let [_, res] = await http.post<ResponseWrapper<null>>(API_URL + "/auth/register", body, httpOptions())
+    if (res.status === 200) {
       NotificationService.push(null, i18n.registerSuccess, cfg.notification)
       service.activateRoute("/login")
     }
@@ -83,13 +82,12 @@ function UserService() {
 
   isUser.subscribe(state => {
     isGuest.set(state ? false : true)
-    if (isGuest.get()) {
-      userAlias = undefined
-      userName = undefined
-      userImageUrl = undefined
-      deleteToken()
-    }
+    userAlias = getAlias()
   })
+
+  if (getAlias()) {
+    isUser.set(true)
+  }
 
   return pub
 }
@@ -102,6 +100,15 @@ function setToken(accessToken: string) {
   localStorage.setItem("token", accessToken)
 }
 
-function deleteToken() {
+function delToken() {
   localStorage.removeItem("token")
+}
+
+function getAlias() {
+  if (getToken()) {
+    let jwt: { sub: string } = jwtDecode(getToken())
+    if (jwt && jwt.sub) {
+      return jwt.sub
+    }
+  }
 }
