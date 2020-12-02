@@ -3,6 +3,7 @@ import PostService from "./app/services/post.service"
 import i18n from "./lang/de_DE.json"
 
 import HomeView from "./app/views/home.view"
+import SettingsView from "./app/views/settings.view"
 import PresentationView from "./app/views/presentation.view"
 import LoginView from "./app/views/login.view"
 import UserView from "./app/views/user.view"
@@ -32,6 +33,12 @@ const Routes: RouteConstructor[] = [
     title: `\$\{${"page." + i18n.register}\}`,
     component: RegisterView,
     activates: [UserService.isGuest.get]
+  },
+  {
+    path: "settings/?*",
+    title: `\$\{${"page." + i18n.settings}\}`,
+    component: SettingsView,
+    activates: [UserService.isUser.get]
   },
   {
     path: "user/:alias",

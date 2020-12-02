@@ -12,6 +12,7 @@ export default function Navigation() {
         <a href="/presentation">{i18n.presentation}</a>
         <a if={UserService.isGuest} href="/login">{i18n.login}</a>
         <a if={UserService.isGuest} href="/register">{i18n.register}</a>
+        <a if={UserService.isUser} href="/settings">{i18n.settings}</a>
         <a if={UserService.isUser} onclick={UserService.logout}>{i18n.logout}</a>
       </div>
     </µ.Box>
