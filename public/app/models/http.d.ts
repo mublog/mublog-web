@@ -3,3 +3,11 @@ declare interface HttpOptions {
   body?: any
   init?: RequestInit
 }
+
+declare interface ResponseWrapper<Type> {
+  data: Type
+  messages: string[]
+  isError: boolean
+}
+
+declare interface PostsResponse extends ResponseWrapper<PostModel[]> { }

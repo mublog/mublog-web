@@ -1,11 +1,7 @@
 declare interface PostModel {
   id: number
   textContent: string
-  user: {
-    alias: string
-    name: string
-    imageUrl?: string
-  }
+  user: User
   datePosted: number
   dateEdited: number
   likeAmount: number
