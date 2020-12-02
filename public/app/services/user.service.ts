@@ -1,23 +1,29 @@
 import { useState } from "../../modules/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import NotificationService from "./notification.service"
-import * as service from "../services/generic.service"
+import * as service from "./generic.service"
+import * as http from "./http.service"
+
 import * as cfg from "../config/settings"
 
 const users = [
   { alias: "iljushka", name: "Ilja", password: "password" }
 ]
 
-export default UserService()
-
-function UserService() {
-  const HttpOptions: Partial<RequestInit> = {
+const httpOptions: HttpOptions = {
+  contentType: "json",
+  init: {
     cache: "no-cache",
     mode: "cors",
     headers: {
-     "Content-Type": "application/json"
-    },
+      "Content-Type": "application/json"
+    }
   }
+}
+
+export default UserService()
+
+function UserService() {
   const API_URL = "http://localhost:5000/api/v1"
   const isUser = useState(false)
   const isGuest = useState(true)
@@ -37,18 +43,6 @@ function UserService() {
     }
   }
 
-  function getToken() {
-    return localStorage.getItem("token")
-  }
-
-  function setToken({ accessToken }) {
-    localStorage.setItem("token", accessToken )
-  }
-
-  function deleteToken() {
-    localStorage.removeItem("token")
-  }
-
   function hasUser(alias: string) {
     return !!users.find(user => user.alias === alias)
   }
@@ -61,26 +55,17 @@ function UserService() {
     return pub
   }
 
-  async function auth() {
-    
-  }
-
   async function login({ alias, password }) {
-    try {
-      const token = await (await fetch(API_URL + "/auth/login", { 
-        method: "POST",
-        ...HttpOptions,
-        body: JSON.stringify({
-          username: alias,
-          password
-        })
-      })).json()
-      setToken(token)
-    }
-    catch (err) {
-      console.error(err)
+    let body = JSON.stringify({ username: alias, password })
+    let [token, result] = await http.post<{ accessToken: string }>(API_URL + "/auth/login", body, httpOptions)
+
+    if (token?.accessToken) {
+      setToken(token.accessToken)
     }
 
+    /**
+     * this will be replaced when the real login works
+     */
     let success = users.find(user => user.alias === alias && user.password === password)
     if (success) {
       isUser.set(true)
@@ -118,4 +103,16 @@ function UserService() {
   })
 
   return pub
+}
+
+function getToken() {
+  return localStorage.getItem("token")
+}
+
+function setToken(accessToken: string) {
+  localStorage.setItem("token", accessToken)
+}
+
+function deleteToken() {
+  localStorage.removeItem("token")
 }
