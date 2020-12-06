@@ -4,7 +4,6 @@ import i18n from "./lang/de_DE.json"
 
 import HomeView from "./app/views/home.view"
 import SettingsView from "./app/views/settings.view"
-import PresentationView from "./app/views/presentation.view"
 import LoginView from "./app/views/login.view"
 import UserView from "./app/views/user.view"
 import UserPostView from "./app/views/user-post.view"
@@ -18,27 +17,22 @@ const Routes: RouteConstructor[] = [
     component: HomeView
   },
   {
-    path: "presentation/?*",
-    title: `\$\{${"page." + i18n.presentation}\}`,
-    component: PresentationView
-  },
-  {
     path: "login/?*",
     title: `\$\{${"page." + i18n.login}\}`,
     component: LoginView,
-    activates: [UserService.isGuest.get]
+    activates: [UserService.isGuest.value]
   },
   {
     path: "register/?*",
     title: `\$\{${"page." + i18n.register}\}`,
     component: RegisterView,
-    activates: [UserService.isGuest.get]
+    activates: [UserService.isGuest.value]
   },
   {
     path: "settings/?*",
     title: `\$\{${"page." + i18n.settings}\}`,
     component: SettingsView,
-    activates: [UserService.isUser.get]
+    activates: [UserService.isUser.value]
   },
   {
     path: "user/:alias",
