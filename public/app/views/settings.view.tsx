@@ -1,7 +1,7 @@
-import Doc from "../../modules/doc/mod"
+import Doc from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as µ from "../components/mu.component"
-import ServiceWorkerService from "../services/service-worker.service"
+import InstallService from "../services/install.service"
 
 export default async function SettingsView() {
   return (
@@ -12,13 +12,13 @@ export default async function SettingsView() {
       <µ.Box>
         <µ.Header>{i18n.general}</µ.Header>
         <div styles={{ display: "flex", gap: "8px", alignItems: "baseline" }}>
-          <µ.Button if={ServiceWorkerService.isNotInstalled} onclick={ServiceWorkerService.install}>
+          <µ.Button if={InstallService.isNotInstalled} onclick={InstallService.install}>
             {i18n.installApp}
           </µ.Button>
-          <µ.Button if={ServiceWorkerService.isInstalled} onclick={ServiceWorkerService.uninstall}>
+          <µ.Button if={InstallService.isInstalled} onclick={InstallService.uninstall}>
             {i18n.uninstallApp}
           </µ.Button>
-          <span if={ServiceWorkerService.isInstalled}>({i18n.isInstalled})</span>
+          <span if={InstallService.isInstalled}>({i18n.isInstalled})</span>
         </div>
       </µ.Box>
     </div>

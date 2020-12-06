@@ -1,8 +1,8 @@
-import { useState } from "../../modules/doc/mod"
+import { useState } from "../../mod/doc/mod"
 
-export default ServiceWorkerService()
+export default InstallService()
 
-function ServiceWorkerService() {
+function InstallService() {
   const isInstalled = useState(false)
   const isNotInstalled = useState(true)
 
