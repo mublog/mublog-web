@@ -1,25 +1,16 @@
-import Doc, { usePortal } from "../../modules/doc/mod"
+import Doc, { usePortal } from "../../mod/doc/mod"
 import * as µ from "./mu.component"
 import adjustCardPosition from "../helpers/adjust-card-position"
+import UserService from "../services/user.service"
 
-// @ts-expect-error
 const UserCardPortal = usePortal(UserCard)
 
-const users = [
-  {
-    alias: "iljushka",
-    displayName: "Ilja B.",
-    bio: "Biology is hard"
-  }
-]
+
 
 async function UserCard({ alias, top, left }) {
   [top, left] = adjustCardPosition(top, left)
-  let user = users.find(u => u.alias === alias)
 
-  if (!user) {
-    return document.createComment("oops")
-  }
+  let user = await UserService.getUser(alias)
 
   // styles={{ backgroundImage: `url(${user.image})` }}
 
@@ -35,7 +26,7 @@ async function UserCard({ alias, top, left }) {
             <div className="user-image" />
             <div className="avatar-circle" />
           </div>
-          <div styles={{ display: "flex", flexDirection: "column", alignItems: "center", flex: "content" }}>
+          <div>
             <div>
               {user.displayName}
             </div>
@@ -46,7 +37,7 @@ async function UserCard({ alias, top, left }) {
         </a>
       </µ.Header>
       <µ.Box arrow="top-left">
-        {user.bio}
+        {user.description}
       </µ.Box>
     </µ.Box>
   ) as HTMLElement
