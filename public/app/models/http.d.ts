@@ -9,5 +9,3 @@ declare interface ResponseWrapper<Type> {
   messages: string[]
   isError: boolean
 }
-
-declare interface PostsResponse extends ResponseWrapper<PostModel[]> { }

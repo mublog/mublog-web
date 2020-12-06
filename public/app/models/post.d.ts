@@ -5,5 +5,7 @@ declare interface PostModel {
   datePosted: number
   dateEdited: number
   likeAmount: number
-  likedByUser?: boolean
+  liked: boolean
 }
+
+declare interface PostsResponse extends ResponseWrapper<PostModel[]> { }
