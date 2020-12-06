@@ -8,9 +8,7 @@ export function onAttributeChange(fn: AttributeChangedCallback, attributes: stri
   AttributeCallbacks.push(fn)
   onDestroy(() => {
     const index = AttributeCallbacks.indexOf(fn)
-    if (index !== -1) {
-      AttributeCallbacks.splice(index, 1)
-    }
+    if (index !== -1) AttributeCallbacks.splice(index, 1)
   })
   AttributeObserver.observe(el, { attributeFilter: attributes, attributeOldValue: true, attributes: true })
 }
@@ -19,8 +17,7 @@ const AttributeCallbacks: ((...args: any[]) => any)[] = []
 const AttributeObserver = new MutationObserver(attributeNotifer)
 function attributeNotifer(recs: MutationRecord[]) {
   each(recs, ({ type, attributeName, oldValue }: MutationRecord) => {
-    if (type !== "attributes") return
-    eachFn(AttributeCallbacks, attributeName, oldValue)
+    if (type === "attributes") eachFn(AttributeCallbacks, attributeName, oldValue)
   })
 }
 

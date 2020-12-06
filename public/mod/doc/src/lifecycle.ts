@@ -1,10 +1,10 @@
 import { Hooks, Mount, AfterUpdate, BeforeUpdate, Destroy, cursor } from "./globals"
-import { addSubscription } from "./helper"
+import { sub } from "./helper"
 
 function onAction(type: any, fn: (...args: any[]) => any) {
   const el = cursor()
   let fns = (el[Hooks][type]) || (el[Hooks][type] = []) as any[]
-  return addSubscription(fns, fn)
+  return sub(fns, fn)
 }
 
 export function beforeUpdate(fn: () => any): void {

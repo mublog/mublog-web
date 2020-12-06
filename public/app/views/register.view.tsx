@@ -1,4 +1,4 @@
-import Doc, { useRef } from "../../modules/doc/mod"
+import Doc, { useRef } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as µ from "../components/mu.component"
 import UserService from "../services/user.service"

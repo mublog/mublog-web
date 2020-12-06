@@ -1,4 +1,4 @@
-import { Hooks, BeforeUpdate, AfterUpdate } from "./globals"
+import { Hooks, BeforeUpdate, AfterUpdate, cursor } from "./globals"
 import { eachFn } from "./helper"
 import { onDestroy } from "./lifecycle"
 import { useStyles } from "./styles"
@@ -13,9 +13,7 @@ export function portalDirective(el: HTMLElement, prop: Portal<any>) {
 
 export function ifDirective(el: HTMLElement, property: boolean | Subscribable<boolean>) {
   if (typeof property === "boolean") {
-    if (property === false) {
-      el.setAttribute("hidden", "")
-    }
+    if (property === false) el.setAttribute("hidden", "")
   }
   else if (property.subscribe) {
     let state: Subscribable<boolean> = property

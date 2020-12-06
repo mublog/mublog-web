@@ -1,4 +1,4 @@
-import Doc, { useRef } from "../../modules/doc/mod"
+import Doc, { useRef } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as services from "../services/generic.service"
 import * as µ from "../components/mu.component"
@@ -43,7 +43,7 @@ export default async function LoginView() {
 
   async function tryLogin(event: Event) {
     event.preventDefault()
-    if ((await UserService.login(getValues())).isUser.get()) {
+    if ((await UserService.login(getValues())).isUser.value()) {
       services.activateRoute("/")
     }
   }

@@ -1,4 +1,4 @@
-import { onGlobalEvent } from "../../modules/doc/mod"
+import { onGlobalEvent } from "../../mod/doc/mod"
 
 export let mouseX = 0
 export let mouseY = 0

@@ -25,11 +25,13 @@ function comment(text: string) {
 }
 
 export function createElement<Tag extends HTMLTag>(type: Tag, props: HTMLOptions<Tag>, ...children: Child[]) {
-  // @ts-expect-error
-  if (typeof type === T_FUNCTION) return type(props, ...children)
+  if (typeof type === T_FUNCTION) {
+    // @ts-expect-error
+    return type(props, ...children)
+  }
   let el = element(type)
   properties(el, props)
-  appendChildren(el, children)
+  appendChildren(el, children, el)
   cursor(el)
   return el
 }
@@ -47,7 +49,7 @@ function prepareHooks(el: HTMLElement) {
 
 export function render(el: HTMLElement, ...children: HTMLElement[]) {
   el.innerHTML = ""
-  appendChildren(el, children)
+  appendChildren(el, children, el)
 }
 
 function appendElement(el: DocumentFragment | HTMLElement, child: HTMLElement) {
@@ -58,13 +60,14 @@ function appendTextLike(el: DocumentFragment | HTMLElement, child: string | numb
   el.appendChild(text(child))
 }
 
-function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
+function appendChildren(el: DocumentFragment | HTMLElement, children: any[], $el: HTMLElement) {
   let frag = fragment()
+  cursor($el)
   const len = children.length
   if (len > 0) {
     for (let i = 0; i < len; i++) {
       if (Array.isArray(children[i])) {
-        appendChildren(frag, children[i])
+        appendChildren(frag, children[i], $el)
       }
       else if (typeof children[i] === T_STRING || typeof children[i] === T_NUMBER) {
         appendTextLike(frag, children[i])
@@ -73,26 +76,27 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
         appendElement(frag, children[i])
       }
       else if (children[i].subscribe) {
-        let stateValue = children[i].get()
-        const hooks = el[Hooks]
+        let stateValue = children[i].value()
         if (typeof stateValue === T_STRING || typeof stateValue === T_NUMBER) {
           let state: Subscribable<number | string> = children[i]
-          let content = text(state.get())
+          let content = text(state.value())
           frag.appendChild(content)
           onDestroy(state.subscribe(val => {
-            eachFn(hooks[BeforeUpdate])
+            eachFn($el[Hooks][BeforeUpdate])
             let newVal = val + ""
-            if (content.textContent !== newVal) content.textContent = newVal
-            eachFn(hooks[AfterUpdate])
+            if (content.textContent !== newVal) {
+              content.textContent = newVal
+            }
+            eachFn($el[Hooks][AfterUpdate])
           }))
         }
         else if (stateValue instanceof Element) {
           let state: Subscribable<Element> = children[i]
-          frag.appendChild(state.get())
+          frag.appendChild(state.value())
           onDestroy(state.subscribe(val => {
-            eachFn(hooks[BeforeUpdate])
-            state.get().replaceWith(val)
-            eachFn(hooks[AfterUpdate])
+            eachFn($el[Hooks][BeforeUpdate])
+            state.value().replaceWith(val)
+            eachFn($el[Hooks][AfterUpdate])
           }))
         }
       }
@@ -103,25 +107,25 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[]) {
 
 function writeSubscribableProperty(el: HTMLElement, key: string, property: Subscribable<any>) {
   let state: Subscribable<any> = property
-  el[key] = state.get()
-  const hooks = el[Hooks]
+  el[key] = state.value()
   onDestroy(state.subscribe(val => {
-    eachFn(hooks[BeforeUpdate])
+    eachFn(el[Hooks][BeforeUpdate])
     if (el[key] !== val) el[key] = val
-    eachFn(hooks[AfterUpdate])
+    eachFn(el[Hooks][AfterUpdate])
   }))
 }
 
 function writeDefault(el: HTMLElement, key: string, property: any) {
-  cursor(el)
-  if (property.subscribe) {
-    writeSubscribableProperty(el, key, property)
-  }
-  else if (key.startsWith("on") && typeof property === T_FUNCTION) {
-    onEvent(key.slice(2) as EventNames, property)
-  }
-  else {
-    el[key] = property
+  if (property !== undefined) {
+    if (property.subscribe) {
+      writeSubscribableProperty(el, key, property)
+    }
+    else if (key.startsWith("on") && typeof property === T_FUNCTION) {
+      onEvent(key.slice(2) as EventNames, property)
+    }
+    else {
+      el[key] = property
+    }
   }
 }
 
@@ -130,22 +134,20 @@ useDirective("for", (el: HTMLElement, prop: DocDirectives["for"]) => {
   let filter: (value: any, index: number) => unknown = prop.filter
   let limit: number = prop.limit
   let offset: number = prop.offset
+  let com: HTMLComponent<any> = prop.do
   if (Array.isArray(prop.of)) {
     if (prop.of && Array.isArray(prop.of)) {
-      let com: HTMLComponent<any> = prop.do
       let copy = prepareForList(prop.of, { sort, filter, limit, offset })
       render(el, ...copy.map(com))
     }
   }
   else if (prop.of && prop.of.subscribe) {
     let list: Subscribable<any[]> = prop.of
-    let com: HTMLComponent<any> = prop.do
-    const hooks = el[Hooks]
     onDestroy(list.subscribe(val => {
-      eachFn(hooks[BeforeUpdate])
+      eachFn(el[Hooks][BeforeUpdate])
       let copy = prepareForList(val, { sort, filter, limit, offset })
       render(el, ...copy.map(com))
-      eachFn(hooks[AfterUpdate])
+      eachFn(el[Hooks][AfterUpdate])
     }))
   }
 })
@@ -157,21 +159,20 @@ useDirective("portal", portalDirective)
 
 function properties(el: HTMLElement, props: any) {
   const keys = keysOf(props)
+  cursor(el)
   keys.forEach(key => {
-    const directive = Directives[key]
-    directive ? directive(el, props[key]) : writeDefault(el, key, props[key])
+    const dir = Directives[key]
+    dir ? dir(el, props[key]) : writeDefault(el, key, props[key])
   })
 }
 
 export function runMount(el: HTMLElement) {
-  const hooks = el[Hooks]
-  if (hooks) eachFn(hooks[Mount])
+  if (el[Hooks]) eachFn(el[Hooks][Mount])
   if (el.children) each(Array.from(el.children), runMount)
 }
 
 export function runDestroy(el: HTMLElement) {
-  const hooks = el[Hooks]
-  if (hooks) eachFn(hooks[Destroy])
+  if (el[Hooks]) eachFn(el[Hooks][Destroy])
   if (el.children) each(Array.from(el.children), runDestroy)
   el = undefined
 }

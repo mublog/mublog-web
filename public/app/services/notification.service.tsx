@@ -1,4 +1,4 @@
-import Doc, { useRef, onEvent } from "../../modules/doc/mod"
+import Doc, { useRef, onEvent } from "../../mod/doc/mod"
 import * as µ from "../components/mu.component"
 
 declare interface NotificationOption {

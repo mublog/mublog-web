@@ -21,11 +21,11 @@ declare interface DocDirectives {
 declare namespace JSX {
   type IntrinsicElements = { [key in keyof HTMLElementTagNameMap]: HTMLProperties<HTMLElementTagNameMap[key]> }
 }
-declare type Update<Type> = (value: Type) => Type
+declare type Update<Type> = (value: Type) => any
 declare type Subscription<Type> = (value: Type) => any
 declare interface State<Type> {
   isState: boolean
-  get(): Type
+  value(): Type
   set(value: Type): State<Type>
   update(fn: Update<Type>): State<Type>
   subscribe(fn: Subscription<Type>): () => void
@@ -48,6 +48,8 @@ declare interface Portal<Type extends (...args: any[]) => Promise<HTMLElement> |
   isPortal: boolean
   set(newAnchor: HTMLElement): Portal<Type>
   open(props: Parameters<Type>[0], ...children: Child[]): Promise<void>
+  onOpen(fn: () => any): Portal<Type>
+  onClose(fn: () => any): Portal<Type>
   close(): Portal<Type>
 }
 declare type RouteActivator = (params?: URLParams) => boolean | Promise<boolean>
@@ -78,7 +80,7 @@ declare interface RouteConstructor {
 }
 declare interface Subscribable<Type> {
   subscribe(fn: (value: Type) => any): () => void
-  get?(): Type
+  value?(): Type
   set?(newValue: Type): void
   update?(fn: (value: Type) => Type): void
 }

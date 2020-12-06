@@ -1,4 +1,4 @@
-import { useState } from "../../modules/doc/mod"
+import { useState } from "../../mod/doc/mod"
 
 export const isLoading = useState(false)
 

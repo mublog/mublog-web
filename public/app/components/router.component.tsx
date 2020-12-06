@@ -1,4 +1,4 @@
-import Doc, { useRouter } from "../../modules/doc/mod"
+import Doc, { useRouter } from "../../mod/doc/mod"
 import * as generic from "../services/generic.service"
 
 export default function Router({ routes }: { routes: RouteConstructor[] }) {
