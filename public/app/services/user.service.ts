@@ -1,4 +1,4 @@
-import { useState } from "../../modules/doc/mod"
+import { useState } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import NotificationService from "./notification.service"
 import * as service from "./generic.service"
@@ -6,47 +6,39 @@ import * as http from "./http.service"
 import * as cfg from "../config/settings"
 import jwtDecode from "jwt-decode"
 
-const httpOptions = (): HttpOptions => ({
-  contentType: "json",
-  init: {
-    cache: "no-cache",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorize": "Bearer " + getToken()
-    }
-  }
-})
-
 export default UserService()
 
 function UserService() {
   const API_URL = "http://localhost:5000/api/v1"
+  const API_LOGIN = API_URL + "/accounts/login"
+  const API_REGISTER = API_URL + "/accounts/register"
+  const API_USER = (alias: string) => API_URL + "/users/" + alias
+
   const isUser = useState(false)
   const isGuest = useState(true)
-  let userAlias: string
 
-  const pub = { isUser, isGuest, logout, login, register, currentUser, hasUser, isLoggedIn }
+  let _currentUser: Partial<User> = {}
 
-  function isLoggedIn(): boolean {
-    return !!getToken() && isUser.get()
+  const pub = { isUser, isGuest, logout, login, register, currentUser, hasUser, isLoggedIn, getUser }
+
+  function isLoggedIn() {
+    return isUser.value()
   }
 
   function currentUser() {
-    if (isUser.get()) {
-      return {
-        alias: userAlias
-      }
+    if (isUser.value()) {
+      return _currentUser
     }
   }
 
-  function hasUser(alias: string) {
-    return true
+  async function hasUser(alias: string) {
+    let user = await getUser(alias)
+    return !!user
   }
 
   async function logout() {
     isUser.set(false)
-    delToken()
+    localStorage.removeItem("token")
     NotificationService.push(null, i18n.logoutMessage, cfg.notification)
     service.activateRoute("/login")
     return pub
@@ -54,7 +46,7 @@ function UserService() {
 
   async function login({ alias, password }) {
     let body = JSON.stringify({ username: alias, password })
-    let [token, res] = await http.post<ResponseWrapper<{ accessToken: string }>>(API_URL + "/auth/login", body, httpOptions())
+    let [token, res] = await http.post<ResponseWrapper<{ accessToken: string }>>(API_LOGIN, body)
     if (res?.status === 200 && token?.data?.accessToken) {
       setToken(token.data.accessToken)
       isUser.set(true)
@@ -69,7 +61,7 @@ function UserService() {
 
   async function register({ alias, displayName, email, password }) {
     let body = JSON.stringify({ email, username: alias, password, displayName })
-    let [_, res] = await http.post<ResponseWrapper<null>>(API_URL + "/auth/register", body, httpOptions())
+    let [_, res] = await http.post<ResponseWrapper<null>>(API_REGISTER, body)
     if (res.status === 200) {
       NotificationService.push(null, i18n.registerSuccess, cfg.notification)
       service.activateRoute("/login")
@@ -80,35 +72,35 @@ function UserService() {
     return pub
   }
 
-  isUser.subscribe(state => {
+  isUser.subscribe(async state => {
     isGuest.set(state ? false : true)
-    userAlias = getAlias()
+    if (state === false) for (let key in _currentUser) _currentUser[key] = undefined
+    if (state === true) _currentUser = await getUser(getAlias())
   })
 
   if (getAlias()) {
     isUser.set(true)
   }
 
-  return pub
-}
 
-function getToken() {
-  return localStorage.getItem("token")
-}
+  function setToken(accessToken: string) {
+    localStorage.setItem("token", accessToken)
+  }
 
-function setToken(accessToken: string) {
-  localStorage.setItem("token", accessToken)
-}
+  async function getUser(alias: string) {
+    let [wrapper, res] = await http.get<ResponseWrapper<User>>(API_USER(alias))
+    if (res.status !== 200) return
+    return wrapper.data
+  }
 
-function delToken() {
-  localStorage.removeItem("token")
-}
-
-function getAlias() {
-  if (getToken()) {
-    let jwt: { sub: string } = jwtDecode(getToken())
-    if (jwt && jwt.sub) {
-      return jwt.sub
+  function getAlias() {
+    if (localStorage.getItem("token")) {
+      let jwt: { sub: string } = jwtDecode(localStorage.getItem("token"))
+      if (jwt && jwt.sub) {
+        return jwt.sub
+      }
     }
   }
+
+  return pub
 }
