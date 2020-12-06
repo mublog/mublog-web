@@ -1,10 +1,10 @@
 {
   "name": "mublog-web",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "",
   "scripts": {
     "build-css": "sass styles/main.scss styles/main.css --style=compressed --no-source-map",
-    "build-js": "esbuild app.tsx --loader:.js=jsx --jsx-factory=Doc.createElement --minify --bundle --target=chrome58,firefox57,safari11 --outfile=app.js",
+    "build-js": "esbuild app.tsx --loader:.js=jsx --jsx-factory=Doc.h --minify --bundle --target=chrome58,firefox57,safari11 --outfile=app.js",
     "build": "npm run build-css && npm run build-js"
   },
   "repository": {
@@ -23,7 +23,8 @@
   ],
   "dependencies": {
     "esbuild": "^0.8.5",
-    "jsrsasign": "^10.0.5"
+    "jsrsasign": "^10.0.5",
+    "jwt-decode": "3.1.2"
   },
   "devDependencies": {
     "sass": "^1.29.0"
