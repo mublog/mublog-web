@@ -1,4 +1,4 @@
-import Doc, { onInterval, onMount, useRef, useState } from "../../modules/doc/mod"
+import Doc, { onInterval, onMount, useRef, useState } from "../../mod/doc/mod"
 import UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
@@ -12,7 +12,7 @@ export default function Post(post: PostModel) {
   const View = (
     <div className={visible} ref={PostRef}>
       <div styles={{ display: "flex", gap: "8px" }}>
-        <UserImageContainer userAlias={post.user.alias} userImageUrl={post.user.profileImageUrl} />
+        <UserImageContainer userAlias={post.user.alias} userImageUrl={post.user.profileImageId} />
         <µ.Box className="post-content" arrow="top-left">
           <µ.Header>
             <UserContainer userAlias={post.user.alias} userName={post.user.displayName} />
@@ -77,62 +77,41 @@ function TextContainer({ postId, data }: { postId: number, data: string }) {
   return View
 
   function refresh() {
-    if (onScreen(View)) {
-      let post = PostService.getPosts().get().find(({ id }) => id === postId)
-      if (post && post.textContent && (post.textContent !== Text.get())) {
-        Text.set(post.textContent)
-      }
-    }
+    if (!onScreen(View)) return
+    let post = PostService.localById(postId)
+    if (!post) return
+    Text.set(post.textContent)
   }
 }
 
 function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: number }) {
   const likes = useState(likeAmount)
-  const HeartRefs = [useRef<µ.IconElement>(), useRef<µ.IconElement>()]
+  const HeartRef = useRef<µ.IconElement>()
 
   const View = (
-    <div className="heart-action" styles={{ display: "flex", gap: "8px", alignItems: "center" }}>
+    <div className="heart-action" styles={{ display: "flex", gap: "8px", alignItems: "center" }} if={UserService.isUser}>
       <µ.Icon
-        ref={HeartRefs[0]}
+        ref={HeartRef}
         name="heart-grey"
-        if={UserService.isUser}
-        onclick={like}
+        onclick={() => PostService.like(postId)}
         className="wiggle-vertical"
         styles={{ cursor: "pointer" }}
       />
-      <µ.Icon ref={HeartRefs[1]} name="heart-grey" if={UserService.isGuest} />
       <span>{likes}</span>
     </div>
   ) as HTMLDivElement
 
   onMount(refresh)
-  onInterval(refresh, 10000)
+  onInterval(refresh, 1000)
 
   return View
 
   function refresh() {
-    if (onScreen(View)) {
-      PostService.update(posts => {
-        let post = posts.find(post => post.id === postId)
-        if (post) {
-          likes.set(post.likeAmount)
-          HeartRefs[0].current.setIcon(post.likedByUser ? "heart-red" : "heart-grey")
-        }
-        return posts
-      })
-    }
-  }
-
-  function like() {
-    PostService.update(posts => {
-      let post = posts.find(post => post.id === postId)
-      if (post) {
-        post.likedByUser = post.likedByUser ? false : true
-        post.likeAmount -= post.likedByUser ? -1 : +1
-        refresh()
-      }
-      return posts
-    })
+    if (!onScreen(View) && UserService.isUser.value()) return
+    let post = PostService.localById(postId)
+    if (!post) return
+    likes.set(post.likeAmount)
+    HeartRef.current.setIcon(post.liked ? "heart-red" : "heart-grey")
   }
 }
 
