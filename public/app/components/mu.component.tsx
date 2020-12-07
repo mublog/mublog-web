@@ -1,4 +1,4 @@
-import Doc, { useRef, useState, onInterval } from "../../mod/doc/mod"
+import Doc, { useRef, useState } from "../../mod/doc/mod"
 import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
 import onScreen from "../helpers/onscreen"
@@ -208,11 +208,9 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
 
 export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & { datetime: number }) {
   const InnerText = useState(elapsedTime(datetime))
-  const View = <time {...props} dateTime={datetime} innerText={InnerText} /> as HTMLTimeElement
-  onInterval(() => {
-    if (onScreen(View)) {
-      InnerText.set(elapsedTime(datetime))
-    }
-  }, 5000)
+  const View = <time {...props} dateTime={datetime} innerText={InnerText} interval={[intervalFn, 5000]} /> as HTMLTimeElement
+  function intervalFn() {
+    if (onScreen(View)) InnerText.set(elapsedTime(datetime))
+  }
   return View
 }

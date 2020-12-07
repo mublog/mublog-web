@@ -5,10 +5,11 @@ import UserService from "../services/user.service"
 
 const UserCardPortal = usePortal(UserCard)
 
-
-
 async function UserCard({ alias, top, left }) {
   [top, left] = adjustCardPosition(top, left)
+
+  let exist = document.getElementById("user-card")
+  if (exist) exist.remove()
 
   let user = await UserService.getUser(alias)
 
@@ -36,7 +37,7 @@ async function UserCard({ alias, top, left }) {
           </div>
         </a>
       </µ.Header>
-      <µ.Box arrow="top-left">
+      <µ.Box arrow="top-left" if={user.description.length > 0}>
         {user.description}
       </µ.Box>
     </µ.Box>

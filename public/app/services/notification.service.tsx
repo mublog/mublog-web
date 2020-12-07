@@ -48,7 +48,7 @@ function Notification({ title, message, options }: { title: string; message: str
     setTimeout(() => View.remove(), options.timeout)
   }
   if (options.removeOnClick) {
-    onEvent("click", () => View.remove())
+    onEvent(View, "click", () => View.remove())
   }
   return View
 }
