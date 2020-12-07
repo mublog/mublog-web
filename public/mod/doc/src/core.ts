@@ -58,9 +58,11 @@ export function usePortal<Type extends (...args: any[]) => Promise<HTMLElement> 
     return pub
   }
   function close(): Portal<Type> {
-    current.remove()
-    current = undefined
-    eachFn(closeObservers)
+    if (current) {
+      current.remove()
+      current = undefined
+      eachFn(closeObservers)
+    }
     return pub
   }
   function onOpen(fn: () => any) {

@@ -1,12 +1,5 @@
 import { blank } from "./helper"
 
-let cur: HTMLElement
-
-export function cursor(el?: HTMLElement): HTMLElement {
-  if (el) cur = el
-  return cur
-}
-
 export const Hooks = Symbol("Hooks")
 export const Mount = Symbol("Mount")
 export const BeforeUpdate = Symbol("BeforeUpdate")

@@ -17,6 +17,11 @@ declare interface DocDirectives {
   ref: Reference<HTMLElement>
   portal: Portal<any>
   styles: Partial<CSSStyleDeclaration> | State<Partial<CSSStyleDeclaration>>
+  mount: Subscription<HTMLElement>
+  destroy: Subscription<HTMLElement>
+  beforeUpdate: Subscription<HTMLElement>
+  afterUpdate: Subscription<HTMLElement>
+  interval: [fn: Subscription<HTMLElement>, interval: number]
 }
 declare namespace JSX {
   type IntrinsicElements = { [key in keyof HTMLElementTagNameMap]: HTMLProperties<HTMLElementTagNameMap[key]> }

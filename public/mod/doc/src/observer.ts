@@ -1,25 +1,5 @@
 import { runMount, runDestroy } from "./element"
-import { each, eachFn } from "./helper"
-import { onDestroy } from "./lifecycle"
-import { cursor } from "./globals"
-
-export function onAttributeChange(fn: AttributeChangedCallback, attributes: string[]) {
-  let el = cursor()
-  AttributeCallbacks.push(fn)
-  onDestroy(() => {
-    const index = AttributeCallbacks.indexOf(fn)
-    if (index !== -1) AttributeCallbacks.splice(index, 1)
-  })
-  AttributeObserver.observe(el, { attributeFilter: attributes, attributeOldValue: true, attributes: true })
-}
-
-const AttributeCallbacks: ((...args: any[]) => any)[] = []
-const AttributeObserver = new MutationObserver(attributeNotifer)
-function attributeNotifer(recs: MutationRecord[]) {
-  each(recs, ({ type, attributeName, oldValue }: MutationRecord) => {
-    if (type === "attributes") eachFn(AttributeCallbacks, attributeName, oldValue)
-  })
-}
+import { each } from "./helper"
 
 const DOMObserver = new MutationObserver(DOMNotifier)
 function DOMNotifier(recs: MutationRecord[]) {

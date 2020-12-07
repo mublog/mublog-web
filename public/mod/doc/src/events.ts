@@ -1,5 +1,5 @@
-import { Hooks, Events, cursor } from "./globals"
-import { onDestroy } from "./lifecycle"
+import { lcAction } from "./directives"
+import { Hooks, Events, Destroy } from "./globals"
 import { blank, eachFn } from "./helper"
 
 export function onGlobalEvent<Name extends EventNames>(name: Name, fn: (event: EventMap[Name]) => any) {
@@ -20,13 +20,12 @@ export function onGlobalEvent<Name extends EventNames>(name: Name, fn: (event: E
   }
 }
 
-export function onEvent<Name extends EventNames>(name: Name, fn: (event: EventMap[Name]) => any) {
-  let el = cursor()
+export function onEvent<Name extends EventNames>(el: HTMLElement, name: Name, fn: (event: EventMap[Name]) => any) {
   let fns = ((el[Hooks][Events][name]) || (el[Hooks][Events][name] = [])) as any[]
   let event = (ev: any) => eachFn(fns, ev)
   fns.push(fn)
   if (fns.length === 1) listen(el, name, event)
-  onDestroy(() => {
+  lcAction(el, Destroy, () => {
     const index = fns.indexOf(fn)
     if (index !== -1) {
       fns.splice(index, 1)
