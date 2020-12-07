@@ -12,12 +12,12 @@ function UserService() {
   const API_URL = "http://localhost:5000/api/v1"
   const API_LOGIN = API_URL + "/accounts/login"
   const API_REGISTER = API_URL + "/accounts/register"
-  const API_USER = (alias: string) => API_URL + "/users/" + alias
+  const API_USER = API_URL + "/users/"
 
   const isUser = useState(false)
   const isGuest = useState(true)
 
-  let _currentUser: Partial<User> = {}
+  let _currentUser = {} as User
 
   const pub = { isUser, isGuest, logout, login, register, currentUser, hasUser, isLoggedIn, getUser }
 
@@ -26,14 +26,11 @@ function UserService() {
   }
 
   function currentUser() {
-    if (isUser.value()) {
-      return _currentUser
-    }
+    if (isUser.value()) return _currentUser
   }
 
   async function hasUser(alias: string) {
-    let user = await getUser(alias)
-    return !!user
+    return !!(await getUser(alias))
   }
 
   async function logout() {
@@ -78,17 +75,12 @@ function UserService() {
     if (state === true) _currentUser = await getUser(getAlias())
   })
 
-  if (getAlias()) {
-    isUser.set(true)
-  }
-
-
   function setToken(accessToken: string) {
     localStorage.setItem("token", accessToken)
   }
 
   async function getUser(alias: string) {
-    let [wrapper, res] = await http.get<ResponseWrapper<User>>(API_USER(alias))
+    let [wrapper, res] = await http.get<ResponseWrapper<User>>(API_USER + alias)
     if (res.status !== 200) return
     return wrapper.data
   }
@@ -101,6 +93,8 @@ function UserService() {
       }
     }
   }
+
+  if (getAlias()) isUser.set(true)
 
   return pub
 }
