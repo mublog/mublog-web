@@ -9,12 +9,8 @@ export const Posts = useState<PostModel[]>([])
 
 export async function load(page: number = 1, size: number = 100) {
   let [postRes, res] = await http.get<ResponseWrapper<PostModel[]>>(API_URL + `?page=${page}&size=${size}`)
-  if (res.status === 200) {
-    Posts.set(postRes.data)
-  }
-  else {
-    // oh no
-  }
+  if (res.status !== 200) return
+  Posts.set(postRes.data)
 }
 
 export async function getPost(id: number) {
@@ -36,15 +32,11 @@ export async function like(id: number) {
   let post = localById(id)
   let method = post.liked ? "del" : "post"
   let [_, res] = await http[method]<ResponseWrapper<null>>(API_POSTS_LIKE + id, "{}")
-
-  if (res.status === 200) {
-    let [w2, r2] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + id)
-    if (r2.status === 200) {
-      patchOne(id, w2.data)
-      return true
-    }
-  }
-  return false
+  if (res.status !== 200) return false
+  let [w2, r2] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + id)
+  if (r2.status !== 200) return false
+  patchOne(id, w2.data)
+  return true
 }
 
 export function patchOne(id: number, newData: PostModel) {
