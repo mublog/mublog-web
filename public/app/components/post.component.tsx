@@ -12,8 +12,8 @@ export default function Post(post: PostModel) {
   return (
     <div className={visible} ref={PostRef} interval={[intervalFn, 250]}>
       <div styles={{ display: "flex", gap: "8px" }}>
-        <div user-card={post.user.alias}>
-          <div className="user-image-wrap">
+        <div>
+          <div className="user-image-wrap" user-card={post.user.alias} >
             <div className="user-image" />
             <div className="avatar-circle" />
           </div>
