@@ -1,5 +1,5 @@
 import UserService from "./app/services/user.service"
-import PostService from "./app/services/post.service"
+import * as PostService from "./app/services/post.service"
 import i18n from "./lang/de_DE.json"
 
 import HomeView from "./app/views/home.view"

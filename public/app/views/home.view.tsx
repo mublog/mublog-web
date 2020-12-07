@@ -1,7 +1,7 @@
 import Doc, { useRef } from "../../mod/doc/mod"
 import * as µ from "../components/mu.component"
 import i18n from "../../lang/de_DE.json"
-import PostService from "../services/post.service"
+import * as PostService from "../services/post.service"
 import UserService from "../services/user.service"
 import Post from "../components/post.component"
 import NotificationService from "../services/notification.service"
@@ -15,7 +15,7 @@ export default async function HomeView() {
         <HomeWriter />
       </div>
       <div for={{
-        of: PostService.getPosts(),
+        of: PostService.Posts,
         do: Post,
         sort: (a, b) => b.datePosted - a.datePosted
       }} />

@@ -2,7 +2,7 @@ import Doc, { useRef, useState } from "../../mod/doc/mod"
 import UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
-import PostService from "../services/post.service"
+import * as PostService from "../services/post.service"
 import onScreen from "../helpers/onscreen"
 
 export default function Post(post: PostModel) {
