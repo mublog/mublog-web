@@ -26,7 +26,7 @@ export default function Post(post: PostModel) {
                 @{post.user.alias}
               </span>
             </div>
-            <µ.Time datetime={post.datePosted} className="datetime" />
+            <µ.Time datetime={post.datePosted * 1000} className="datetime" />
             <µ.Icon name="calendar" />
           </µ.Header>
           <div className="user-content">
