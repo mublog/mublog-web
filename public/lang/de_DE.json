@@ -17,6 +17,7 @@
     "name": "Name",
     "uploadImage": "Bild hochladen",
     "authError": "Für diese Aktion hast du keine Berechtigungen.",
+    "progressiveWebApp": "Progressive Webanwendung",
     "alias": "Benutzername",
     "email": "E-Mail Adresse",
     "password": "Passwort",
