@@ -7,5 +7,3 @@ declare interface PostModel {
   likeAmount: number
   liked: boolean
 }
-
-declare interface PostsResponse extends ResponseWrapper<PostModel[]> { }
