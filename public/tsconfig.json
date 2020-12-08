@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "module": "esnext",
     "jsxFactory": "Doc.h",
     "jsx": "preserve",
     "moduleResolution": "node",
