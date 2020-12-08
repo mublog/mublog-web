@@ -2,6 +2,7 @@ import Doc, { useRef, useState } from "../../mod/doc/mod"
 import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
 import onScreen from "../helpers/onscreen"
+import { Uploads } from "../services/generic.service"
 
 export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPositions }, ...children: Child[]) {
   if (!props) {
@@ -116,7 +117,8 @@ export type IconName =
   "menu-kebab" | "menu-meatballs" | "menu-bento" |
   "heart-grey" | "heart-red" |
   "comment-bubbles-grey" | "comment-bubbles" |
-  "magnifier" | "clock" | "calendar"
+  "magnifier" | "clock" | "calendar" | "x-red" |
+  "clipboard"
 
 export interface IconElement extends HTMLElement {
   setIcon(name: IconName): void
@@ -213,4 +215,22 @@ export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & {
     if (onScreen(View)) InnerText.set(elapsedTime(datetime))
   }
   return View
+}
+
+export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Omit<UploadItem<string>, "key">) {
+  return (
+    <div className="upload-item" {...props} title={props.fileName}>
+      <img src={props.fileData} className="upload-image" />
+      <div className="upload-text">{props.fileName}</div>
+      <Icon name="clipboard" copyToClipboard={props.fileData} className="upload-action" />
+      <Icon name="x-red" onclick={removeUpload} className="upload-action" />
+    </div>
+  ) as HTMLDivElement
+
+  function removeUpload() {
+    Uploads.update(files => {
+      let idx = files.findIndex(file => file.key === props.key)
+      if (idx >= 0) files.splice(idx, 1)
+    })
+  }
 }
