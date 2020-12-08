@@ -1,7 +1,7 @@
 import Doc, { usePortal } from "../../mod/doc/mod"
 import * as µ from "./mu.component"
 import adjustCardPosition from "../helpers/adjust-card-position"
-import UserService from "../services/user.service"
+import * as UserService from "../services/user.service"
 
 const UserCardPortal = usePortal(UserCard)
 
