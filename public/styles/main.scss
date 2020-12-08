@@ -3,8 +3,8 @@
 @use "colors.scss" as *;
 
 @font-face {
-  font-family: battlenet;
-  src: url("battlenet.woff2") format("woff");
+  font-family: iljushka;
+  src: url("iljushka.woff") format("woff");
   font-style: normal;
   font-weight: normal;
   font-display: swap;
@@ -26,6 +26,8 @@ body,
 html {
   margin: 0;
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 a {
@@ -34,6 +36,7 @@ a {
 
 img {
   max-width: 100%;
+  image-rendering: auto;
 }
 
 input,
@@ -60,17 +63,17 @@ a {
   word-wrap: break-word;
   word-break: break-all;
   color: $dark-red-1;
-  font-family: battlenet;
+  font-family: iljushka;
   font-size: 32px;
   line-height: 26px;
+  scrollbar-width: thin;
 }
 
 #app-grid {
-  margin: 8px auto;
-  width: 800px;
+  margin: 0px auto;
+  width: 900px;
   flex-direction: row-reverse;
   display: flex;
-  gap: 10px;
 }
 
 .user-image-wrap {
@@ -155,6 +158,36 @@ a {
 
   textarea {
     resize: vertical;
+  }
+}
+
+.upload-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  img.upload-image {
+    background-color: $dark-red-1;
+    box-shadow: 0px 2px $dark-red-1, 2px 0px $dark-red-1, 0px -2px $dark-red-1, -2px 0px $dark-red-1;
+    filter: drop-shadow(0px 2px $grey);
+    object-fit: cover;
+    height: 56px;
+    width: 56px;
+  }
+
+  .upload-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  .upload-action {
+    cursor: pointer;
+
+    &:hover {
+      animation: wiggle-vertical 400ms linear infinite;
+    }
   }
 }
 
@@ -333,15 +366,19 @@ a {
 
 #content {
   flex: 1;
-  height: max-content;
+  height: 100vh;
+  overflow: auto;
+  padding: 8px;
 }
 
 #side {
-  height: max-content;
+  height: 100vh;
+  overflow: auto;
+  width: 200px;
+  padding: 8px;
 }
 
 #navigation {
-  width: 200px;
   height: max-content;
 
   .list {
@@ -426,45 +463,45 @@ a {
   }
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 100;
+}
+
+h1 {
+  box-shadow: 0px 2px $dark-red-2, 0px 4px $grey;
+  text-shadow: 0px 2px $grey;
+  margin-bottom: 14px;
+}
+
+h2 {
+  box-shadow: 0px 2px $dark-red-2;
+  text-shadow: 0px 2px $grey;
+  margin-bottom: 10px;
+}
+
+h3 {
+  box-shadow: 0px 2px $dark-red-2;
+  text-shadow: 0px 2px $grey;
+  margin-bottom: 6px;
+}
+
+h4 {
+  text-shadow: 0px 2px $grey;
+  margin-bottom: 4px;
+}
+
+h5,
+h6 {
+  text-shadow: 0px 2px $grey;
+  margin-bottom: 2px;
+}
+
 .mark-down {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-weight: 100;
-  }
-
-  h1 {
-    box-shadow: 0px 2px $dark-red-2, 0px 4px $grey;
-    text-shadow: 0px 2px $grey;
-    margin-bottom: 14px;
-  }
-
-  h2 {
-    box-shadow: 0px 2px $dark-red-2;
-    text-shadow: 0px 2px $grey;
-    margin-bottom: 10px;
-  }
-
-  h3 {
-    box-shadow: 0px 2px $dark-red-2;
-    text-shadow: 0px 2px $grey;
-    margin-bottom: 6px;
-  }
-
-  h4 {
-    text-shadow: 0px 2px $grey;
-    margin-bottom: 4px;
-  }
-
-  h5,
-  h6 {
-    text-shadow: 0px 2px $grey;
-    margin-bottom: 2px;
-  }
-
   code {
     background-color: $grey;
     display: block;
