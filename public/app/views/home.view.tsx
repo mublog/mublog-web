@@ -63,7 +63,7 @@ function HomeWriter() {
     const formData = new FormData()
     formData.append("file", blob, file.name)
 
-    let [data, res] = await http.post<any>("/api/v1/media", formData, {
+    /* let [data, res] = await http.post<any>("/api/v1/media", formData, {
       init: {
         body: formData,
         method: "POST",
@@ -72,7 +72,7 @@ function HomeWriter() {
         }
       }
     })
-    console.log({ data, res })
+    console.log({ data, res }) */
   }
 
   function getValues() {
