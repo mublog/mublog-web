@@ -1,5 +1,5 @@
 import Doc, { useRef, useState } from "../../mod/doc/mod"
-import UserService from "../services/user.service"
+import * as UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import translateMarkDown from "../helpers/mark-down"
 import * as PostService from "../services/post.service"

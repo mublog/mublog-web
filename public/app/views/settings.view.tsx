@@ -2,7 +2,7 @@ import Doc from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import i18nProgressiveWebAppText from "../../lang/de_DE.progressiveWebAppText"
 import * as µ from "../components/mu.component"
-import InstallService from "../services/install.service"
+import * as InstallService from "../services/install.service"
 
 export default async function SettingsView() {
   return (

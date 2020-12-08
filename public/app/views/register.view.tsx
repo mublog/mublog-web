@@ -1,7 +1,7 @@
 import Doc, { useRef } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as µ from "../components/mu.component"
-import UserService from "../services/user.service"
+import * as UserService from "../services/user.service"
 import NotificationService from "../services/notification.service"
 
 export default async function RegisterView() {
@@ -16,8 +16,8 @@ export default async function RegisterView() {
       <form onsubmit={tryRegister}>
         <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <div styles={{ display: "flex", flexDirection: "row", gap: "8px" }}>
-            <µ.Label labelText={i18n.alias}>
-              <µ.Input name="alias" ref={InputAlias} type="text" placeholder={i18n.alias} required="true" />
+            <µ.Label labelText={i18n.username}>
+              <µ.Input name="alias" ref={InputAlias} type="text" placeholder={i18n.username} required="true" />
             </µ.Label>
             <µ.Label labelText={i18n.name}>
               <µ.Input name="name" ref={InputName} type="text" placeholder={i18n.name} required="true" />

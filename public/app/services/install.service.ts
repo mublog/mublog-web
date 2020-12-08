@@ -1,52 +1,36 @@
 import { useState } from "../../mod/doc/mod"
 
-export default InstallService()
+export const isInstalled = useState(false)
+export const isNotInstalled = useState(true)
 
-function InstallService() {
-  const isInstalled = useState(false)
-  const isNotInstalled = useState(true)
+isInstalled.subscribe(state => isNotInstalled.set(!state))
 
-  const pub = { isInstalled, isNotInstalled, install, uninstall }
-
-  async function install() {
-    if ("serviceWorker" in navigator) {
-      await navigator.serviceWorker.register("serviceworker.js")
-      console.log("[ServiceWorker] - Registered")
-      isInstalled.set(true)
-      isNotInstalled.set(false)
-    }
-    return pub
-  }
-
-  async function uninstall() {
-    if ("serviceWorker" in navigator) {
-      let registrations = await navigator.serviceWorker.getRegistrations()
-      for (let registration of registrations) {
-        if (registration) registration.unregister()
-      }
-    }
-    isInstalled.set(false)
-    isNotInstalled.set(true)
-    return pub
-  }
-
+export async function install() {
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.getRegistration("serviceworker.js")
-      .then(registration => {
-        if (registration && registration.active) {
-          isInstalled.set(!!registration.active)
-          isNotInstalled.set(!registration.active)
-        }
-        else {
-          isInstalled.set(false)
-          isNotInstalled.set(true)
-        }
-      })
-      .catch(() => {
-        isInstalled.set(false)
-        isNotInstalled.set(true)
-      })
+    await navigator.serviceWorker.register("serviceworker.js")
+    isInstalled.set(true)
   }
+}
 
-  return pub
+export async function uninstall() {
+  if ("serviceWorker" in navigator) {
+    let registrations = await navigator.serviceWorker.getRegistrations()
+    for (let registration of registrations) {
+      if (registration) registration.unregister()
+    }
+  }
+  isInstalled.set(false)
+}
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistration("serviceworker.js")
+    .then(registration => {
+      if (registration && registration.active) {
+        isInstalled.set(!!registration.active)
+      }
+      else {
+        isInstalled.set(false)
+      }
+    })
+    .catch(() => isInstalled.set(false))
 }

@@ -1,4 +1,4 @@
-import UserService from "./app/services/user.service"
+import * as UserService from "./app/services/user.service"
 import * as PostService from "./app/services/post.service"
 import i18n from "./lang/de_DE.json"
 

@@ -1,5 +1,5 @@
 import Doc from "../../mod/doc/mod"
-import UserService from "../services/user.service"
+import * as UserService from "../services/user.service"
 import i18n from "../../lang/de_DE.json"
 import * as µ from "./mu.component"
 

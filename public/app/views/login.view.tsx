@@ -2,7 +2,7 @@ import Doc, { useRef } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as services from "../services/generic.service"
 import * as µ from "../components/mu.component"
-import UserService from "../services/user.service"
+import * as UserService from "../services/user.service"
 
 export default async function LoginView() {
   const InputAlias = useRef<HTMLInputElement>()
@@ -14,8 +14,8 @@ export default async function LoginView() {
       <form onsubmit={tryLogin}>
         <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <div styles={{ display: "flex", gap: "8px" }}>
-            <µ.Label labelText={i18n.alias}>
-              <µ.Input ref={InputAlias} type="text" placeholder={i18n.alias} required="true" />
+            <µ.Label labelText={i18n.username}>
+              <µ.Input ref={InputAlias} type="text" placeholder={i18n.username} required="true" />
             </µ.Label>
             <µ.Label labelText={i18n.password}>
               <µ.Input ref={InputPassword} type="password" placeholder="********" required="true" />
@@ -43,7 +43,8 @@ export default async function LoginView() {
 
   async function tryLogin(event: Event) {
     event.preventDefault()
-    if ((await UserService.login(getValues())).isUser.value()) {
+    await UserService.login(getValues())
+    if (UserService.isUser.value()) {
       services.activateRoute("/")
     }
   }

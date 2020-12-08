@@ -7,19 +7,18 @@ const API_POSTS_LIKE = API_URL + "/like/"
 
 export const Posts = useState<PostModel[]>([])
 
-export async function load(page: number = 1, size: number = 100) {
+export const localById = (postId: number) => Posts.value().find(post => post.id === postId)
+export const hasPost = async (postId: number) => !!(await getPost(postId))
+
+export async function load(page: number = 1, size: number = 1000) {
   let [postRes, res] = await http.get<ResponseWrapper<PostModel[]>>(API_URL + `?page=${page}&size=${size}`)
   if (res.status !== 200) return
   Posts.set(postRes.data)
 }
 
-export async function getPost(id: number) {
-  let [wrapper, res] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + id)
+export async function getPost(postId: number) {
+  let [wrapper, res] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + postId)
   if (res.status === 200) return wrapper.data
-}
-
-export async function hasPost(id: number) {
-  return !!(await getPost(id))
 }
 
 export async function add(content: string) {
@@ -28,22 +27,18 @@ export async function add(content: string) {
   return res.status === 200
 }
 
-export async function like(id: number) {
-  let post = localById(id)
+export async function like(postId: number) {
+  let post = localById(postId)
   let method = post.liked ? "del" : "post"
-  let [_, res] = await http[method]<ResponseWrapper<null>>(API_POSTS_LIKE + id, "{}")
+  let [_, res] = await http[method]<ResponseWrapper<null>>(API_POSTS_LIKE + postId, "{}")
   if (res.status !== 200) return false
-  let [w2, r2] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + id)
+  let [w2, r2] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + postId)
   if (r2.status !== 200) return false
-  patchOne(id, w2.data)
+  patchOne(postId, w2.data)
   return true
 }
 
 export function patchOne(id: number, newData: PostModel) {
   let post = localById(id)
   if (post) for (let key in newData) post[key] = newData[key]
-}
-
-export function localById(id: number) {
-  return Posts.value().find(post => post.id === id)
 }
