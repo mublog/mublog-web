@@ -57,16 +57,13 @@ export default async function RegisterView() {
   }
 
   function equalPasswords() {
-    return [...new Set(getValues().passwords)].length !== 1
+    return [...new Set(getValues().passwords)].length === 1
   }
 
   async function tryRegister(event: Event) {
     event.preventDefault()
     let values = getValues()
-    if (equalPasswords()) {
-      NotificationService.push(null, i18n.passwordsNotSame)
-      return
-    }
+    if (!equalPasswords()) return NotificationService.push(null, i18n.passwordsNotSame)
 
     UserService.register({
       alias: values.alias,
