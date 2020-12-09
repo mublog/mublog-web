@@ -8,7 +8,7 @@ Doc.registerDirective("user-card", (el, prop: string) => onEvent(el, "mouseenter
 }))
 
 Doc.registerDirective("copyToClipboard", (el, prop: string | (() => string)) => {
-  el.title = i18n.clickToCopy.replace("$c", typeof prop === "function" ? prop() : prop)
+  Doc.setProperties(el, { tooltip: i18n.clickToCopy.replace("$c", typeof prop === "function" ? prop() : prop) })
   onEvent(el, "click", () => {
     let content: string
     if (typeof prop === "function") {

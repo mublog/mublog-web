@@ -210,7 +210,7 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
 
 export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & { datetime: number }) {
   const InnerText = observable(elapsedTime(datetime))
-  const View = <time {...props} dateTime={datetime} innerText={InnerText} interval={[intervalFn, 5000]} /> as HTMLTimeElement
+  const View = <time dateTime={datetime} innerText={InnerText} interval={[intervalFn, 5000]}  {...props} /> as HTMLTimeElement
   function intervalFn() {
     if (onScreen(View)) InnerText.set(elapsedTime(datetime))
   }

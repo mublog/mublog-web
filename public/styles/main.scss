@@ -603,7 +603,7 @@ h6 {
   background-color: $dark-red-1;
   color: $white;
   position: absolute;
-  z-index: 10;
+  z-index: 9999;
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);

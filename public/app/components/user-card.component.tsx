@@ -2,6 +2,7 @@ import Doc, { portal } from "../../mod/doc/mod"
 import * as µ from "./mu.component"
 import adjustCardPosition from "../helpers/adjust-card-position"
 import * as UserService from "../services/user.service"
+import i18n from "../../lang/de_DE.json"
 
 const UserCardPortal = portal(UserCard)
 
@@ -27,7 +28,7 @@ async function UserCard({ alias, top, left }) {
             <div className="user-image" />
             <div className="avatar-circle" />
           </div>
-          <div>
+          <div tooltip={i18n.visitUser.replace("$u", user.displayName)}>
             <div>
               {user.displayName}
             </div>
