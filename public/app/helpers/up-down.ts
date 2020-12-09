@@ -17,13 +17,13 @@ interface File<Type> {
   type: string
 }
 
+const DownloadElement = document.createElement("a")
 export function down(content: string, option: DownOption): Error {
   try {
     let type = option.contentType || "application/octet-stream"
-    let a = document.createElement("a")
-    a.href = URL.createObjectURL(new Blob([content], { type }))
-    a.download = option.filename
-    a.click()
+    DownloadElement.href = URL.createObjectURL(new Blob([content], { type }))
+    DownloadElement.download = option.filename
+    DownloadElement.click()
     return null
   }
   catch (error) {
@@ -31,6 +31,7 @@ export function down(content: string, option: DownOption): Error {
   }
 }
 
+const Reader = new FileReader()
 export function up<Type = string>(option: UpOption): Promise<[File<Type>, Error]> {
   return new Promise(res => {
     try {
@@ -41,14 +42,13 @@ export function up<Type = string>(option: UpOption): Promise<[File<Type>, Error]
         let files = event.target.files
         if (!files.length) return res([null, null])
         let file: File<Type> = files[0]
-        let reader = new FileReader()
-        reader.onload = (event) => {
+        Reader.onload = (event) => {
           file.data = event.target.result as unknown as Type
           res([file, null])
         }
-        reader.onerror = () => res([null, null])
-        reader.onabort = () => res([null, null])
-        reader["readAs" + option.readAs](file)
+        Reader.onerror = () => res([null, null])
+        Reader.onabort = () => res([null, null])
+        Reader["readAs" + option.readAs](file)
       }
       input.click()
     }
