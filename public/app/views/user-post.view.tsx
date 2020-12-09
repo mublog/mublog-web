@@ -8,7 +8,6 @@ export default async function UserPostView({ alias, id }: URLParams) {
       of: PostService.Posts,
       do: Post,
       filter: p => p.id == id && p.user.alias === alias,
-      sort: (a, b) => b.datePosted - a.datePosted,
       limit: 1
     }} />
   ) as HTMLDivElement

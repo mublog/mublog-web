@@ -3,7 +3,7 @@ export declare interface HttpOptions {
   init?: Omit<RequestInit, "body" | "method">
 }
 
-export declare type HtttpResponse<Type> = Promise<[Type, Response, Error]>
+export declare type HttpResponse<Type> = Promise<[Type, Response, Error]>
 
 const token = () => localStorage.getItem("token")
 
@@ -26,11 +26,11 @@ function createHttp(method: string, body: string, options: HttpOptions): [HttpOp
   return [options, init]
 }
 
-export async function method<Type>(url: string, method: string, body: any, options?: HttpOptions): HtttpResponse<Type> {
+export async function f<T>(url: string, method: string, body: any, options?: HttpOptions): HttpResponse<T> {
   try {
     let [opt, init] = createHttp(method, body, options)
     let response = await fetch(url, init)
-    let data: Type = await response[opt.responseType]()
+    let data: T = await response[opt.responseType]()
     return [data, response, null]
   }
   catch (error) {
@@ -38,22 +38,8 @@ export async function method<Type>(url: string, method: string, body: any, optio
   }
 }
 
-export function get<Type>(url: string, options?: HttpOptions): HtttpResponse<Type> {
-  return method(url, "GET", null, options)
-}
-
-export function post<Type>(url: string, body?: any, options?: HttpOptions): HtttpResponse<Type> {
-  return method(url, "POST", body, options)
-}
-
-export function put<Type>(url: string, body?: any, options?: HttpOptions): HtttpResponse<Type> {
-  return method(url, "PUT", body, options)
-}
-
-export function del<Type>(url: string, body?: any, options?: HttpOptions): HtttpResponse<Type> {
-  return method(url, "DELETE", body, options)
-}
-
-export function patch<Type>(url: string, body?: any, options?: HttpOptions): HtttpResponse<Type> {
-  return method(url, "PATCH", body, options)
-}
+export const get = <T>(url: string, opt?: HttpOptions): HttpResponse<T> => f(url, "GET", null, opt)
+export const post = <T>(url: string, body?: any, opt?: HttpOptions): HttpResponse<T> => f(url, "POST", body, opt)
+export const put = <T>(url: string, body?: any, opt?: HttpOptions): HttpResponse<T> => f(url, "PUT", body, opt)
+export const del = <T>(url: string, body?: any, opt?: HttpOptions): HttpResponse<T> => f(url, "DELETE", body, opt)
+export const patch = <T>(url: string, body?: any, opt?: HttpOptions): HttpResponse<T> => f(url, "PATCH", body, opt)

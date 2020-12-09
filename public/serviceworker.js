@@ -3,6 +3,8 @@ const filesToCache = [
   "/",
   "/index.html",
   "/app.js",
+  "/manifest.json",
+  "/serviceworker.js",
   "/styles/main.css",
   "/styles/battlenet.woff2",
   "/assets/assets-2x.png",
