@@ -1,18 +1,33 @@
+const TextArea = document.createElement("textarea")
+document.body.appendChild(TextArea)
+hide()
+
 export default async function copyToClipboard(content: string): Promise<Error> {
-  let textArea = document.createElement("textarea")
   let error: Error
   try {
-    document.body.appendChild(textArea)
-    textArea.value = content
-    textArea.select()
-    textArea.setSelectionRange(0, content.length)
-    document.execCommand("copy")
+    TextArea.value = content
+    show()
+    copy()
   }
   catch (err) {
     error = err
   }
   finally {
-    textArea.remove()
+    hide()
     return error
   }
+}
+
+function copy() {
+  TextArea.select()
+  TextArea.setSelectionRange(0, TextArea.value.length)
+  document.execCommand("copy")
+}
+
+function hide() {
+  TextArea.setAttribute("hidden", "true")
+}
+
+function show() {
+  TextArea.removeAttribute("hidden")
 }

@@ -7,11 +7,14 @@ useDirective("user-card", (el, prop: string) => onEvent(el, "mouseenter", event 
 }))
 
 useDirective("copyToClipboard", (el, prop: any) => onEvent(el, "click", () => {
-  let content: string
+  let content: string = ""
   if (typeof prop === "function") {
-    content = prop()
+    let propR = prop()
+    if (typeof propR === "string") {
+      content = propR
+    }
   }
-  else {
+  else if (typeof prop === "string") {
     content = prop
   }
   copyToClipboard(content)
