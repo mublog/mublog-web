@@ -1,4 +1,4 @@
-import { Hooks, BeforeUpdate, AfterUpdate, Destroy, Mount } from "./globals"
+import { Hooks, Destroy, Mount } from "./globals"
 import { eachFn, sub } from "./helper"
 import { useStyles } from "./styles"
 import { T_BOOLEAN } from "./types"
@@ -14,14 +14,6 @@ export function mountDirective(el: HTMLElement, prop: Subscription<HTMLElement>)
 
 export function destroyDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
   return lcAction(el, Destroy, prop)
-}
-
-export function beforeUpdateDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
-  return lcAction(el, BeforeUpdate, prop)
-}
-
-export function afterUpdateDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
-  return lcAction(el, AfterUpdate, prop)
 }
 
 export function intervalDirective(el: HTMLElement, prop: [Subscription<HTMLElement>, number]) {
@@ -45,9 +37,7 @@ export function ifDirective(el: HTMLElement, prop: any) {
     let state: Subscribable<boolean> = prop
     lcAction(el, Destroy, state.subscribe(val => {
       if (val === true) {
-        eachFn(el[Hooks][BeforeUpdate])
         el.removeAttribute("hidden")
-        eachFn(el[Hooks][AfterUpdate])
       }
       else if (val === false) {
         el.setAttribute("hidden", "")
@@ -60,9 +50,7 @@ export function stylesDirective(el: HTMLElement, prop: any) {
   if (prop.subscribe) {
     let state: Subscribable<Partial<CSSStyleDeclaration>> = prop
     lcAction(el, Destroy, state.subscribe(rules => {
-      eachFn(el[Hooks][BeforeUpdate])
       useStyles(el, rules)
-      eachFn(el[Hooks][AfterUpdate])
     }))
   }
   else {

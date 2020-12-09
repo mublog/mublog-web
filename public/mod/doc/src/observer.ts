@@ -1,5 +1,5 @@
-import { runMount, runDestroy } from "./element"
-import { each } from "./helper"
+import { each, eachFn } from "./helper"
+import { Hooks, Mount, Destroy } from "./globals"
 
 const DOMObserver = new MutationObserver(DOMNotifier)
 function DOMNotifier(recs: MutationRecord[]) {
@@ -10,3 +10,14 @@ function DOMNotifier(recs: MutationRecord[]) {
   })
 }
 DOMObserver.observe(document.body, { subtree: true, childList: true })
+
+function runMount(el: HTMLElement) {
+  if (el[Hooks]) eachFn(el[Hooks][Mount], el)
+  if (el.children) each(Array.from(el.children), runMount)
+}
+
+function runDestroy(el: HTMLElement) {
+  if (el[Hooks]) eachFn(el[Hooks][Destroy], el)
+  if (el.children) each(Array.from(el.children), runDestroy)
+  el = undefined
+}

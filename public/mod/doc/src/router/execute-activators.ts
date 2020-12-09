@@ -5,9 +5,7 @@ export default async function executeActivators(
   if (activatorArray) {
     try {
       for (let activator of activatorArray) {
-        if (await activator(params) !== true) {
-          return false
-        }
+        if (await activator(params) !== true) return false
       }
     }
     catch (error) {

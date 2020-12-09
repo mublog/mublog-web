@@ -19,8 +19,6 @@ declare interface DocDirectives {
   styles: Partial<CSSStyleDeclaration> | State<Partial<CSSStyleDeclaration>>
   mount: Subscription<HTMLElement>
   destroy: Subscription<HTMLElement>
-  beforeUpdate: Subscription<HTMLElement>
-  afterUpdate: Subscription<HTMLElement>
   interval: [fn: Subscription<HTMLElement>, interval: number]
 }
 declare namespace JSX {

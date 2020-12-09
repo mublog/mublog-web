@@ -1,4 +1,4 @@
-import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy, Events, Directives } from "./globals"
+import { Hooks, Mount, Destroy, Events, Directives } from "./globals"
 import { onEvent } from "./events"
 import { T_STRING, T_NUMBER, T_FUNCTION } from "./types"
 import { blank, each, eachFn, keysOf, prepareForList } from "./helper"
@@ -34,7 +34,7 @@ export function createElement<Tag extends HTMLTag>(type: Tag, props: HTMLOptions
   // @ts-expect-error
   if (typeof type === T_FUNCTION) return type(props, ...children)
   let el = element(type)
-  properties(el, props)
+  setProperties(el, props)
   appendChildren(el, children, el)
   return el
 }
@@ -44,8 +44,6 @@ export const h = createElement
 function prepareHooks(el: HTMLElement) {
   el[Hooks] = blank()
   el[Hooks][Mount] = []
-  el[Hooks][BeforeUpdate] = []
-  el[Hooks][AfterUpdate] = []
   el[Hooks][Destroy] = []
   el[Hooks][Events] = blank()
 }
@@ -76,19 +74,15 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[], $el
           let content = text(state.value())
           frag.appendChild(content)
           directives.destroyDirective($el, state.subscribe(val => {
-            runBeforeUpdate($el)
             let newVal = val + ""
             if (content.textContent !== newVal) content.textContent = newVal
-            runAfterUpdate($el)
           }))
         }
         else if (stateValue instanceof Element) {
           let state: Subscribable<Element> = children[i]
           frag.appendChild(state.value())
           directives.destroyDirective($el, state.subscribe(val => {
-            runBeforeUpdate($el)
             state.value().replaceWith(val)
-            runAfterUpdate($el)
           }))
         }
       }
@@ -101,9 +95,7 @@ function writeSubscribableProperty(el: HTMLElement, key: string, property: Subsc
   let state: Subscribable<any> = property
   el[key] = state.value()
   directives.destroyDirective(el, state.subscribe(val => {
-    runBeforeUpdate(el)
     if (el[key] !== val) el[key] = val
-    runAfterUpdate(el)
   }))
 }
 
@@ -134,10 +126,8 @@ registerDirective("for", (el: HTMLElement, prop: DocDirectives["for"]) => {
     else if (prop.of && prop.of.subscribe) {
       let list: Subscribable<any[]> = prop.of
       directives.destroyDirective(el, list.subscribe(val => {
-        runBeforeUpdate(el)
         let copy = prepareForList(val, { sort, filter, limit, offset })
         render(el, ...copy.map(com))
-        runAfterUpdate(el)
       }))
     }
   }
@@ -149,33 +139,12 @@ registerDirective("ref", directives.referenceDirective)
 registerDirective("portal", directives.portalDirective)
 registerDirective("mount", directives.mountDirective)
 registerDirective("destroy", directives.destroyDirective)
-registerDirective("beforeUpdate", directives.beforeUpdateDirective)
-registerDirective("afterUpdate", directives.afterUpdateDirective)
 registerDirective("interval", directives.intervalDirective)
 
-function properties(el: HTMLElement, props: any) {
+export function setProperties(el: HTMLElement, props: any) {
   const keys = keysOf(props)
   keys.forEach(key => {
     const dir = Directives[key]
     dir ? dir(el, props[key]) : writeDefault(el, key, props[key])
   })
-}
-
-export function runMount(el: HTMLElement) {
-  if (el[Hooks]) eachFn(el[Hooks][Mount], el)
-  if (el.children) each(Array.from(el.children), runMount)
-}
-
-export function runDestroy(el: HTMLElement) {
-  if (el[Hooks]) eachFn(el[Hooks][Destroy], el)
-  if (el.children) each(Array.from(el.children), runDestroy)
-  el = undefined
-}
-
-export function runBeforeUpdate(el: HTMLElement) {
-  eachFn(el[Hooks][BeforeUpdate], el)
-}
-
-export function runAfterUpdate(el: HTMLElement) {
-  eachFn(el[Hooks][AfterUpdate], el)
 }

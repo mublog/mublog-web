@@ -11,9 +11,7 @@ export default async function findRoute(routes: Route[], url: string): Promise<R
     }
     route.params = parameters(route.matcher, url)
     let activatable = await executeActivators(route.activates, route.params)
-    if (activatable) {
-      return route
-    }
+    if (activatable) return route
     i++
     continue
   }

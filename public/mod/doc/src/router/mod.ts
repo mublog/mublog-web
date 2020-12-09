@@ -5,7 +5,7 @@ import loadRoute from "./load-route"
 import renderRoute from "./render-route"
 import url from "./url"
 
-export function useRouter<Target extends HTMLElement>({ target, routes }: { target: Target, routes: RouteConstructor[] }) {
+export function router<Target extends HTMLElement>({ target, routes }: { target: Target, routes: RouteConstructor[] }) {
   const Routes: Route[] = createRoutes(routes)
   const callbacks: { [key: string]: (() => any)[] } = {
     load: [],
