@@ -88,6 +88,7 @@ $seperator: url("/assets/sprite-seperator.png") 2 fill round;
   @include assets();
   width: 32px;
   height: 32px;
+  font-style: normal;
 
   &.icon-magnifier {
     background-position: 0px 0px;

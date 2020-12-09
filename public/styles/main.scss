@@ -26,8 +26,6 @@ body,
 html {
   margin: 0;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
 }
 
 a {
@@ -70,10 +68,11 @@ a {
 }
 
 #app-grid {
-  margin: 0px auto;
+  margin: 8px auto;
   width: 900px;
   flex-direction: row-reverse;
   display: flex;
+  gap: 8px;
 }
 
 .user-image-wrap {
@@ -275,7 +274,7 @@ a {
 
 .post {
   position: relative;
-  transition: opacity 0.3s ease-out 0s;
+  transition: opacity 250ms ease-out 0s;
 
   .title {
     display: flex;
@@ -366,16 +365,10 @@ a {
 
 #content {
   flex: 1;
-  height: 100vh;
-  overflow: auto;
-  padding: 8px;
 }
 
 #side {
-  height: 100vh;
-  overflow: auto;
   width: 200px;
-  padding: 8px;
 }
 
 #navigation {
@@ -600,4 +593,33 @@ h6 {
     display: block;
     width: 140px;
   }
+}
+
+.tooltip .tooltip-text {
+  transition: opacity 250ms ease-out 0s;
+  cursor: default;
+  opacity: 0;
+  pointer-events: none;
+  background-color: $dark-red-1;
+  color: $white;
+  position: absolute;
+  z-index: 10;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  padding: 4px 8px 4px 8px;
+  box-shadow: 2px 0px $black, 0px 2px $black, -2px 0px $black, 0px -2px $black;
+  text-shadow: none;
+  filter: drop-shadow(0px 2px $grey);
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tooltip:hover .tooltip-text {
+  opacity: 1;
+  pointer-events: unset;
+  visibility: visible;
 }
