@@ -153,7 +153,7 @@ export interface WriterElement extends HTMLDivElement {
 
 export interface WriterElementConstructor {
   placeholder?: string
-  value?: string
+  value?: string | State<string>
   ref?: Reference<WriterElement>
 }
 
