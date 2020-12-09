@@ -14,7 +14,6 @@ export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPosit
     className += " " + props.className
     delete props.className
   }
-  delete props.labelText
   return (
     <div className={className} {...props}>
       <div className={"arrow arrow-" + props.arrow} if={!!props.arrow} />
