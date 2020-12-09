@@ -2,14 +2,12 @@ import Doc, { useRef } from "../../mod/doc/mod"
 import * as µ from "../components/mu.component"
 import i18n from "../../lang/de_DE.json"
 import { up } from "../helpers/up-down"
-import * as http from "../services/http.service"
 import { Uploaded, Uploads } from "../services/generic.service"
 import * as PostService from "../services/post.service"
 import * as UserService from "../services/user.service"
 import Post from "../components/post.component"
 import NotificationService from "../services/notification.service"
 import { createKey } from "../../mod/doc/src/helper"
-import { base64ToBlob } from "../helpers/base64-to-blob"
 
 export default async function HomeView() {
   await PostService.load()
@@ -58,10 +56,10 @@ function HomeWriter() {
     let [file, error] = await up({ accept: "image/*", readAs: "DataURL" })
     if (error) return NotificationService.push(null, error.message)
     if (!file.type.startsWith("image/")) return NotificationService.push(null, file.type)
-    Uploads.update(images => images.push({ key: createKey(), fileName: file.name, fileData: file.data }))
-    const [blob] = await base64ToBlob(file.data)
-    const formData = new FormData()
-    formData.append("file", blob, file.name)
+    Uploads.update(uploads => uploads.push({ key: createKey(), fileName: file.name, fileData: file.data }))
+    /*     const [blob] = await base64ToBlob(file.data)
+        const formData = new FormData()
+        formData.append("file", blob, file.name) */
 
     /* let [data, res] = await http.post<any>("/api/v1/media", formData, {
       init: {
@@ -90,9 +88,7 @@ function HomeWriter() {
     }
     const values = getValues()
 
-    if (!values.text) {
-      return NotificationService.push(null, i18n.messageCriteriaError)
-    }
+    if (!values.text) return NotificationService.push(null, i18n.messageCriteriaError)
 
     let success = await PostService.add(values.text)
     if (success) {
