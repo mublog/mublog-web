@@ -1,13 +1,13 @@
-import { useState } from "../../mod/doc/mod"
+import { observable } from "../../mod/doc/mod"
 
-export const isLoading = useState(false)
+export const isLoading = observable(false)
 
 export function activateRoute(href: string) {
   history.pushState(null, "", href)
   return dispatchEvent(new PopStateEvent("popstate"))
 }
 
-export const Uploaded = useState(false)
-export const Uploads = useState<UploadItem<string>[]>([])
+export const Uploaded = observable(false)
+export const Uploads = observable<UploadItem<string>[]>([])
 
 Uploads.subscribe(images => Uploaded.set(images.length > 0 ? true : false))

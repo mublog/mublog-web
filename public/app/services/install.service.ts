@@ -1,7 +1,7 @@
-import { useState } from "../../mod/doc/mod"
+import { observable } from "../../mod/doc/mod"
 
-export const isInstalled = useState(false)
-export const isNotInstalled = useState(true)
+export const isInstalled = observable(false)
+export const isNotInstalled = observable(true)
 
 isInstalled.subscribe(state => isNotInstalled.set(!state))
 

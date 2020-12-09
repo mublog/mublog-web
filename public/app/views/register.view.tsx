@@ -1,14 +1,14 @@
-import Doc, { useRef } from "../../mod/doc/mod"
+import Doc, { reference } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as µ from "../components/mu.component"
 import * as UserService from "../services/user.service"
 import NotificationService from "../services/notification.service"
 
 export default async function RegisterView() {
-  const InputAlias = useRef<HTMLInputElement>()
-  const InputName = useRef<HTMLInputElement>()
-  const InputEmail = useRef<HTMLInputElement>()
-  const InputPasswords = [useRef<HTMLInputElement>(), useRef<HTMLInputElement>()]
+  const InputAlias = reference<HTMLInputElement>()
+  const InputName = reference<HTMLInputElement>()
+  const InputEmail = reference<HTMLInputElement>()
+  const InputPasswords = [reference<HTMLInputElement>(), reference<HTMLInputElement>()]
 
   return (
     <µ.Box id="register">

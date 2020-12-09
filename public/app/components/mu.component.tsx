@@ -1,8 +1,9 @@
-import Doc, { useRef, useState } from "../../mod/doc/mod"
+import Doc, { reference, observable } from "../../mod/doc/mod"
 import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
 import onScreen from "../helpers/onscreen"
 import { Uploads } from "../services/generic.service"
+import i18n from "../../lang/de_DE.json"
 
 export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPositions }, ...children: Child[]) {
   if (!props) {
@@ -158,15 +159,15 @@ export interface WriterElementConstructor {
 }
 
 export function Writer({ placeholder, value, ref }: WriterElementConstructor, ...children: Child[]): WriterElement {
-  const TextAreaRef = useRef<HTMLTextAreaElement>()
-  const MarkDownContent = useRef<HTMLDivElement>()
-  const Visible = useState(false)
+  const TextAreaRef = reference<HTMLTextAreaElement>()
+  const MarkDownContent = reference<HTMLDivElement>()
+  const Visible = observable(false)
 
   return (
     <div className="box writer" getValues={getValues} ref={ref} clear={clear}>
       <div>
         <TextArea ref={TextAreaRef} oninput={writeMarkDown} placeholder={placeholder || ""} value={value || ""} />
-        <Icon name="magnifier" className="toggle-post-preview" onclick={toggleVisibility} styles={{ cursor: "pointer" }} />
+        <Icon name="magnifier" className="toggle-post-preview" onclick={toggleVisibility} styles={{ cursor: "pointer" }} tooltip={i18n.showPostPreview} />
       </div>
       <Footer>
         <div className="mark-down-wrapper" if={Visible}>
@@ -209,7 +210,7 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
 }
 
 export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & { datetime: number }) {
-  const InnerText = useState(elapsedTime(datetime))
+  const InnerText = observable(elapsedTime(datetime))
   const View = <time {...props} dateTime={datetime} innerText={InnerText} interval={[intervalFn, 5000]} /> as HTMLTimeElement
   function intervalFn() {
     if (onScreen(View)) InnerText.set(elapsedTime(datetime))
@@ -219,7 +220,7 @@ export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & {
 
 export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Omit<UploadItem<string>, "key">) {
   return (
-    <div className="upload-item" {...props} title={props.fileName}>
+    <div className="upload-item" {...props}>
       <img src={props.fileData} className="upload-image" />
       <div className="upload-text">{props.fileName}</div>
       <Icon name="clipboard" copyToClipboard={props.fileData} className="upload-action" />

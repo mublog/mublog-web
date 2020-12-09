@@ -1,12 +1,12 @@
-import Doc, { useRef } from "../../mod/doc/mod"
+import Doc, { reference } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as services from "../services/generic.service"
 import * as µ from "../components/mu.component"
 import * as UserService from "../services/user.service"
 
 export default async function LoginView() {
-  const InputAlias = useRef<HTMLInputElement>()
-  const InputPassword = useRef<HTMLInputElement>()
+  const InputAlias = reference<HTMLInputElement>()
+  const InputPassword = reference<HTMLInputElement>()
 
   return (
     <µ.Box id="login">

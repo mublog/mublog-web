@@ -1,4 +1,4 @@
-import { useState } from "../../mod/doc/mod"
+import { observable } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import NotificationService from "./notification.service"
 import * as service from "./generic.service"
@@ -11,8 +11,8 @@ const API_LOGIN = API_URL + "/accounts/login"
 const API_REGISTER = API_URL + "/accounts/register"
 const API_USER = API_URL + "/users/"
 
-export const isUser = useState(false)
-export const isGuest = useState(true)
+export const isUser = observable(false)
+export const isGuest = observable(true)
 
 let _currentUser = {} as User
 

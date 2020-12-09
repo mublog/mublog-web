@@ -1,7 +1,6 @@
-import { Directives } from "./globals"
 import { eachFn, sub } from "./helper"
 
-export function useState<Type>(initialValue: Type): State<Type> {
+export function observable<Type>(initialValue: Type): State<Type> {
   let current: Type = initialValue
   const subscribers: Subscription<Type>[] = []
   const pub = { isState: true, set, subscribe, update, value }
@@ -25,18 +24,13 @@ export function useState<Type>(initialValue: Type): State<Type> {
   return pub
 }
 
-export function useRef<Type>(): Reference<Type> {
+export function reference<Type>(): Reference<Type> {
   let current: Type
   const pub = { isRef: true, current }
   return pub
 }
 
-export function useDirective(name: string, fn: (el: HTMLElement, property: any) => any) {
-  Directives[name] = fn
-  return () => delete Directives[name]
-}
-
-export function usePortal<Type extends (...args: any[]) => Promise<HTMLElement> | HTMLElement>(component: Type): Portal<Type> {
+export function portal<Type extends (...args: any[]) => Promise<HTMLElement> | HTMLElement>(component: Type): Portal<Type> {
   let anchor: HTMLElement
   let current: HTMLElement
   const openObservers = []

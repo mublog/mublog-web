@@ -1,11 +1,11 @@
-import { useState } from "../../mod/doc/mod"
+import { observable } from "../../mod/doc/mod"
 import * as http from "./http.service"
 
 const API_URL = "http://localhost:5000/api/v1/posts"
 const API_POSTS_ID = API_URL + "/"
 const API_POSTS_LIKE = API_URL + "/like/"
 
-export const Posts = useState<PostModel[]>([])
+export const Posts = observable<PostModel[]>([])
 
 export const localById = (postId: number) => Posts.value().find(post => post.id === postId)
 export const hasPost = async (postId: number) => !!(await getPost(postId))

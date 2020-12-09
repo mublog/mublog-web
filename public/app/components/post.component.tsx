@@ -1,13 +1,14 @@
-import Doc, { useRef, useState } from "../../mod/doc/mod"
+import Doc, { reference, observable } from "../../mod/doc/mod"
 import * as UserService from "../services/user.service"
 import * as µ from "./mu.component"
+import i18n from "../../lang/de_DE.json"
 import translateMarkDown from "../helpers/mark-down"
 import * as PostService from "../services/post.service"
 import onScreen from "../helpers/onscreen"
 
 export default function Post(post: PostModel) {
-  const PostRef = useRef<HTMLDivElement>()
-  const visible = useState<string>("post opacity-0")
+  const PostRef = reference<HTMLDivElement>()
+  const visible = observable<string>("post opacity-0")
 
   return (
     <div className={visible} ref={PostRef} interval={[intervalFn, 250]}>
@@ -50,8 +51,8 @@ export default function Post(post: PostModel) {
 }
 
 function TextContainer({ postId, data }: { postId: number, data: string }) {
-  const Text = useState<string>(data)
-  const MD = useState<string>("")
+  const Text = observable<string>(data)
+  const MD = observable<string>("")
   Text.subscribe(txt => MD.set(translateMarkDown(txt)))
 
   return (
@@ -69,8 +70,8 @@ function TextContainer({ postId, data }: { postId: number, data: string }) {
 }
 
 function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: number }) {
-  const likes = useState(likeAmount)
-  const HeartRef = useRef<µ.IconElement>()
+  const likes = observable(likeAmount)
+  const HeartRef = reference<µ.IconElement>()
 
   return (
     <div
@@ -79,6 +80,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
       if={UserService.isUser}
       mount={refreshFn}
       interval={[refreshFn, 1000]}
+      tooltip={[likes, i18n.nUsersLikedThat]}
     >
       <µ.Icon
         ref={HeartRef}

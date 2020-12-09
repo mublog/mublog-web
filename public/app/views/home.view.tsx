@@ -1,4 +1,4 @@
-import Doc, { useRef } from "../../mod/doc/mod"
+import Doc, { reference } from "../../mod/doc/mod"
 import * as µ from "../components/mu.component"
 import i18n from "../../lang/de_DE.json"
 import { up } from "../helpers/up-down"
@@ -27,10 +27,10 @@ export default async function HomeView() {
 }
 
 function HomeWriter() {
-  const WriterRef = useRef<µ.WriterElement>()
+  const WriterRef = reference<µ.WriterElement>()
 
   return (
-    <form onsubmit={tryPost}>
+    <form onsubmit={tryPost} destroy={() => Uploads.set([])}>
       <µ.Writer ref={WriterRef}>
         <div styles={{ display: "flex", gap: "8px" }}>
           <µ.Button type="submit">{i18n.send}</µ.Button>
@@ -54,8 +54,8 @@ function HomeWriter() {
 
   async function uploadImage() {
     let [file, error] = await up({ accept: "image/*", readAs: "DataURL" })
-    if (error) return NotificationService.push(null, error.message)
-    if (!file.type.startsWith("image/")) return NotificationService.push(null, file.type)
+    if (error) return NotificationService.push(null, i18n.followingError.replace("$e", error.message))
+    if (!file.type.startsWith("image/")) return NotificationService.push(null, i18n.unsupportedFileType.replace("$t", file.type))
     Uploads.update(uploads => uploads.push({ key: createKey(), fileName: file.name, fileData: file.data }))
     /*     const [blob] = await base64ToBlob(file.data)
         const formData = new FormData()

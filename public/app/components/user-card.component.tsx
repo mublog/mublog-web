@@ -1,9 +1,9 @@
-import Doc, { usePortal } from "../../mod/doc/mod"
+import Doc, { portal } from "../../mod/doc/mod"
 import * as µ from "./mu.component"
 import adjustCardPosition from "../helpers/adjust-card-position"
 import * as UserService from "../services/user.service"
 
-const UserCardPortal = usePortal(UserCard)
+const UserCardPortal = portal(UserCard)
 
 async function UserCard({ alias, top, left }) {
   [top, left] = adjustCardPosition(top, left)

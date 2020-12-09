@@ -1,4 +1,4 @@
-import Doc, { useRef, onEvent } from "../../mod/doc/mod"
+import Doc, { reference, onEvent } from "../../mod/doc/mod"
 import * as µ from "../components/mu.component"
 
 declare interface NotificationOption {
@@ -11,7 +11,7 @@ export default NotificationService()
 
 function NotificationService() {
   const pub = { push }
-  const bottomRight = useRef<HTMLElement>()
+  const bottomRight = reference<HTMLElement>()
 
   function push(title: string, message: string, options: NotificationOption = {
     removeOnClick: false,

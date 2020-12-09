@@ -2,7 +2,6 @@ import { Hooks, Mount, BeforeUpdate, AfterUpdate, Destroy, Events, Directives } 
 import { onEvent } from "./events"
 import { T_STRING, T_NUMBER, T_FUNCTION } from "./types"
 import { blank, each, eachFn, keysOf, prepareForList } from "./helper"
-import { useDirective } from "./core"
 import * as directives from "./directives"
 
 function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[Tag] {
@@ -23,11 +22,17 @@ function comment(text: string) {
   return document.createComment(text)
 }
 
+export function registerDirective(name: string, fn: (el: HTMLElement, property: any) => any) {
+  Directives[name] = fn
+}
+
+export function unregisterDirective(name: string) {
+  delete Directives[name]
+}
+
 export function createElement<Tag extends HTMLTag>(type: Tag, props: HTMLOptions<Tag>, ...children: Child[]) {
-  if (typeof type === T_FUNCTION) {
-    // @ts-expect-error
-    return type(props, ...children)
-  }
+  // @ts-expect-error
+  if (typeof type === T_FUNCTION) return type(props, ...children)
   let el = element(type)
   properties(el, props)
   appendChildren(el, children, el)
@@ -50,14 +55,6 @@ export function render(el: HTMLElement, ...children: HTMLElement[]) {
   appendChildren(el, children, el)
 }
 
-function appendElement(el: DocumentFragment | HTMLElement, child: HTMLElement) {
-  el.appendChild(child)
-}
-
-function appendTextLike(el: DocumentFragment | HTMLElement, child: string | number) {
-  el.appendChild(text(child))
-}
-
 function appendChildren(el: DocumentFragment | HTMLElement, children: any[], $el: HTMLElement) {
   let frag = fragment()
   const len = children.length
@@ -67,10 +64,10 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[], $el
         appendChildren(frag, children[i], $el)
       }
       else if (typeof children[i] === T_STRING || typeof children[i] === T_NUMBER) {
-        appendTextLike(frag, children[i])
+        frag.appendChild(text(children[i]))
       }
       else if (children[i] instanceof Element) {
-        appendElement(frag, children[i])
+        frag.appendChild(children[i])
       }
       else if (children[i].subscribe) {
         let stateValue = children[i].value()
@@ -78,20 +75,20 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[], $el
           let state: Subscribable<number | string> = children[i]
           let content = text(state.value())
           frag.appendChild(content)
-          directives.lcAction($el, Destroy, state.subscribe(val => {
-            eachFn($el[Hooks][BeforeUpdate], $el)
+          directives.destroyDirective($el, state.subscribe(val => {
+            runBeforeUpdate($el)
             let newVal = val + ""
             if (content.textContent !== newVal) content.textContent = newVal
-            eachFn($el[Hooks][AfterUpdate], $el)
+            runAfterUpdate($el)
           }))
         }
         else if (stateValue instanceof Element) {
           let state: Subscribable<Element> = children[i]
           frag.appendChild(state.value())
-          directives.lcAction($el, Destroy, state.subscribe(val => {
-            eachFn($el[Hooks][BeforeUpdate], $el)
+          directives.destroyDirective($el, state.subscribe(val => {
+            runBeforeUpdate($el)
             state.value().replaceWith(val)
-            eachFn($el[Hooks][AfterUpdate], $el)
+            runAfterUpdate($el)
           }))
         }
       }
@@ -103,28 +100,27 @@ function appendChildren(el: DocumentFragment | HTMLElement, children: any[], $el
 function writeSubscribableProperty(el: HTMLElement, key: string, property: Subscribable<any>) {
   let state: Subscribable<any> = property
   el[key] = state.value()
-  directives.lcAction(el, Destroy, state.subscribe(val => {
-    eachFn(el[Hooks][BeforeUpdate], el)
+  directives.destroyDirective(el, state.subscribe(val => {
+    runBeforeUpdate(el)
     if (el[key] !== val) el[key] = val
-    eachFn(el[Hooks][AfterUpdate], el)
+    runAfterUpdate(el)
   }))
 }
 
 function writeDefault(el: HTMLElement, key: string, property: any) {
-  if (property !== undefined) {
-    if (property.subscribe) {
-      writeSubscribableProperty(el, key, property)
-    }
-    else if (key.startsWith("on") && typeof property === T_FUNCTION) {
-      onEvent(el, key.slice(2) as EventNames, property)
-    }
-    else {
-      el[key] = property
-    }
+  if (property === undefined) return
+  if (property.subscribe) {
+    writeSubscribableProperty(el, key, property)
+  }
+  else if (key.startsWith("on") && typeof property === T_FUNCTION) {
+    onEvent(el, key.slice(2) as EventNames, property)
+  }
+  else {
+    el[key] = property
   }
 }
 
-useDirective("for", (el: HTMLElement, prop: DocDirectives["for"]) => {
+registerDirective("for", (el: HTMLElement, prop: DocDirectives["for"]) => {
   let sort: (a: any, b: any) => number = prop.sort
   let filter: (value: any, index: number) => unknown = prop.filter
   let limit: number = prop.limit
@@ -137,25 +133,25 @@ useDirective("for", (el: HTMLElement, prop: DocDirectives["for"]) => {
     }
     else if (prop.of && prop.of.subscribe) {
       let list: Subscribable<any[]> = prop.of
-      directives.lcAction(el, Destroy, list.subscribe(val => {
-        eachFn(el[Hooks][BeforeUpdate], el)
+      directives.destroyDirective(el, list.subscribe(val => {
+        runBeforeUpdate(el)
         let copy = prepareForList(val, { sort, filter, limit, offset })
         render(el, ...copy.map(com))
-        eachFn(el[Hooks][AfterUpdate], el)
+        runAfterUpdate(el)
       }))
     }
   }
 })
 
-useDirective("styles", directives.stylesDirective)
-useDirective("if", directives.ifDirective)
-useDirective("ref", directives.referenceDirective)
-useDirective("portal", directives.portalDirective)
-useDirective("mount", directives.mountDirective)
-useDirective("destroy", directives.destroyDirective)
-useDirective("beforeUpdate", directives.beforeUpdateDirective)
-useDirective("afterUpdate", directives.afterUpdateDirective)
-useDirective("interval", directives.intervalDirective)
+registerDirective("styles", directives.stylesDirective)
+registerDirective("if", directives.ifDirective)
+registerDirective("ref", directives.referenceDirective)
+registerDirective("portal", directives.portalDirective)
+registerDirective("mount", directives.mountDirective)
+registerDirective("destroy", directives.destroyDirective)
+registerDirective("beforeUpdate", directives.beforeUpdateDirective)
+registerDirective("afterUpdate", directives.afterUpdateDirective)
+registerDirective("interval", directives.intervalDirective)
 
 function properties(el: HTMLElement, props: any) {
   const keys = keysOf(props)
@@ -174,4 +170,12 @@ export function runDestroy(el: HTMLElement) {
   if (el[Hooks]) eachFn(el[Hooks][Destroy], el)
   if (el.children) each(Array.from(el.children), runDestroy)
   el = undefined
+}
+
+export function runBeforeUpdate(el: HTMLElement) {
+  eachFn(el[Hooks][BeforeUpdate], el)
+}
+
+export function runAfterUpdate(el: HTMLElement) {
+  eachFn(el[Hooks][AfterUpdate], el)
 }
