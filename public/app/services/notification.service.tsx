@@ -44,11 +44,7 @@ function Notification({ title, message, options }: { title: string; message: str
     </µ.Box>
   ) as HTMLDivElement
 
-  if (options.timeout) {
-    setTimeout(() => View.remove(), options.timeout)
-  }
-  if (options.removeOnClick) {
-    onEvent(View, "click", () => View.remove())
-  }
+  if (options.timeout) setTimeout(() => View.remove(), options.timeout)
+  if (options.removeOnClick) onEvent(View, "click", () => View.remove())
   return View
 }
