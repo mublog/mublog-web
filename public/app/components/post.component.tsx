@@ -9,6 +9,7 @@ import onScreen from "../helpers/onscreen"
 
 export default function Post(props: PostModel) {
   const visible = observable<string>("post opacity-0")
+  const CommentTextArea = reference<µ.WriterElement>()
   return (
     <div className={visible} interval={[intervalFn, 250]}>
       <div styles={{ display: "flex", gap: "8px" }}>
@@ -41,6 +42,7 @@ export default function Post(props: PostModel) {
           </µ.Footer>
           <div if={!!props.showComments}>
             <µ.Seperator />
+            <µ.Writer ref={CommentTextArea} />
             hi, ich bin der kommentar
           </div>
         </µ.Box>
@@ -82,7 +84,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
       styles={{ display: "flex", gap: "8px", alignItems: "center" }}
       if={UserService.isUser}
       mount={refreshFn}
-      interval={[refreshFn, 1000]}
+      interval={[refreshFn, 250]}
       tooltip={[likes, i18n.nUsersLikedThat]}
     >
       <µ.Icon
