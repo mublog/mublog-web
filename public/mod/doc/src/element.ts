@@ -1,7 +1,7 @@
 import { Hooks, Mount, Destroy, Events, Directives } from "./globals"
 import { onEvent } from "./events"
 import { T_STRING, T_NUMBER, T_FUNCTION } from "./types"
-import { blank, each, eachFn, keysOf, prepareForList } from "./helper"
+import { blank, keysOf, prepareForList } from "./helper"
 import * as directives from "./directives"
 
 function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[Tag] {
@@ -30,7 +30,7 @@ export function unregisterDirective(name: string) {
   delete Directives[name]
 }
 
-export function createElement<Tag extends HTMLTag>(type: Tag, props: HTMLOptions<Tag>, ...children: Child[]) {
+export function createElement<Tag extends HTMLTag>(type: Tag, props: HTMLOptions<Tag>, ...children: Child[]): HTMLElementTagNameMap[Tag] {
   // @ts-expect-error
   if (typeof type === T_FUNCTION) return type(props, ...children)
   let el = element(type)

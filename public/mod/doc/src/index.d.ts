@@ -22,7 +22,8 @@ declare interface DocDirectives {
   interval: [fn: Subscription<HTMLElement>, interval: number]
 }
 declare namespace JSX {
-  type IntrinsicElements = { [key in keyof HTMLElementTagNameMap]: HTMLProperties<HTMLElementTagNameMap[key]> }
+  type IntrinsicElements =
+    { [key in keyof HTMLElementTagNameMap]: HTMLProperties<HTMLElementTagNameMap[key]> }
 }
 declare type Update<Type> = (value: Type) => any
 declare type Subscription<Type> = (value: Type) => any
