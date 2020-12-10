@@ -6,6 +6,7 @@ interface DownOption {
 interface UpOption {
   accept: string
   readAs: "BinaryString" | "Text" | "DataURL"
+  maxSize?: number
 }
 
 interface File<Type> {
@@ -43,6 +44,9 @@ export function up<Type = string>(option: UpOption): Promise<[File<Type>, Error]
         if (!files.length) return res([null, null])
         let file: File<Type> = files[0]
         Reader.onload = (event) => {
+          if (option.maxSize && file.size > option.maxSize) {
+            return res([null, new Error("Filesize exceeded")])
+          }
           file.data = event.target.result as unknown as Type
           res([file, null])
         }

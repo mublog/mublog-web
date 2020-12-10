@@ -3,7 +3,7 @@ import * as PostService from "../services/post.service"
 import Post from "../components/post.component"
 
 export default async function UserPostView({ alias, id }: URLParams) {
-  const post = PostService.localById(parseInt(id))
+  const post = await PostService.getPost(parseInt(id))
   return (
     <Post
       id={post.id}

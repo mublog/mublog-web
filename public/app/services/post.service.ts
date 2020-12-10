@@ -18,7 +18,12 @@ export async function load(page: number = 1, size: number = 1000) {
 
 export async function getPost(postId: number) {
   let [wrapper, res] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + postId)
-  if (res.status === 200) return wrapper.data
+  if (res.status === 200) {
+    if (!localById(wrapper.data.id)) {
+      Posts.value().push(wrapper.data)
+    }
+    return wrapper.data
+  }
 }
 
 export async function add(content: string) {

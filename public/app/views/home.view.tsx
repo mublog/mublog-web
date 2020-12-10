@@ -20,7 +20,8 @@ export default async function HomeView() {
       <div for={{
         of: PostService.Posts,
         do: Post,
-        sort: (a, b) => b.datePosted - a.datePosted
+        sort: (a, b) => b.datePosted - a.datePosted,
+        limit: 5
       }} />
     </div>
   ) as HTMLDivElement
@@ -53,7 +54,7 @@ function HomeWriter() {
   ) as HTMLFormElement
 
   async function uploadImage() {
-    let [file, error] = await up({ accept: "image/*", readAs: "DataURL" })
+    let [file, error] = await up({ accept: "image/*", readAs: "DataURL", maxSize: 5242880 })
     if (error) return NotificationService.push(null, i18n.followingError.replace("$e", error.message))
     if (!file.type.startsWith("image/")) return NotificationService.push(null, i18n.unsupportedFileType.replace("$t", file.type))
     Uploads.update(uploads => uploads.push({ key: createKey(), fileName: file.name, fileData: file.data }))
