@@ -1,20 +1,19 @@
 import Doc, { reference, observable } from "../../mod/doc/mod"
 import * as UserService from "../services/user.service"
+import NotificationService from "../services/notification.service"
 import * as µ from "./mu.component"
 import i18n from "../../lang/de_DE.json"
 import translateMarkDown from "../helpers/mark-down"
 import * as PostService from "../services/post.service"
 import onScreen from "../helpers/onscreen"
 
-export default function Post(post: PostModel) {
-  const PostRef = reference<HTMLDivElement>()
+export default function Post(props: PostModel) {
   const visible = observable<string>("post opacity-0")
-
   return (
-    <div className={visible} ref={PostRef} interval={[intervalFn, 250]}>
+    <div className={visible} interval={[intervalFn, 250]}>
       <div styles={{ display: "flex", gap: "8px" }}>
         <div>
-          <div className="user-image-wrap" user-card={post.user.alias} >
+          <div className="user-image-wrap" user-card={props.user.alias} >
             <div className="user-image" />
             <div className="avatar-circle" />
           </div>
@@ -22,24 +21,28 @@ export default function Post(post: PostModel) {
         <µ.Box className="post-content" arrow="top-left">
           <µ.Header>
             <div>
-              {post.user.displayName}
+              {props.user.displayName}
               <span className="user-alias">
-                @{post.user.alias}
+                @{props.user.alias}
               </span>
             </div>
-            <µ.Time datetime={post.datePosted * 1000} className="datetime" />
+            <µ.Time datetime={props.datePosted * 1000} className="datetime" />
             <µ.Icon name="calendar" />
           </µ.Header>
           <div className="user-content">
-            <TextContainer postId={post.id} data={post.textContent} />
+            <TextContainer postId={props.id} data={props.textContent} />
           </div>
           <µ.Footer>
             <div styles={{ display: "flex", gap: "8px" }}>
-              <HeartContainer likeAmount={post.likeAmount} postId={post.id} />
-              <CommentContainer userAlias={post.user.alias} postId={post.id} />
+              <HeartContainer likeAmount={props.likeAmount} postId={props.id} />
+              <CommentContainer userAlias={props.user.alias} postId={props.id} />
               <µ.Icon name="menu-meatballs" className="post-menu" />
             </div>
           </µ.Footer>
+          <div if={!!props.showComments}>
+            <µ.Seperator />
+            hi, ich bin der kommentar
+          </div>
         </µ.Box>
       </div>
     </div>
@@ -104,7 +107,7 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
 
 function CommentContainer({ userAlias, postId }: { userAlias: string, postId: number }) {
   return (
-    <a href={`/user/${userAlias}/post/${postId}`} className="comment-action">
+    <a href={`/user/${userAlias}/post/${postId}`} className="comment-action" tooltip={i18n.showComments}>
       <div styles={{ display: "flex", gap: "8px", alignItems: "center" }}>
         <µ.Icon name="comment-bubbles-grey" className="post-comment" />
         <span>0</span>

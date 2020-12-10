@@ -84,7 +84,7 @@ export function Footer(props: HTMLProperties<HTMLDivElement>, ...children: Child
     delete props.className
   }
   return (
-    <footer {...props} className="footer">
+    <footer className="footer" {...props}>
       <Seperator />
       <div className={className}>
         {...children}
@@ -166,7 +166,9 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
     <div className="box writer" getValues={getValues} ref={ref} clear={clear}>
       <div>
         <TextArea ref={TextAreaRef} oninput={writeMarkDown} placeholder={placeholder || ""} value={value || ""} />
-        <Icon name="magnifier" className="toggle-post-preview" onclick={toggleVisibility} styles={{ cursor: "pointer" }} tooltip={i18n.showPostPreview} />
+        <span tooltip={i18n.showPostPreview}>
+          <Icon name="magnifier" className="toggle-post-preview" onclick={toggleVisibility} styles={{ cursor: "pointer" }} />
+        </span>
       </div>
       <Footer>
         <div className="mark-down-wrapper" if={Visible}>
@@ -204,7 +206,7 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
   }
 
   function toggleVisibility() {
-    Visible.set(Visible.value() ? false : true)
+    Visible.set(!Visible.value())
   }
 }
 
@@ -222,7 +224,9 @@ export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Omit<U
     <div className="upload-item" {...props}>
       <img src={props.fileData} className="upload-image" />
       <div className="upload-text">{props.fileName}</div>
-      <Icon name="clipboard" copyToClipboard={props.fileData} className="upload-action" />
+      <span copyToClipboard={props.fileData} styles={{ display: "flex", alignItems: "center" }}>
+        <Icon name="clipboard" className="upload-action" />
+      </span>
       <Icon name="x-red" onclick={removeUpload} className="upload-action" />
     </div>
   ) as HTMLDivElement
