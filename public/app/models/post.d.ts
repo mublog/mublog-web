@@ -5,5 +5,6 @@ declare interface PostModel {
   datePosted: number
   dateEdited: number
   likeAmount: number
-  liked: boolean
+  liked: boolean,
+  showComments?: boolean
 }
