@@ -420,6 +420,7 @@ a {
   }
 
   .notification {
+    animation: notification-slide 250ms ease-in-out;
     pointer-events: all;
   }
 
@@ -446,7 +447,7 @@ a {
 
 .toggle-post-preview {
   position: absolute;
-  bottom: -8px;
+  bottom: 0px;
   left: -8px;
   z-index: 1;
 
@@ -618,8 +619,23 @@ h6 {
   white-space: nowrap;
 }
 
-.tooltip:hover .tooltip-text {
+.tooltip .tooltip-text-icon {
+  opacity: 0;
+  position: absolute;
+
+  &::after {
+    z-index: 99999;
+    content: "";
+    background: red;
+    width: 32px;
+    height: 32px;
+    display: block;
+    position: absolute;
+  }
+}
+
+.tooltip:hover .tooltip-text,
+.tooltip:hover .tooltip-text-icon {
   opacity: 1;
   pointer-events: unset;
-  visibility: visible;
 }
