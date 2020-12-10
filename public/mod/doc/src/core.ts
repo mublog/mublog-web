@@ -1,6 +1,6 @@
 import { eachFn, sub } from "./helper"
 
-export function observable<Type>(initialValue: Type): State<Type> {
+export function observable<Type>(initialValue: Type): Observable<Type> {
   let current: Type = initialValue
   const subscribers: Subscription<Type>[] = []
   const pub = { isState: true, set, subscribe, update, value }

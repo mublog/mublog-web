@@ -13,10 +13,10 @@ declare interface DocDirectives {
     limit?: number
     offset?: number
   }
-  if: State<boolean> | boolean
+  if: Observable<boolean> | boolean
   ref: Reference<HTMLElement>
   portal: Portal<any>
-  styles: Partial<CSSStyleDeclaration> | State<Partial<CSSStyleDeclaration>>
+  styles: Partial<CSSStyleDeclaration> | Observable<Partial<CSSStyleDeclaration>>
   mount: Subscription<HTMLElement>
   destroy: Subscription<HTMLElement>
   interval: [fn: Subscription<HTMLElement>, interval: number]
@@ -27,11 +27,11 @@ declare namespace JSX {
 }
 declare type Update<Type> = (value: Type) => any
 declare type Subscription<Type> = (value: Type) => any
-declare interface State<Type> {
+declare interface Observable<Type> {
   isState: boolean
   value(): Type
-  set(value: Type): State<Type>
-  update(fn: Update<Type>): State<Type>
+  set(value: Type): Observable<Type>
+  update(fn: Update<Type>): Observable<Type>
   subscribe(fn: Subscription<Type>): () => void
 }
 declare type EventMap = GlobalEventHandlersEventMap & WindowEventMap
@@ -39,8 +39,8 @@ declare type EventNames = keyof EventMap
 declare type AttributeChangedCallback = (name: string, oldValue: string) => any
 declare type HTMLTag = keyof HTMLElementTagNameMap
 declare type HTMLOptions<Tag extends HTMLTag> = Partial<HTMLElementTagNameMap[Tag]> & { [key: string]: any }
-declare type HTMLElementChild = HTMLElement | State<HTMLElement>
-declare type HTMLPrimitiveChild = string | number | State<string | number>
+declare type HTMLElementChild = HTMLElement | Observable<HTMLElement>
+declare type HTMLPrimitiveChild = string | number | Observable<string | number>
 declare type Child = HTMLElementChild | HTMLPrimitiveChild
 declare type AnyFn = () => any
 declare type IntervalFn = () => any

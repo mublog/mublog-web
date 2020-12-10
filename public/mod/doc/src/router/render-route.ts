@@ -1,4 +1,4 @@
-import { render } from "../element"
+import { render } from "../doc"
 
 export default async function renderRoute<Target extends HTMLElement>(
   targetComponent: Target,

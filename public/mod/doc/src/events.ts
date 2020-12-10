@@ -1,6 +1,5 @@
-import { lcAction } from "./directives"
 import { Hooks, Events, Destroy } from "./globals"
-import { blank, eachFn } from "./helper"
+import { blank, eachFn, lifeCycle } from "./helper"
 
 export function onGlobalEvent<Name extends EventNames>(name: Name, fn: (event: EventMap[Name]) => any) {
   if (!window[Hooks]) {
@@ -25,7 +24,7 @@ export function onEvent<Name extends EventNames>(el: HTMLElement, name: Name, fn
   let event = (ev: any) => eachFn(fns, ev)
   fns.push(fn)
   if (fns.length === 1) listen(el, name, event)
-  lcAction(el, Destroy, () => {
+  lifeCycle(el, Destroy, () => {
     const index = fns.indexOf(fn)
     if (index !== -1) {
       fns.splice(index, 1)

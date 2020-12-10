@@ -1,3 +1,4 @@
+import { Hooks } from "./globals"
 import { T_NUMBER } from "./types"
 
 export function each(list: any[], fn?: (val: any, idx?: number, list?: any[]) => any) {
@@ -51,4 +52,9 @@ export function keysOf(obj: any) {
   let keys: string[] = []
   for (let key in obj) keys.push(key)
   return keys
+}
+
+export function lifeCycle(el: HTMLElement, type: any, fn: Subscription<HTMLElement>) {
+  let fns: Subscription<any>[] = (el[Hooks][type]) || (el[Hooks][type] = [])
+  return sub(fns, fn)
 }

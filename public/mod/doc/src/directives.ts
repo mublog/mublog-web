@@ -1,41 +1,41 @@
-import { Hooks, Destroy, Mount } from "./globals"
-import { eachFn, sub } from "./helper"
+import { render } from "./children"
+import { Destroy, Mount, Directives } from "./globals"
+import { prepareForList, lifeCycle } from "./helper"
 import { useStyles } from "./styles"
 import { T_BOOLEAN } from "./types"
 
-export function lcAction(el: HTMLElement, type: any, fn: Subscription<HTMLElement>) {
-  let fns: Subscription<any>[] = (el[Hooks][type]) || (el[Hooks][type] = [])
-  return sub(fns, fn)
+export function directive(name: string, fn: (el: HTMLElement, property: any) => any) {
+  Directives[name] = fn
 }
 
-export function mountDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
-  return lcAction(el, Mount, prop)
+function mountDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
+  return lifeCycle(el, Mount, prop)
 }
 
-export function destroyDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
-  return lcAction(el, Destroy, prop)
+function destroyDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
+  return lifeCycle(el, Destroy, prop)
 }
 
-export function intervalDirective(el: HTMLElement, prop: [Subscription<HTMLElement>, number]) {
+function intervalDirective(el: HTMLElement, prop: [Subscription<HTMLElement>, number]) {
   let id = setInterval(() => prop[0](el), prop[1])
-  return lcAction(el, Destroy, (): void => clearInterval(id))
+  return lifeCycle(el, Destroy, (): void => clearInterval(id))
 }
 
-export function referenceDirective(el: HTMLElement, prop: Reference<any>) {
+function referenceDirective(el: HTMLElement, prop: Reference<any>) {
   if (prop.isRef) prop.current = el
 }
 
-export function portalDirective(el: HTMLElement, prop: Portal<any>) {
+function portalDirective(el: HTMLElement, prop: Portal<any>) {
   if (prop.isPortal) prop.set(el)
 }
 
-export function ifDirective(el: HTMLElement, prop: any) {
+function ifDirective(el: HTMLElement, prop: any) {
   if (typeof prop === T_BOOLEAN) {
     if (prop === false) el.setAttribute("hidden", "")
   }
   else if (prop.subscribe) {
     let state: Subscribable<boolean> = prop
-    lcAction(el, Destroy, state.subscribe(val => {
+    lifeCycle(el, Destroy, state.subscribe(val => {
       if (val === true) {
         el.removeAttribute("hidden")
       }
@@ -46,14 +46,42 @@ export function ifDirective(el: HTMLElement, prop: any) {
   }
 }
 
-export function stylesDirective(el: HTMLElement, prop: any) {
+function stylesDirective(el: HTMLElement, prop: any) {
   if (prop.subscribe) {
     let state: Subscribable<Partial<CSSStyleDeclaration>> = prop
-    lcAction(el, Destroy, state.subscribe(rules => {
-      useStyles(el, rules)
-    }))
+    lifeCycle(el, Destroy, state.subscribe(rules => useStyles(el, rules)))
   }
   else {
     useStyles(el, prop)
   }
 }
+
+function forDirective(el: HTMLElement, prop: DocDirectives["for"]) {
+  let sort: (a: any, b: any) => number = prop.sort
+  let filter: (value: any, index: number) => unknown = prop.filter
+  let limit: number = prop.limit
+  let offset: number = prop.offset
+  let com: HTMLComponent<any> = prop.do
+  if (prop.of) {
+    if (Array.isArray(prop.of)) {
+      let copy = prepareForList(prop.of, { sort, filter, limit, offset })
+      render(el, ...copy.map(com))
+    }
+    else if (prop.of && prop.of.subscribe) {
+      let list: Subscribable<any[]> = prop.of
+      destroyDirective(el, list.subscribe(val => {
+        let copy = prepareForList(val, { sort, filter, limit, offset })
+        render(el, ...copy.map(com))
+      }))
+    }
+  }
+}
+
+directive("styles", stylesDirective)
+directive("if", ifDirective)
+directive("ref", referenceDirective)
+directive("portal", portalDirective)
+directive("mount", mountDirective)
+directive("destroy", destroyDirective)
+directive("interval", intervalDirective)
+directive("for", forDirective)
