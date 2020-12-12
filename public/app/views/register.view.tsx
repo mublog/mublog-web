@@ -2,7 +2,7 @@ import Doc, { reference } from "../../mod/doc/mod"
 import i18n from "../../lang/de_DE.json"
 import * as µ from "../components/mu.component"
 import * as UserService from "../services/user.service"
-import NotificationService from "../services/notification.service"
+import * as NotificationService from "../services/notification.service"
 
 export default async function RegisterView() {
   const InputAlias = reference<HTMLInputElement>()
