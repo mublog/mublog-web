@@ -10,6 +10,30 @@
   font-display: swap;
 }
 
+.bg-xo {
+  background-image: url("/assets/bg-xo.png");
+  background-size: 44px;
+  image-rendering: crisp-edges;
+  background-position: 50% 50%;
+  background-attachment: fixed;
+}
+
+.bg-yi {
+  background-image: url("/assets/bg-yi.png");
+  background-size: 20px;
+  image-rendering: crisp-edges;
+  background-position: 50% 50%;
+  background-attachment: fixed;
+}
+
+.bg-retro {
+  background-image: url("/assets/bg-retro.png");
+  background-size: 44px;
+  image-rendering: crisp-edges;
+  background-position: 50% 50%;
+  background-attachment: fixed;
+}
+
 :root {
   background: $dark-grey-2;
 }
@@ -183,10 +207,6 @@ a {
 
   .upload-action {
     cursor: pointer;
-
-    &:hover {
-      animation: wiggle-vertical 400ms linear infinite;
-    }
   }
 }
 
@@ -310,55 +330,83 @@ a {
     padding: 4px;
   }
 
-  .icon-heart-red,
-  .icon-heart-grey {
-    &.wiggle-vertical {
-      &:hover {
-        animation: wiggle-vertical 400ms linear infinite;
-      }
-    }
-  }
-
   .comment-action {
     text-decoration: none;
   }
 
   .post-menu {
     margin-left: auto;
+
+    .icon {
+      cursor: pointer;
+    }
   }
 
   + .post {
     margin-top: 8px;
   }
-}
 
-@keyframes heart-animation {
-  from {
-    background-position: 0px 0px;
-  }
+  .comments {
+    max-height: 500px;
+    overflow: auto;
+    margin: -8px;
+    padding: 8px;
 
-  to {
-    background-position: -192px 0px;
+    .comment {
+      padding: 8px;
+      margin: -8px;
+
+      .comment-author {
+        text-shadow: 0px 2px $grey;
+        margin-bottom: 4px;
+
+        &::after {
+          content: ":";
+        }
+      }
+
+      .box {
+        .box-content {
+          white-space: pre-line;
+        }
+      }
+
+      .comment-flex {
+        align-items: flex-start;
+        gap: 8px;
+        display: flex;
+        width: calc(100% - 32px);
+        margin: 0 auto;
+      }
+
+      .user-image {
+        margin: 4px;
+        width: 40px;
+        height: 40px;
+        box-shadow: 2px 0px $dark-red-1, 0px 2px $dark-red-1, -2px 0px $dark-red-1, 0px -2px $dark-red-1;
+        filter: drop-shadow(0px 2px $grey);
+        background-color: $white;
+      }
+    }
   }
 }
 
 .menu {
+  animation: slide-vertical 250ms ease-in-out;
   position: absolute;
-  width: 200px;
+  width: max-content;
   z-index: 999;
+  min-width: 200px;
+  transform: translate(-100%, -100%);
 
-  ul {
-    list-style: none;
+  .menu-item {
+    cursor: pointer;
+    margin: 0px -8px 0px -8px;
+    padding: 4px 8px 4px 8px;
 
-    li {
-      font-style: normal;
-      display: flex;
-      padding: 2px 4px 2px 4px;
-      display: block;
-
-      * {
-        text-decoration: none;
-      }
+    &:hover {
+      background-color: $grey;
+      box-shadow: inset 0px 2px $dark-grey-1, inset 0px -2px $dark-grey-1;
     }
   }
 }
@@ -438,6 +486,18 @@ a {
   to {
     opacity: 1;
     transform: translateX(0px);
+  }
+}
+
+@keyframes slide-vertical {
+  from {
+    opacity: 0;
+    top: 8px;
+  }
+
+  to {
+    opacity: 1;
+    top: 0px;
   }
 }
 
@@ -573,7 +633,7 @@ h6 {
 
 #user-card {
   opacity: 1;
-  transition: opacity 0.3s ease-out 0s;
+  transition: opacity 250ms ease-out 0s;
   width: 250px;
   height: 200px;
   pointer-events: auto;
@@ -619,23 +679,11 @@ h6 {
   white-space: nowrap;
 }
 
-.tooltip .tooltip-text-icon {
-  opacity: 0;
-  position: absolute;
-
-  &::after {
-    z-index: 99999;
-    content: "";
-    background: red;
-    width: 32px;
-    height: 32px;
-    display: block;
-    position: absolute;
-  }
-}
-
-.tooltip:hover .tooltip-text,
-.tooltip:hover .tooltip-text-icon {
+.tooltip:hover .tooltip-text {
   opacity: 1;
   pointer-events: unset;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

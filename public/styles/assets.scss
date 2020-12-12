@@ -1,3 +1,4 @@
+$icon-size: 32;
 $assets-2x: url("/assets/assets-2x.png");
 $loading-bar: url("/assets/sprite-loading-bar.png");
 $box: url("/assets/sprite-white-box.png") 12 fill round;
@@ -14,6 +15,26 @@ $seperator: url("/assets/sprite-seperator.png") 2 fill round;
   @include sprite;
   background-image: $assets-2x;
   background-repeat: no-repeat;
+}
+
+@mixin icon {
+  @include assets;
+  width: #{$icon-size}px !important;
+  height: #{$icon-size}px !important;
+  font-style: normal !important;
+  display: inline-block !important;
+}
+
+@mixin icon-position($x, $y) {
+  background-position: #{$icon-size * -$x}px #{$icon-size * -$y}px;
+}
+
+@mixin icon-mixin($x, $y) {
+  &::after {
+    content: "";
+    @include icon;
+    @include icon-position($x, $y);
+  }
 }
 
 .avatar-circle {
@@ -85,61 +106,72 @@ $seperator: url("/assets/sprite-seperator.png") 2 fill round;
 }
 
 .icon {
-  @include assets();
-  width: 32px !important;
-  height: 32px !important;
-  font-style: normal;
-  display: inline-block !important;
+  @include icon;
 
   &.icon-magnifier {
-    background-position: 0px 0px;
+    @include icon-position(0, 0);
   }
 
   &.icon-clock {
-    background-position: -32px 0px;
+    @include icon-position(1, 0);
   }
 
   &.icon-calendar {
-    background-position: -64px 0px;
+    @include icon-position(2, 0);
   }
 
   &.icon-menu-kebab {
-    background-position: -96px 0px;
+    @include icon-position(3, 0);
   }
 
   &.icon-menu-meatballs {
-    background-position: -128px 0px;
+    @include icon-position(4, 0);
   }
 
   &.icon-menu-bento {
-    background-position: -162px 0px;
-  }
-
-  &.icon-heart-grey {
-    background-position: 0px -32px;
-  }
-
-  &.icon-heart-red {
-    background-position: -32px -32px;
-  }
-
-  &.icon-comment-bubbles-grey {
-    background-position: -64px -32px;
-  }
-
-  &.icon-comment-bubbles {
-    background-position: -96px -32px;
+    @include icon-position(5, 0);
   }
 
   &.icon-loading-circle {
-    background-position: -192px 0px;
+    @include icon-position(6, 0);
   }
 
   &.icon-x-red {
-    background-position: -224px 0px;
+    @include icon-position(7, 0);
   }
 
   &.icon-clipboard {
-    background-position: -256px 0px;
+    @include icon-position(8, 0);
+  }
+
+  &.icon-heart-grey {
+    @include icon-position(0, 1);
+  }
+
+  &.icon-heart-red {
+    @include icon-position(1, 1);
+  }
+
+  &.icon-comment-bubbles-grey {
+    @include icon-position(2, 1);
+  }
+
+  &.icon-comment-bubbles {
+    @include icon-position(3, 1);
+  }
+
+  &.icon-user-follow {
+    @include icon-position(4, 1);
+    @include icon-mixin(5, 1);
+  }
+
+  &.icon-user-unfollow {
+    @include icon-position(4, 1);
+    @include icon-mixin(6, 1);
+  }
+
+  &.icon-user-loading {
+    @include icon-position(4, 1);
+    @include icon-mixin(7, 1);
   }
 }
