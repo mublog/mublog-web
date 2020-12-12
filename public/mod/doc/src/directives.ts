@@ -4,74 +4,56 @@ import { prepareForList, lifeCycle } from "./helper"
 import { useStyles } from "./styles"
 import { T_BOOLEAN } from "./types"
 
-export function directive(name: string, fn: (el: HTMLElement, property: any) => any) {
-  Directives[name] = fn
-}
+export const directive = (name: string, fn: DirectiveFn) => Directives[name] = fn
 
-function mountDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
-  return lifeCycle(el, Mount, prop)
+const mountDirective: DirectiveFn = (e, p) => lifeCycle(e, Mount, p)
+const destroyDirective: DirectiveFn = (e, p) => lifeCycle(e, Destroy, p)
+const intervalDirective: DirectiveFn = (e, p: [Subscription<HTMLElement>, number]) => {
+  let id = setInterval(() => p[0](e), p[1])
+  return lifeCycle(e, Destroy, (): void => clearInterval(id))
 }
-
-function destroyDirective(el: HTMLElement, prop: Subscription<HTMLElement>) {
-  return lifeCycle(el, Destroy, prop)
+const referenceDirective: DirectiveFn = (e: HTMLElement, p: Reference<any>) => {
+  if (p.isRef) p.current = e
 }
-
-function intervalDirective(el: HTMLElement, prop: [Subscription<HTMLElement>, number]) {
-  let id = setInterval(() => prop[0](el), prop[1])
-  return lifeCycle(el, Destroy, (): void => clearInterval(id))
+const portalDirective: DirectiveFn = (e: HTMLElement, p: Portal<any>) => {
+  if (p.isPortal) p.set(e)
 }
-
-function referenceDirective(el: HTMLElement, prop: Reference<any>) {
-  if (prop.isRef) prop.current = el
-}
-
-function portalDirective(el: HTMLElement, prop: Portal<any>) {
-  if (prop.isPortal) prop.set(el)
-}
-
-function ifDirective(el: HTMLElement, prop: any) {
-  if (typeof prop === T_BOOLEAN) {
-    if (prop === false) el.setAttribute("hidden", "")
+const ifDirective: DirectiveFn = (e, p) => {
+  if (typeof p === T_BOOLEAN) {
+    if (p === false) e.setAttribute("hidden", "")
   }
-  else if (prop.subscribe) {
-    let state: Subscribable<boolean> = prop
-    lifeCycle(el, Destroy, state.subscribe(val => {
-      if (val === true) {
-        el.removeAttribute("hidden")
-      }
-      else if (val === false) {
-        el.setAttribute("hidden", "")
-      }
+  else if (p.subscribe) {
+    let state: Subscribable<boolean> = p
+    lifeCycle(e, Destroy, state.subscribe(val => {
+      val === true ? e.removeAttribute("hidden") : e.setAttribute("hidden", "")
     }))
   }
 }
-
-function stylesDirective(el: HTMLElement, prop: any) {
-  if (prop.subscribe) {
-    let state: Subscribable<Partial<CSSStyleDeclaration>> = prop
-    lifeCycle(el, Destroy, state.subscribe(rules => useStyles(el, rules)))
+const stylesDirective: DirectiveFn = (e, p) => {
+  if (p.subscribe) {
+    let state: Subscribable<Partial<CSSStyleDeclaration>> = p
+    lifeCycle(e, Destroy, state.subscribe(rules => useStyles(e, rules)))
   }
   else {
-    useStyles(el, prop)
+    useStyles(e, p)
   }
 }
-
-function forDirective(el: HTMLElement, prop: DocDirectives["for"]) {
-  let sort: (a: any, b: any) => number = prop.sort
-  let filter: (value: any, index: number) => unknown = prop.filter
-  let limit: number = prop.limit
-  let offset: number = prop.offset
-  let com: HTMLComponent<any> = prop.do
-  if (prop.of) {
-    if (Array.isArray(prop.of)) {
-      let copy = prepareForList(prop.of, { sort, filter, limit, offset })
-      render(el, ...copy.map(com))
+const forDirective: DirectiveFn = (e, p: DocDirectives["for"]) => {
+  let sort: (a: any, b: any) => number = p.sort
+  let filter: (value: any, index: number) => unknown = p.filter
+  let limit: number = p.limit
+  let offset: number = p.offset
+  let com: HTMLComponent<any> = p.do
+  if (p.of) {
+    if (Array.isArray(p.of)) {
+      let copy = prepareForList(p.of, { sort, filter, limit, offset })
+      render(e, ...copy.map(com))
     }
-    else if (prop.of && prop.of.subscribe) {
-      let list: Subscribable<any[]> = prop.of
-      destroyDirective(el, list.subscribe(val => {
+    else if (p.of && p.of.subscribe) {
+      let list: Subscribable<any[]> = p.of
+      destroyDirective(e, list.subscribe(val => {
         let copy = prepareForList(val, { sort, filter, limit, offset })
-        render(el, ...copy.map(com))
+        render(e, ...copy.map(com))
       }))
     }
   }

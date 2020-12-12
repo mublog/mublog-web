@@ -3,7 +3,7 @@ import { eachFn, sub } from "./helper"
 export function observable<Type>(initialValue: Type): Observable<Type> {
   let current: Type = initialValue
   const subscribers: Subscription<Type>[] = []
-  const pub = { isState: true, set, subscribe, update, value }
+  const pub = { isObservable: true, set, subscribe, update, value }
   function set(newValue: Type) {
     current = newValue
     eachFn(subscribers, current)

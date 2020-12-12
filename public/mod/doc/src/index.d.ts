@@ -19,7 +19,7 @@ declare interface DocDirectives {
   styles: Partial<CSSStyleDeclaration> | Observable<Partial<CSSStyleDeclaration>>
   mount: Subscription<HTMLElement>
   destroy: Subscription<HTMLElement>
-  interval: [fn: Subscription<HTMLElement>, interval: number]
+  interval: [fn: (el: HTMLElement) => any, interval: number]
 }
 declare namespace JSX {
   type IntrinsicElements =
@@ -28,12 +28,13 @@ declare namespace JSX {
 declare type Update<Type> = (value: Type) => any
 declare type Subscription<Type> = (value: Type) => any
 declare interface Observable<Type> {
-  isState: boolean
+  isObservable: boolean
   value(): Type
   set(value: Type): Observable<Type>
   update(fn: Update<Type>): Observable<Type>
   subscribe(fn: Subscription<Type>): () => void
 }
+declare type DirectiveFn = (el: HTMLElement, property: any) => any
 declare type EventMap = GlobalEventHandlersEventMap & WindowEventMap
 declare type EventNames = keyof EventMap
 declare type AttributeChangedCallback = (name: string, oldValue: string) => any

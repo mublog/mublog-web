@@ -1,4 +1,5 @@
-import { setProperties, appendChildren } from "./doc"
+import { setProperties } from "./properties"
+import { appendChildren } from "./children"
 import { Hooks, Mount, Destroy, Events } from "./globals"
 import { blank } from "./helper"
 import { T_FUNCTION } from "./types"
@@ -9,17 +10,9 @@ export function element<Tag extends HTMLTag>(type: Tag): HTMLElementTagNameMap[T
   return el
 }
 
-export function text(content: string | number) {
-  return document.createTextNode(content + "")
-}
-
-export function fragment() {
-  return document.createDocumentFragment()
-}
-
-export function comment(text: string) {
-  return document.createComment(text)
-}
+export const text = (data: string | number) => document.createTextNode(data + "")
+export const fragment = () => document.createDocumentFragment()
+export const comment = (data: string) => document.createComment(data)
 
 function prepareHooks(el: HTMLElement) {
   el[Hooks] = blank()
