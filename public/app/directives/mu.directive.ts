@@ -2,6 +2,7 @@ import Doc, { onEvent, directive } from "../../mod/doc/mod"
 import UserCardPortal from "../components/user-card.component"
 import copyToClipboard from "../helpers/copy-to-clipboard"
 import i18n from "../../lang/de_DE.json"
+import * as service from "../services/generic.service"
 
 directive("user-card", (el, prop: string) => onEvent(el, "mouseenter", event => {
   UserCardPortal.open({ alias: prop, top: event.clientY, left: event.clientX })
@@ -27,3 +28,5 @@ directive("tooltip", (el, prop) => {
   el.classList.add("tooltip")
   el.appendChild(Doc.createElement("span", { className: "tooltip-text" }, prop))
 })
+
+directive("routerLink", (el, prop) => onEvent(el, "click", () => service.activateRoute(prop)))

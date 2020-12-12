@@ -1,93 +1,71 @@
-import Doc, { reference, observable } from "../../mod/doc/mod"
+import Doc, { reference, observable, directive } from "../../mod/doc/mod"
 import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
 import onScreen from "../helpers/onscreen"
 import { Uploads } from "../services/generic.service"
 import i18n from "../../lang/de_DE.json"
 
+directive("isBox", el => el.classList.add("box"))
 export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPositions }, ...children: Child[]) {
   if (!props) {
     props = {}
   }
-  let className = "box"
-  if (props.className) {
-    className += " " + props.className
-    delete props.className
-  }
   return (
-    <div className={className} {...props}>
+    <div {...props} isBox>
       <div className={"arrow arrow-" + props.arrow} if={!!props.arrow} />
-      <div className="box-content">{...children}</div>
+      <div className="box-content">{children}</div>
     </div>
   ) as HTMLDivElement
 }
 
 declare type ArrowPositions = "top-left" | "top-right" | "bottom-left" | "bottom-right"
 
+directive("isLabel", el => el.classList.add("label"))
 export function Label(
   props: HTMLProperties<HTMLDivElement> & { labelText: string },
   ...children: Child[]
 ) {
-  let className = "label"
-  if (props.className) {
-    className += " " + props.className
-    delete props.className
-  }
-  let labelText = props.labelText
-  delete props.labelText
   return (
-    <div {...props} className={className}>
-      <label className="label-content">{labelText}</label>
-      {...children}
+    <div {...props} isLabel>
+      <label className="label-content">{props.labelText}</label>
+      {children}
     </div>
   ) as HTMLDivElement
 }
 
+directive("isButton", el => el.classList.add("button"))
 export function Button(props: HTMLProperties<HTMLButtonElement>, ...children: Child[]) {
   if (!props) props = {}
-  let className = "button"
-  if (props.className) {
-    className += " " + props.className
-    delete props.className
-  }
   return (
-    <button {...props} className={className}>
+    <button {...props} isButton>
       <div className="button-content">
-        {...children}
+        {children}
       </div>
     </button>
   ) as HTMLButtonElement
 }
 
+directive("isHeader", el => el.classList.add("header"))
 export function Header(props: HTMLProperties<HTMLDivElement>, ...children: Child[]) {
   if (!props) props = {}
-  let className = "header"
-  if (props.className) {
-    className += " " + props.className
-    delete props.className
-  }
   return (
-    <header {...props} className={className}>
+    <header {...props} isHeader>
       <div className="title header-content">
-        {...children}
+        {children}
       </div>
       <Seperator />
     </header>
   ) as HTMLDivElement
 }
 
+directive("isFooter", el => el.classList.add("footer"))
 export function Footer(props: HTMLProperties<HTMLDivElement>, ...children: Child[]) {
   if (!props) props = {}
-  let className = "footer-content"
-  if (props.className) {
-    className += " " + props.className
-    delete props.className
-  }
   return (
-    <footer className="footer" {...props}>
+    <footer {...props} isFooter>
       <Seperator />
-      <div className={className}>
-        {...children}
+      <div className="footer-content">
+        {children}
       </div>
     </footer>
   ) as HTMLDivElement
@@ -110,7 +88,7 @@ export function TextArea(props: HTMLProperties<HTMLTextAreaElement>) {
 }
 
 export function Seperator(): HTMLSpanElement {
-  return <span className="seperator"></span>
+  return <span className="seperator" />
 }
 
 export type IconName =
@@ -118,7 +96,7 @@ export type IconName =
   "heart-grey" | "heart-red" |
   "comment-bubbles-grey" | "comment-bubbles" |
   "magnifier" | "clock" | "calendar" | "x-red" |
-  "clipboard"
+  "clipboard" | "user-follow" | "user-unfollow" | "user-loading"
 
 export interface IconElement extends HTMLElement {
   setIcon(name: IconName): void
@@ -175,7 +153,7 @@ export function Writer({ placeholder, value, ref }: WriterElementConstructor, ..
           <div className="box mark-down" ref={MarkDownContent} />
           <Seperator />
         </div>
-        {...children}
+        {children}
       </Footer>
     </div>
   )
@@ -219,15 +197,14 @@ export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & {
   return View
 }
 
+directive("isUploadItem", el => el.classList.add("upload-item"))
 export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Omit<UploadItem<string>, "key">) {
   return (
-    <div className="upload-item" {...props}>
+    <div {...props} isUploadItem>
       <img src={props.fileData} className="upload-image" />
       <div className="upload-text">{props.fileName}</div>
-      <span copyToClipboard={props.fileData} styles={{ display: "flex", alignItems: "center" }}>
-        <Icon name="clipboard" className="upload-action" />
-      </span>
-      <Icon name="x-red" onclick={removeUpload} className="upload-action" />
+      <Icon className="upload-action" copyToClipboard={props.fileData} name="clipboard" />
+      <Icon tooltip={i18n.removeImage} name="x-red" onclick={removeUpload} className="upload-action" />
     </div>
   ) as HTMLDivElement
 
@@ -237,4 +214,22 @@ export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Omit<U
       if (idx >= 0) files.splice(idx, 1)
     })
   }
+}
+
+directive("isMenu", el => el.classList.add("menu"))
+export function Menu(props: HTMLProperties<HTMLUListElement>, ...children: Child[]) {
+  return (
+    <ul {...props} isMenu isBox>
+      {children}
+    </ul>
+  ) as HTMLUListElement
+}
+
+directive("isMenuItem", el => el.classList.add("menu-item"))
+export function MenuItem(props: HTMLProperties<HTMLLIElement>, ...children: Child[]) {
+  return (
+    <li {...props} isMenuItem>
+      {children}
+    </li>
+  ) as HTMLLIElement
 }

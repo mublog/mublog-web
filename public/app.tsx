@@ -6,7 +6,7 @@ import Navigation from "./app/components/navigation.component"
 import UserCardPortal from "./app/components/user-card.component"
 import Routes from "./routes"
 
-function Application(): HTMLDivElement {
+function Application() {
   return (
     <div id="app">
       <div id="loading-bar" if={service.isLoading} />
@@ -22,7 +22,7 @@ function Application(): HTMLDivElement {
         <div portal={UserCardPortal} />
       </div>
     </div>
-  )
+  ) as HTMLDivElement
 }
 
 document.getElementById("app").replaceWith(<Application />)

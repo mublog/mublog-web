@@ -13,30 +13,30 @@ import RouteNotFoundView from "./app/views/route-not-found.view"
 const Routes: RouteConstructor[] = [
   {
     path: "",
-    title: `\$\{${"page." + i18n.home}\}`,
+    title: i18n.home,
     component: HomeView
   },
   {
     path: "login/?*",
-    title: `\$\{${"page." + i18n.login}\}`,
+    title: i18n.login,
     component: LoginView,
     activates: [UserService.isGuest.value]
   },
   {
     path: "register/?*",
-    title: `\$\{${"page." + i18n.register}\}`,
+    title: i18n.register,
     component: RegisterView,
     activates: [UserService.isGuest.value]
   },
   {
     path: "settings/?*",
-    title: `\$\{${"page." + i18n.settings}\}`,
+    title: i18n.settings,
     component: SettingsView,
     activates: [UserService.isUser.value]
   },
   {
     path: "user/:alias",
-    title: ({ alias }) => `\$\{${"user." + alias}\}`,
+    title: ({ alias }) => alias,
     component: UserView,
     activates: [
       ({ alias }) => UserService.hasUser(alias)
@@ -44,7 +44,7 @@ const Routes: RouteConstructor[] = [
     children: [
       {
         path: "post/:id",
-        title: ({ alias, id }) => `\$\{${"user." + alias + ".post." + id}\}`,
+        title: ({ alias, id }) => alias + "/post/" + id,
         component: UserPostView,
         activates: [
           ({ alias, id }) => PostService.hasPost(parseInt(id))
@@ -54,7 +54,7 @@ const Routes: RouteConstructor[] = [
   },
   {
     path: "**",
-    title: `\$\{${"page." + i18n.error}\}`,
+    title: i18n.error,
     component: RouteNotFoundView
   }
 ]
