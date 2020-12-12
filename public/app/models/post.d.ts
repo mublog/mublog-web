@@ -8,3 +8,11 @@ declare interface PostModel {
   liked: boolean,
   showComments?: boolean
 }
+
+declare interface CommentModel {
+  id: number
+  textContent: string
+  user: User
+  datePosted: number
+  dateEdited: number
+}
