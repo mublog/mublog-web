@@ -7,29 +7,17 @@ declare interface NotificationOption {
   removeOnClick?: boolean
 }
 
-export default NotificationService()
+const BottomRight = reference<HTMLElement>()
 
-function NotificationService() {
-  const pub = { push }
-  const bottomRight = reference<HTMLElement>()
-
-  function push(title: string, message: string, options: NotificationOption = {
-    removeOnClick: false,
-    timeout: 5000
-  }) {
-    const wrapper = bottomRight.current
-    if (wrapper) {
-      wrapper.appendChild(<Notification title={title} message={message} options={options} />)
-      wrapper.scrollBy(0, wrapper.scrollHeight)
-    }
+export function push(title: string, message: string, options: NotificationOption = {
+  removeOnClick: false,
+  timeout: 5000
+}) {
+  const wrapper = BottomRight.current
+  if (wrapper) {
+    wrapper.appendChild(<Notification title={title} message={message} options={options} />)
+    wrapper.scrollBy(0, wrapper.scrollHeight)
   }
-
-  document.body.appendChild((
-    <div id="notifications">
-      <div ref={bottomRight} className="notification-wrapper" />
-    </div>
-  ))
-  return pub
 }
 
 function Notification({ title, message, options }: { title: string; message: string; options: NotificationOption }) {
@@ -48,3 +36,9 @@ function Notification({ title, message, options }: { title: string; message: str
   if (options.removeOnClick) onEvent(View, "click", () => View.remove())
   return View
 }
+
+document.body.appendChild((
+  <div id="notifications">
+    <div ref={BottomRight} className="notification-wrapper" />
+  </div>
+))

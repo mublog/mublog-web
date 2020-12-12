@@ -1,5 +1,7 @@
 import { observable } from "../../mod/doc/mod"
+import * as NotificationService from "./notification.service"
 import * as http from "./http.service"
+import i18n from "../../lang/de_DE.json"
 
 const API_URL = "http://localhost:5000/api/v1/posts"
 const API_POSTS_ID = API_URL + "/"
@@ -10,8 +12,15 @@ export const Posts = observable<PostModel[]>([])
 export const localById = (postId: number) => Posts.value().find(post => post.id === postId)
 export const hasPost = async (postId: number) => !!(await getPost(postId))
 
-export async function load(page: number = 1, size: number = 1000) {
-  let [postRes, res] = await http.get<ResponseWrapper<PostModel[]>>(API_URL + `?page=${page}&size=${size}`)
+export async function load(username: string = null, page: number = 1, size: number = 50) {
+  let url: string[] = []
+  if (username) url.push(`Username=${username}`)
+  if (page) url.push(`Page=${page}`)
+  if (size) url.push(`Size=${size}`)
+  let query = url.join("&")
+  if (query.length > 0) query = "?" + query
+
+  let [postRes, res] = await http.get<ResponseWrapper<PostModel[]>>(API_URL + query)
   if (res.status !== 200) return
   Posts.set(postRes.data)
 }
@@ -30,6 +39,17 @@ export async function add(content: string) {
   const body = JSON.stringify({ content })
   let [_, res] = await http.post<ResponseWrapper<null>>(API_URL, body)
   return res.status === 200
+}
+
+export async function del(postId: number) {
+  let [_, res] = await http.del<ResponseWrapper<null>>(API_POSTS_ID + postId)
+  if (res?.status === 204) {
+    NotificationService.push(null, i18n.deletePostSuccess)
+  }
+  else {
+    NotificationService.push(null, i18n.deletePostFailed)
+  }
+  return res?.status === 204
 }
 
 export async function like(postId: number) {

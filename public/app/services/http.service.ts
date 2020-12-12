@@ -26,7 +26,7 @@ function createHttp(method: string, body: string, options: HttpOptions): [HttpOp
   return [options, init]
 }
 
-export async function f<T>(url: string, method: string, body: any, options?: HttpOptions): HttpResponse<T> {
+async function f<T>(url: string, method: string, body: any, options?: HttpOptions): HttpResponse<T> {
   try {
     let [opt, init] = createHttp(method, body, options)
     let response = await fetch(url, init)
