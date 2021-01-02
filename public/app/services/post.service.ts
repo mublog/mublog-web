@@ -19,15 +19,14 @@ export async function load(username: string = null, page: number = 1, size: numb
   if (size) url.push(`Size=${size}`)
   let query = url.join("&")
   if (query.length > 0) query = "?" + query
-
   let [postRes, res] = await http.get<ResponseWrapper<PostModel[]>>(API_URL + query)
-  if (res.status !== 200) return
-  Posts.set(postRes.data)
+  if (![200, 204].includes(res?.status)) return
+  if (postRes?.data) Posts.set(postRes.data)
 }
 
 export async function getPost(postId: number) {
   let [wrapper, res] = await http.get<ResponseWrapper<PostModel>>(API_POSTS_ID + postId)
-  if (res.status === 200) {
+  if ([200, 204].includes(res?.status)) {
     if (!localById(wrapper.data.id)) {
       Posts.value().push(wrapper.data)
     }

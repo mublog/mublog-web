@@ -13,6 +13,7 @@ export function appendChildren(el: DocumentFragment | HTMLElement, children: any
   const len = children.length
   if (len > 0) {
     for (let i = 0; i < len; i++) {
+      if (!children[i]) continue
       if (Array.isArray(children[i])) {
         appendChildren(frag, children[i], $el)
       }

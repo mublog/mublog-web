@@ -8,9 +8,6 @@ import * as UserService from "../services/user.service"
 import Post from "../components/post.component"
 import * as NotificationService from "../services/notification.service"
 import { createKey } from "../../mod/doc/src/helper"
-import { base64ToBlob } from "../helpers/base64-to-blob"
-
-import * as http from "../services/http.service"
 
 export default async function HomeView() {
   await PostService.load()
