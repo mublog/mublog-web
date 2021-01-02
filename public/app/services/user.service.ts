@@ -11,6 +11,7 @@ const API_URL = `http://localhost:5000/api/v${API_VERSION}`
 const API_ACCOUNT = "accounts"
 const API_USER = API_URL + "/users/"
 const API_FOLLOW = API_USER + "follow/"
+const API_ACCOUNTS = API_URL + `/${API_ACCOUNT}`
 const API_LOGIN = API_URL + `/${API_ACCOUNT}/login`
 const API_REGISTER = API_URL + `/${API_ACCOUNT}/register`
 const API_TOKEN = API_URL + `/${API_ACCOUNT}/token`
@@ -50,12 +51,12 @@ export async function login({ alias, password }) {
 
 export async function follow(username: string) {
   let [_, res] = await http.post<ResponseWrapper<null>>(API_FOLLOW + username)
-  return res.status === 2000
+  return res?.status === 2000
 }
 
 export async function unfollow(username: string) {
   let [_, res] = await http.del<ResponseWrapper<null>>(API_FOLLOW + username)
-  return res.status === 2000
+  return res?.status === 2000
 }
 
 export async function followers(username: string) {
@@ -69,24 +70,42 @@ export async function following(username: string) {
 export async function patchDisplayName(displayName: string) {
   let body = JSON.stringify({ displayName })
   let [_, res] = await http.patch<ResponseWrapper<null>>(API_DISPLAY_NAME, body)
-  return res.status === 200
+  if (res?.status === 200) {
+    NotificationService.push(null, i18n.changeNameSuccess, cfg.notification)
+    _currentUser.alias = displayName
+    _currentUser.displayName = displayName
+    return true
+  }
+  NotificationService.push(null, i18n.changeNameFailed, cfg.notification)
+  return false
 }
 
 export async function patchEmail(email: string) {
   let body = JSON.stringify({ email })
   let [_, res] = await http.patch<ResponseWrapper<null>>(API_EMAIL, body)
-  return res.status === 200
+  return res?.status === 200
 }
 
 export async function patchPassword(currentPassword: string, newPassword: string) {
-  let body = JSON.stringify({ currentPassword, newPassword })
+  let body = JSON.stringify({ currentPassword1: currentPassword, newPassword })
   let [_, res] = await http.patch<ResponseWrapper<null>>(API_PASSWORD, body)
-  return res.status === 200
+  if (res?.status === 200) {
+    NotificationService.push(null, i18n.passwordChangedSuccess, cfg.notification)
+    return true
+  }
+  NotificationService.push(null, i18n.passwordChangedFailed, cfg.notification)
+  return false
 }
 
 export async function deleteAccount() {
-  let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_PASSWORD, "{}")
-  return res.status === 200
+  let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_ACCOUNTS, "{}")
+  if (res?.status === 200) {
+    isUser.set(false)
+    localStorage.removeItem("token")
+    service.activateRoute("/register")
+    return true
+  }
+  return false
 }
 
 export async function refreshToken() {
@@ -95,10 +114,10 @@ export async function refreshToken() {
     const diff = ((token.exp) - Math.round(Date.now() / 1000)) / 3600
     if (diff <= 24) {
       let [wrapper, res] = await http.get<ResponseWrapper<{ accessToken: string }>>(API_TOKEN)
-      if (wrapper.data?.accessToken) {
-        setToken(wrapper.data?.accessToken)
+      if (wrapper?.data?.accessToken) {
+        setToken(wrapper.data.accessToken)
       }
-      isUser.set(res.status === 200)
+      isUser.set(res?.status === 200)
     }
     else {
       isUser.set(true)
@@ -112,7 +131,7 @@ export async function refreshToken() {
 export async function register({ alias, displayName, email, password }) {
   let body = JSON.stringify({ email, username: alias, password, displayName })
   let [_, res] = await http.post<ResponseWrapper<null>>(API_REGISTER, body)
-  if (res.status === 200) {
+  if (res?.status === 200) {
     NotificationService.push(null, i18n.registerSuccess, cfg.notification)
     service.activateRoute("/login")
   }
@@ -136,7 +155,7 @@ function setToken(accessToken: string) {
 
 export async function getUser(username: string) {
   let [wrapper, res] = await http.get<ResponseWrapper<User>>(API_USER + username)
-  if (res.status !== 200) return
+  if (res?.status !== 200) return
   return wrapper.data
 }
 
