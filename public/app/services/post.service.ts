@@ -38,13 +38,17 @@ export async function getPost(postId: number) {
 export async function add(content: string) {
   const body = JSON.stringify({ content })
   let [_, res] = await http.post<ResponseWrapper<null>>(API_URL, body)
-  return res.status === 200
+  return res?.status === 200
 }
 
 export async function del(postId: number) {
   let [_, res] = await http.del<ResponseWrapper<null>>(API_POSTS_ID + postId)
-  if (res?.status === 204) {
+  if ([200, 204].includes(res?.status)) {
     NotificationService.push(null, i18n.deletePostSuccess)
+    Posts.update(list => {
+      const idx = list.findIndex(post => post.id === postId)
+      if (idx >= 0) list.splice(idx, 1)
+    })
   }
   else {
     NotificationService.push(null, i18n.deletePostFailed)
