@@ -6,7 +6,7 @@ const filesToCache = [
   "/manifest.json",
   "/serviceworker.js",
   "/styles/main.css",
-  "/styles/battlenet.woff2",
+  "/styles/iljushka.woff",
   "/assets/assets-2x.png",
   "/assets/icon-180.png",
   "/assets/icon-196.png",
