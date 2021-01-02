@@ -7,9 +7,7 @@ import i18n from "../../lang/de_DE.json"
 
 directive("isBox", el => el.classList.add("box"))
 export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPositions }, ...children: Child[]) {
-  if (!props) {
-    props = {}
-  }
+  if (!props) props = {}
   return (
     <div {...props} isBox>
       <div className={"arrow arrow-" + props.arrow} if={!!props.arrow} />
