@@ -103,9 +103,7 @@ export interface IconElement extends HTMLElement {
 export function Icon({ name, ...props }: HTMLProperties<HTMLElement> & { name: IconName }) {
   let className = "icon icon-"
   let iconName: string = "icon-" + name
-  if (name) {
-    className += name
-  }
+  if (name) className += name
   if (props.className) {
     className += " " + props.className
     delete props.className
