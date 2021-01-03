@@ -12,6 +12,8 @@
     "register": "Registrieren",
     "logout": "Ausloggen",
     "error": "Fehler",
+    "following": "Folgt",
+    "followers": "Follower",
     "navigation": "Navigation",
     "visitUser": "Besuche $u's Seite",
     "send": "Senden",
