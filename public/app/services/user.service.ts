@@ -60,11 +60,13 @@ export async function unfollow(username: string) {
 }
 
 export async function followers(username: string) {
-  return 0
+  let [wrapper] = await http.get<ResponseWrapper<User[]>>(API_USER + `${username}/followers`)
+  return wrapper?.data && wrapper.data.length ? wrapper.data : []
 }
 
 export async function following(username: string) {
-  return 0
+  let [wrapper] = await http.get<ResponseWrapper<User[]>>(API_USER + `${username}/following`)
+  return wrapper?.data && wrapper.data.length ? wrapper.data : []
 }
 
 export async function patchDisplayName(displayName: string) {
