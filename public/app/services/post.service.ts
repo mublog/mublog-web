@@ -3,7 +3,9 @@ import * as NotificationService from "./notification.service"
 import * as http from "./http.service"
 import i18n from "../../lang/de_DE.json"
 
-const API_URL = "http://localhost:5000/api/v1/posts"
+const URL = "http://localhost:5000"
+const API_VERSION = 1
+const API_URL = `${URL}/api/v${API_VERSION}/posts`
 const API_POSTS_ID = API_URL + "/"
 const API_POSTS_LIKE = API_URL + "/like/"
 
@@ -11,6 +13,8 @@ export const Posts = observable<PostModel[]>([])
 
 export const localById = (postId: number) => Posts.value().find(post => post.id === postId)
 export const hasPost = async (postId: number) => !!(await getPost(postId))
+
+export const sort = (a: PostModel, b: PostModel) => b.datePosted - a.datePosted
 
 export async function load(username: string = null, page: number = 1, size: number = 50) {
   let url: string[] = []
@@ -69,4 +73,12 @@ export async function like(postId: number) {
 export function patchOne(id: number, newData: PostModel) {
   let post = localById(id)
   if (post) for (let key in newData) post[key] = newData[key]
+}
+
+export async function loadComments(id: number): Promise<CommentModel[]> {
+  let [wrapper] = await http.get<ResponseWrapper<CommentModel[]>>(API_URL + "/" + id + "/comments")
+  if (wrapper?.data?.length) {
+    return wrapper.data
+  }
+  return []
 }

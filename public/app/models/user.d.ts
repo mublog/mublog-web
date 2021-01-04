@@ -1,4 +1,4 @@
-declare interface User {
+interface User {
   alias?: string
   username?: string
   displayName: string

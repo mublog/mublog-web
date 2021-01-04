@@ -1,10 +1,10 @@
-declare interface HttpOptions {
+interface HttpOptions {
   contentType?: "json" | "text" | "blob"
   body?: any
   init?: RequestInit
 }
 
-declare interface ResponseWrapper<Type> {
+interface ResponseWrapper<Type> {
   data: Type
   messages: string[]
   isError: boolean

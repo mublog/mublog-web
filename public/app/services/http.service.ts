@@ -22,7 +22,15 @@ const httpHeaders = (): RequestInit["headers"] => {
 function createHttp(method: string, body: string, options: HttpOptions): [HttpOptions, RequestInit] {
   if (!options) options = {}
   if (!options.responseType) options.responseType = "json"
-  let init: RequestInit = { headers: httpHeaders(), method, body }
+  let _headers = options.init?.headers || {}
+  let headers = { ...httpHeaders(), ..._headers }
+  for (let key in _headers) {
+    if (!_headers[key]) {
+      delete headers[key]
+    }
+  }
+
+  let init: RequestInit = { headers, method, body }
   return [options, init]
 }
 

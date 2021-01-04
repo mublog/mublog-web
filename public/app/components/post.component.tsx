@@ -25,11 +25,10 @@ export default function Post(props: PostModel) {
           <µ.Header>
             <div>
               {props.user.displayName}
-              <span className="user-alias">
-                @{props.user.alias}
-              </span>
+              <span className="user-alias">@{props.user.alias}</span>
             </div>
             <µ.Time datetime={props.datePosted * 1000} className="datetime" />
+            <span if={props.datePosted !== props.dateEdited} tooltip={i18n.edited}>*</span>
             <µ.Icon name="calendar" />
           </µ.Header>
           <div className="user-content">
@@ -38,7 +37,7 @@ export default function Post(props: PostModel) {
           <µ.Footer>
             <div styles={{ display: "flex", gap: "8px", alignItems: "center" }}>
               <HeartContainer likeAmount={props.likeAmount} postId={props.id} />
-              <CommentContainer userAlias={props.user.alias} postId={props.id} />
+              <CommentContainer userAlias={props.user.alias} postId={props.id} commentsAmount={props.commentsAmount} />
               <div className="post-menu" tooltip={i18n.showPostMenu}>
                 <µ.Icon if={UserService.isUser} name="menu-meatballs" onclick={MenuPortal.open} />
               </div>
@@ -48,39 +47,7 @@ export default function Post(props: PostModel) {
               </span>
             </div>
           </µ.Footer>
-          <div if={!!props.showComments}>
-            <µ.Seperator />
-            <div className="comments">
-              <Comment
-                id={1}
-                user={{ alias: "anton" } as User}
-                datePosted={Date.now()}
-                dateEdited={Date.now()}
-                textContent="tschööööh"
-              />
-              <Comment
-                id={2}
-                user={{ alias: "iljushka" } as User}
-                datePosted={Date.now()}
-                dateEdited={Date.now()}
-                textContent="hi :3"
-              />
-              <Comment
-                id={3}
-                user={{ alias: "anton" } as User}
-                datePosted={Date.now()}
-                dateEdited={Date.now()}
-                textContent={"Lorem ipsun\nthe fuck wtf xD\nlol was"}
-              />
-              <Comment
-                id={4}
-                user={{ alias: "anton" } as User}
-                datePosted={Date.now()}
-                dateEdited={Date.now()}
-                textContent={"löl"}
-              />
-            </div>
-          </div>
+          {!props.showComments ? undefined : <Comments postId={props.id} />}
         </µ.Box>
       </div>
     </div>
@@ -88,10 +55,20 @@ export default function Post(props: PostModel) {
 
   function PostMenu() {
     const Owner = UserService.currentUser()?.username === props.user.alias
+
+    /**
+     * editbutton:
+     * <µ.MenuItem if={Owner}>
+     *   {i18n.editPost}
+     * </µ.MenuItem>
+     */
+
     return (
       <µ.Menu onmouseleave={MenuPortal.close}>
-        <µ.MenuItem if={Owner}>
-          {i18n.editPost}
+        <µ.MenuItem>
+          <a href={`/user/${props.user.alias}/post/${props.id}`}>
+            {i18n.comments}
+          </a>
         </µ.MenuItem>
         <µ.MenuItem if={Owner} onclick={DeletePostPortal.open}>
           {i18n.deletePost}
@@ -128,12 +105,35 @@ export default function Post(props: PostModel) {
   }
 }
 
+function Comments({ postId }: { postId: number }) {
+  const TextAreaRef = reference<HTMLTextAreaElement>()
+  const comments = observable([] as CommentModel[])
+  PostService.loadComments(postId).then($ => comments.set($))
+
+  return (
+    <div>
+      <µ.Seperator />
+      <form onsubmit={tryComment}>
+        <µ.TextArea ref={TextAreaRef} />
+        <µ.Button type="submit">{i18n.send}</µ.Button>
+      </form>
+      <µ.Seperator />
+      <div className="comments" for={{ of: comments, do: Comment, sort: PostService.sort }} />
+    </div>
+  ) as HTMLDivElement
+
+  function tryComment(event: Event) {
+    event.preventDefault()
+    const value = TextAreaRef.current.value
+  }
+}
+
 function Comment(props: CommentModel) {
   const Owner = UserService.currentUser()?.username === props.user.alias
   return (
     <div className="comment">
       <div className="comment-flex" styles={{ flexDirection: Owner ? "row-reverse" : "row" }}>
-        <div className="user-image" user-card={props.user.alias} />
+        <div className="user-image" user-card={props.user.alias} styles={{ backgroundColor: randomColor() + " !important" }} />
         <µ.Box arrow={Owner ? "top-right" : "top-left"}>
           <div className="comment-author">
             {props.user.alias}
@@ -197,13 +197,27 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
   }
 }
 
-function CommentContainer({ userAlias, postId }: { userAlias: string, postId: number }) {
+function CommentContainer({ userAlias, postId, commentsAmount }: { userAlias: string, postId: number, commentsAmount: number }) {
+  const comments = observable(commentsAmount)
+
   return (
-    <a href={`/user/${userAlias}/post/${postId}`} className="comment-action" tooltip={i18n.showComments}>
+    <a
+      href={`/user/${userAlias}/post/${postId}`}
+      className="comment-action"
+      tooltip={i18n.showComments}
+      interval={[refreshFn, 250]}
+    >
       <div styles={{ display: "flex", gap: "8px", alignItems: "center" }}>
         <µ.Icon name="comment-bubbles-grey" className="post-comment" />
-        <span>0</span>
+        <span>{comments}</span>
       </div>
     </a>
   ) as HTMLAnchorElement
+
+  function refreshFn(el: HTMLElement) {
+    if (!onScreen(el) && UserService.isUser.value()) return
+    let post = PostService.localById(postId)
+    if (!post) return
+    comments.set(post.commentsAmount)
+  }
 }

@@ -10,7 +10,7 @@ export function Box(props: HTMLProperties<HTMLDivElement> & { arrow?: ArrowPosit
   if (!props) props = {}
   return (
     <div {...props} isBox>
-      <div className={"arrow arrow-" + props.arrow} if={!!props.arrow} />
+      {!props.arrow ? undefined : <div className={"arrow arrow-" + props.arrow} />}
       <div className="box-content">{children}</div>
     </div>
   ) as HTMLDivElement
@@ -194,12 +194,11 @@ export function Time({ datetime, ...props }: HTMLProperties<HTMLTimeElement> & {
 }
 
 directive("isUploadItem", el => el.classList.add("upload-item"))
-export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Omit<UploadItem<string>, "key">) {
+export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Partial<UploadItem>) {
   return (
     <div {...props} isUploadItem>
-      <img src={props.fileData} className="upload-image" />
+      <img src={props.preview} className="upload-image" />
       <div className="upload-text">{props.fileName}</div>
-      <Icon className="upload-action" copyToClipboard={props.fileData} name="clipboard" />
       <Icon tooltip={i18n.removeImage} name="x-red" onclick={removeUpload} className="upload-action" />
     </div>
   ) as HTMLDivElement

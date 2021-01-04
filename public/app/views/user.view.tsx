@@ -4,7 +4,5 @@ import Post from "../components/post.component"
 
 export default async function UserView({ alias }: URLParams) {
   await PostService.load(alias)
-  return (
-    <div for={{ of: PostService.Posts, do: Post, sort: (a, b) => b.datePosted - a.datePosted }} />
-  ) as HTMLDivElement
+  return <div for={{ of: PostService.Posts, do: Post, sort: PostService.sort }} /> as HTMLDivElement
 }

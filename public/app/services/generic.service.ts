@@ -8,6 +8,6 @@ export function activateRoute(href: string) {
 }
 
 export const Uploaded = observable(false)
-export const Uploads = observable<UploadItem<string>[]>([])
+export const Uploads = observable<UploadItem[]>([])
 
 Uploads.subscribe(images => Uploaded.set(images.length > 0 ? true : false))

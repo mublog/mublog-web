@@ -1,13 +1,9 @@
-declare interface UploadItem<Type> {
-  guid?: string
-  data?: Blob
-
-
+interface UploadItem {
   key: string
+  preview: string
+  data: any
   fileName: string
-  fileData: Type
 }
-
 
 interface JWToken {
   aud: string
