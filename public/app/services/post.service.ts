@@ -82,3 +82,14 @@ export async function loadComments(id: number): Promise<CommentModel[]> {
   }
   return []
 }
+
+export async function addComment(id: number, content: string) {
+  let body = JSON.stringify({ content })
+  let [wrapper, res] = await http.post<ResponseWrapper<CommentModel[]>>(API_URL + "/" + id + "/comments", body)
+  if (res?.status === 200) {
+    return true
+  }
+  else {
+    return false
+  }
+}
