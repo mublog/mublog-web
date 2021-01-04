@@ -108,23 +108,32 @@ export default function Post(props: PostModel) {
 function Comments({ postId }: { postId: number }) {
   const TextAreaRef = reference<HTMLTextAreaElement>()
   const comments = observable([] as CommentModel[])
-  PostService.loadComments(postId).then($ => comments.set($))
+  loadComments()
 
   return (
-    <div>
+    <div interval={[loadComments, 10000]}>
       <µ.Seperator />
-      <form onsubmit={tryComment}>
+      <form onsubmit={tryComment} styles={{ display: "flex", gap: "8px", flexDirection: "column" }}>
         <µ.TextArea ref={TextAreaRef} />
-        <µ.Button type="submit">{i18n.send}</µ.Button>
+        <µ.Button type="submit" styles={{ width: "max-content" }}>{i18n.send}</µ.Button>
       </form>
       <µ.Seperator />
       <div className="comments" for={{ of: comments, do: Comment, sort: PostService.sort }} />
     </div>
   ) as HTMLDivElement
 
-  function tryComment(event: Event) {
+  async function tryComment(event: Event) {
     event.preventDefault()
     const value = TextAreaRef.current.value
+    let result = await PostService.addComment(postId, value)
+    if (result) {
+      TextAreaRef.current.value = ""
+      loadComments()
+    }
+  }
+
+  function loadComments() {
+    PostService.loadComments(postId).then($ => comments.set($))
   }
 }
 
