@@ -115,7 +115,7 @@ function Comments({ postId }: { postId: number }) {
       <µ.Seperator />
       <form onsubmit={tryComment} styles={{ display: "flex", gap: "8px", flexDirection: "column" }}>
         <µ.TextArea ref={TextAreaRef} />
-        <µ.Button type="submit" styles={{ width: "max-content" }}>{i18n.send}</µ.Button>
+        <µ.Button type="submit" styles={{ width: "max-content" }}>{i18n.actionComment}</µ.Button>
       </form>
       <µ.Seperator />
       <div className="comments" for={{ of: comments, do: Comment, sort: PostService.sort }} />
