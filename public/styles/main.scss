@@ -723,15 +723,6 @@ h6 {
     display: unset;
   }
 
-  .menu {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 85%;
-    z-index: 9999999;
-  }
-
   #app-grid {
     margin: 0 auto;
     width: 85%;
