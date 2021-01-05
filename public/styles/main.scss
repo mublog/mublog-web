@@ -126,7 +126,7 @@ a {
   height: 12px;
   background-image: $loading-bar;
   animation: loading-bar 5s linear infinite;
-  z-index: 999;
+  z-index: 99999999;
 }
 
 @keyframes loading-bar {
@@ -356,13 +356,18 @@ a {
       padding: 8px;
       margin: -8px;
 
+      .top {
+        display: flex;
+      }
+
       .comment-author {
         text-shadow: 0px 2px $grey;
         margin-bottom: 4px;
+        margin-right: 8px;
+      }
 
-        &::after {
-          content: ":";
-        }
+      time::after {
+        content: ":";
       }
 
       .box {
@@ -413,6 +418,7 @@ a {
 
 #content {
   flex: 1;
+  width: 0px;
 }
 
 #side {
@@ -633,7 +639,7 @@ h6 {
 #user-card {
   opacity: 1;
   transition: opacity 250ms ease-out 0s;
-  width: 250px;
+  width: 400px;
   height: 200px;
   pointer-events: auto;
   position: absolute;
@@ -685,4 +691,64 @@ h6 {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.hide-mobile {
+  display: unset;
+}
+
+.hide-desktop {
+  display: none;
+}
+
+@media only screen and (max-width: 800px) {
+  .hide-mobile {
+    display: none;
+  }
+
+  .hide-desktop {
+    display: unset;
+  }
+
+  .menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    z-index: 9999999;
+  }
+
+  #app-grid {
+    margin: 0 auto;
+    width: 85%;
+    flex-direction: column;
+    display: flex;
+  }
+
+  #side {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+  }
+
+  #content {
+    width: 100%;
+  }
+
+  #navigation {
+    height: max-content;
+
+    .list {
+      display: flex;
+      flex-direction: row;
+      gap: 4px;
+
+      a {
+        width: max-content;
+      }
+    }
+  }
 }
