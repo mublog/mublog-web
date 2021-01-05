@@ -67,32 +67,22 @@ function ProgressiveView() {
 }
 
 function DeleteAccountView() {
-  const DeleteAccountPortal = portal(DeleteAccount)
+  const DeleteContinue = observable(false)
+
   return (
     <µ.Box>
       <µ.Header>{i18n.deleteAccount}</µ.Header>
       <µ.Box>{i18n.deleteAccountInfo}</µ.Box>
       <µ.Footer>
-        <µ.Button
-          type="button"
-          onclick={DeleteAccountPortal.open}
-        >
+        <µ.Button type="button" onclick={() => DeleteContinue.set(!DeleteContinue.value())}>
           {i18n.deleteAccount}
+        </µ.Button>
+        <µ.Button type="button" onclick={() => UserService.deleteAccount()} if={DeleteContinue}>
+          {i18n.continue}
         </µ.Button>
       </µ.Footer>
     </µ.Box>
   ) as HTMLDivElement
-
-  function DeleteAccount() {
-    return (
-      <µ.Menu onmouseleave={DeleteAccountPortal.close}>
-        <µ.Header>{i18n.deleteAccountSure}</µ.Header>
-        <µ.MenuItem onclick={UserService.deleteAccount}>
-          {i18n.continue}
-        </µ.MenuItem>
-      </µ.Menu>
-    ) as HTMLUListElement
-  }
 }
 
 function ChangePasswordView() {
