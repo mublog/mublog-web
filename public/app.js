@@ -1,12 +1,2455 @@
-(()=>{var ft=Object.defineProperty,cr=Object.prototype.hasOwnProperty,gt=Object.getOwnPropertySymbols,ur=Object.prototype.propertyIsEnumerable,g=Object.assign,mr=e=>ft(e,"__esModule",{value:!0}),ke=(e,t)=>{var r={};for(var o in e)cr.call(e,o)&&t.indexOf(o)<0&&(r[o]=e[o]);if(e!=null&&gt)for(var o of gt(e))t.indexOf(o)<0&&ur.call(e,o)&&(r[o]=e[o]);return r},vt=(e,t)=>{mr(e);for(var r in t)ft(e,r,{get:t[r],enumerable:!0})};const n={};vt(n,{appendChildren:()=>ne,createElement:()=>Be,h:()=>vr,render:()=>K,setProperties:()=>Te});const ce="string",te="number",re="function",ht="boolean";function I(e,...t){if(!e||e.length===0)return;let r=0;const o=e.length;for(r;r<o;r++)e[r](...t)}function A(){return Object.create(null)}function Re(e,t){return e.push(t),()=>pr(e,t)}function pr(e,t){const r=e.indexOf(t);r!==-1&&e.splice(r,1)}function yt(e){let t;for(let r=0,o=e.length;r<o;r++)t=Math.imul(31,t)+e.charCodeAt(r)|0;return t.toString(36)}function Ae(e,{sort:t,filter:r,limit:o,offset:i}){let s=[...e];return r&&(s=s.filter(r)),t&&(s=s.sort(t)),typeof i===te&&(s=s.slice(0,i)),typeof o===te&&(s.length=o),s}function ye(e){let t=[];for(let r in e)t.push(r);return t}function H(e,t,r){let o=e[E][t]||(e[E][t]=[]);return Re(o,r)}const E=Symbol("Hooks"),we=Symbol("Mount"),L=Symbol("Destroy"),F=Symbol("Events"),be=Symbol("Styles"),xe=A();function Ue(e,t){window[E]||(window[E]=A(),window[E][F]||(window[E][F]=A()));let r=window[E][F][e]||(window[E][F][e]=[]),o=i=>I(r,i);return r.push(t),r.length===1&&wt(window,e,o),()=>{const i=r.indexOf(t);i!==-1&&(r.splice(i,1),r.length===0&&bt(window,e,o))}}function O(e,t,r){let o=e[E][F][t]||(e[E][F][t]=[]),i=s=>I(o,s);o.push(r),o.length===1&&wt(e,t,i),H(e,L,()=>{const s=o.indexOf(r);s!==-1&&(o.splice(s,1),o.length===0&&bt(e,t,i))})}function wt(e,t,r){e.addEventListener(t,r,!1)}function bt(e,t,r){e.removeEventListener(t,r,!1)}function Te(e,t){const r=ye(t);r.forEach(o=>{const i=xe[o];i?i(e,t[o]):dr(e,o,t[o])})}function dr(e,t,r){if(r===void 0)return;if(r.subscribe){let o=r;e[t]=o.value(),H(e,L,o.subscribe(i=>{e[t]!==i&&(e[t]=i)}))}else t.startsWith("on")&&typeof r===re?O(e,t.slice(2),r):e[t]=r}function K(e,...t){e.innerHTML="",ne(e,t,e)}function ne(e,t,r){let o=xt();const i=t.length;if(i>0){for(let s=0;s<i;s++){if(t[s]===void 0)continue;if(t[s]===null)continue;if(Array.isArray(t[s]))ne(o,t[s],r);else if(typeof t[s]===ce||typeof t[s]===te)o.appendChild(Ce(t[s]));else if(t[s]instanceof Element)o.appendChild(t[s]);else if(t[s].subscribe){let c=t[s].value();if(typeof c===ce||typeof c===te){let u=t[s],m=Ce(u.value());o.appendChild(m),H(r,L,u.subscribe(p=>{let R=p+"";m.textContent!==R&&(m.textContent=R)}))}else if(c instanceof Element){let u=t[s];o.appendChild(u.value()),H(r,L,u.subscribe(m=>{u.value().replaceWith(m)}))}}}e.appendChild(o)}}function gr(e){let t=document.createElement(e);return fr(t),t}const Ce=e=>document.createTextNode(e+""),xt=()=>document.createDocumentFragment();function fr(e){e[E]=A(),e[E][we]=[],e[E][L]=[],e[E][F]=A()}function Be(e,t,...r){if(typeof e===re)return e(t,...r);let o=gr(e);return Te(o,t),ne(o,r,o),o}const vr=Be;function d(e){let t=e;const r=[],o={isObservable:!0,set:i,subscribe:u,update:s,value:c};function i(m){return t=m,I(r,t),o}function s(m){return m(t),I(r,t),o}function c(){return t}function u(m){return m(t),Re(r,m)}return o}function v(){let e;const t={isRef:!0,current:e};return t}function ue(e){let t,r;const o=[],i=[],s={isPortal:!0,open:c,close:m,set:u,onOpen:p,onClose:R};async function c(S,...N){r?(m(),c(S,...N)):(r=await e(S,...N),t.appendChild(r),I(o))}function u(S){return t=S,s}function m(){return r&&(r.remove(),r=void 0,I(i)),s}function p(S){return o.push(S),s}function R(S){return i.push(S),s}return s}const hr=/\*/g,yr=/\:([a-zA-Z]+)/gi,wr="(?<$1>[^\\/\\:\\?]+?)",br="^/",xr="/?$",Tr="(\\S+)?",Er=/\S+/i,Sr=/\/\//g,Lr="/",Mr=/(\*\*)+/g,Pr="**";function _e(e){if(e.startsWith("/"))throw new Error("RoutePath cannot start with an '/'");if(e.endsWith("/"))throw new Error("RoutePath cannot end with an '/'");return e==="**"?Er:(e=e.replace(hr,Tr),e=e.replace(yr,wr),e=e.replace(Sr,Lr),e=e.replace(Mr,Pr),new RegExp(br+e+xr))}function Fe(e){let t=[],r=0;for(;e[r];){let{component:o,path:i,title:s,children:c,activates:u}=e[r],m=_e(i);u=[...new Set(u)],t.push({title:s,matcher:m,component:o,activates:u}),c&&e.splice(r+1,0,...c.map(p=>(p.activates&&u?p.activates=[...u,...new Set(p.activates)]:u&&(p.activates=u),p.path=i+"/"+p.path,p))),r++}return t}async function Oe(e,t){if(e)try{for(let r of e)if(await r(t)!==!0)return!1}catch(r){return console.error(r),!1}return!0}function $e(e,t){let r=e.exec(t);return r.groups?g({},r.groups):Object.create(null)}async function We(e,t){let r=0;for(;e[r];){let o=e[r];if(!o.matcher.test(t)){r++;continue}o.params=$e(o.matcher,t);let i=await Oe(o.activates,o.params);if(i)return o;r++;continue}}async function Ve(e,t){let r=await We(e,t);if(!r)return;let{component:o,title:i,params:s}=r,c="";i&&(typeof i===re?c=i(s):typeof i===ce&&(c=i));let u=await o(s);return{title:c,params:s,component:u}}async function je(e,t,r){t.title&&(document.title=t.title),history.replaceState(t.params,document.title,r),K(e,t.component)}function Ge(){return location.pathname+location.search+location.hash}function Tt({target:e,routes:t}){const r=Fe(t),o={load:[],loadEnd:[],loadError:[]},i={onLoad:c,onLoadEnd:u,onLoadError:m};async function s(){let p=Ge();I(o.load);let R=await Ve(r,p);R?je(e,R,p):I(o.loadError),I(o.loadEnd)}function c(p){return o.load.push(p),i}function u(p){return o.loadEnd.push(p),i}function m(p){return o.loadEnd.push(p),i}return s(),Ue("popstate",s),i}Ue("click",e=>{let t=e.target;for(;t;){if(t.href){e.preventDefault(),history.pushState(null,"",t.href),dispatchEvent(new PopStateEvent("popstate"));break}t=t.parentNode}});const Et=document.createElement("style");document.head.appendChild(Et);const St=Et.sheet,me=A();function ze(e,t){e[be]||(e[be]=A());const r=e[be],o=[],i=[],s=ye(t);for(let c=0,u=s.length;c<u;c++){const m=s[c].replace(/([A-Z])/g,"-$1"),p=Hr(`${m}: ${t[s[c]]};`);r[m]?(i.push(r[m]),r[m]=p,o.push(p)):(r[m]=p,o.push(p))}e.classList.remove(...i),e.classList.add(...o)}function Hr(e){let t="r-"+yt(e),r=`.${t} { ${e} }`;return me[t]?me[t]!==r&&(t+="_",me[t]=`.${t} { ${e} }`,Lt(me[t])):(me[t]=r,Lt(r)),t}function Lt(e){St.insertRule(e,St.rules.length)}const w=(e,t)=>xe[e]=t,Nr=(e,t)=>H(e,we,t),Mt=(e,t)=>H(e,L,t),Ir=(e,t)=>{let r=setInterval(()=>t[0](e),t[1]);return H(e,L,()=>clearInterval(r))},kr=(e,t)=>{t.isRef&&(t.current=e)},Rr=(e,t)=>{t.isPortal&&t.set(e)},Ar=(e,t)=>{if(typeof t===ht)t===!1&&e.setAttribute("hidden","");else if(t.subscribe){let r=t;H(e,L,r.subscribe(o=>{o===!0?e.removeAttribute("hidden"):e.setAttribute("hidden","")}))}},Ur=(e,t)=>{if(t.subscribe){let r=t;H(e,L,r.subscribe(o=>ze(e,o)))}else ze(e,t)},Cr=(e,t)=>{let r=t.sort,o=t.filter,i=t.limit,s=t.offset,c=t.do;if(t.of){if(Array.isArray(t.of)){let u=Ae(t.of,{sort:r,filter:o,limit:i,offset:s});K(e,...u.map(c))}else if(t.of&&t.of.subscribe){let u=t.of;Mt(e,u.subscribe(m=>{let p=Ae(m,{sort:r,filter:o,limit:i,offset:s});K(e,...p.map(c))}))}}};w("styles",Ur);w("if",Ar);w("ref",kr);w("portal",Rr);w("mount",Nr);w("destroy",Mt);w("interval",Ir);w("for",Cr);const Br=/\![\[]{1}([^\]]+)[\]]{1}[\(]{1}([^\)\"]+)(\"(.+)\")?[\)]{1}/g,_r=/[\[]{1}([^\]]+)[\]]{1}[\(]{1}([^\)\"]+)(\"(.+)\")?[\)]{1}/g,Fr=/^\s*\n\`\`\`(([^\s]+))?/gm,Or=/^\`\`\`\s*\n/gm,$r=/(\<pre.+\>)\s*\n\<p\>(.+)\<\/p\>/gm,Wr=/[\`]{1}([^\`]+)[\`]{1}/g,Vr=/^\s*(\n)?(.+)/gm,jr=/\<(\/)?(h\d|ul|ol|li|img|pre)/,Gr=/[\*\_]{2}([^\*\_]+)[\*\_]{2}/g,zr=/[\*\_]{1}([^\*\_]+)[\*\_]{1}/g,Kr=/[\~]{2}([^\~]+)[\~]{2}/g,qr=/^\s*\n\*/gm,Jr=/^(\*.+)\s*\n([^\*])/gm,Zr=/^\* (.+)/gm,Yr=/^\s*\n\d\./gm,Xr=/^(\d\..+)\s*\n([^\d\.])/gm,Qr=/^\d\. (.+)/gm,Dr=/[\\#]{1} (.+)/g,en=/[\\#]{2} (.+)/g,tn=/[\\#]{3} (.+)/g,rn=/[\\#]{4} (.+)/g,nn=/[\\#]{5} (.+)/g,on=/[\\#]{6} (.+)/g;function b(e,t,r){return e.replace(t,r)}function pe(e){return e=ln(e),e=sn(e),e=b(e,Br,'<img loading="lazy" src="$2" alt="$1">'),e=b(e,_r,'<a target="_blank" href="$2">$1</a>'),e=an(e),e=b(e,Fr,'<pre class="$2">'),e=b(e,Or,`</pre>
+(() => {
+  var __defProp = Object.defineProperty;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __assign = Object.assign;
+  var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
+  var __rest = (source, exclude) => {
+    var target = {};
+    for (var prop in source)
+      if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+        target[prop] = source[prop];
+    if (source != null && __getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(source)) {
+        if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+          target[prop] = source[prop];
+      }
+    return target;
+  };
+  var __export = (target, all) => {
+    __markAsModule(target);
+    for (var name2 in all)
+      __defProp(target, name2, {get: all[name2], enumerable: true});
+  };
 
-`),e=b(e,Wr,"<code>$1</code>"),e=b(e,Vr,t=>jr.test(t)?t:`<p>${t}</p>`),e=b(e,$r,"$1$2"),e}function sn(e){return e=b(e,on,"<h6>$1</h6>"),e=b(e,nn,"<h5>$1</h5>"),e=b(e,rn,"<h4>$1</h4>"),e=b(e,tn,"<h3>$1</h3>"),e=b(e,en,"<h2>$1</h2>"),e=b(e,Dr,"<h1>$1</h1>"),e}function an(e){return e=b(e,Gr,"<b>$1</b>"),e=b(e,zr,"<i>$1</i>"),e=b(e,Kr,"<del>$1</del>"),e}function ln(e){return e=b(e,qr,`<ul>
-*`),e=b(e,Jr,`$1
-</ul>
+  // mod/doc/src/doc.ts
+  const doc_exports = {};
+  __export(doc_exports, {
+    appendChildren: () => appendChildren,
+    createElement: () => createElement,
+    h: () => h,
+    render: () => render,
+    setProperties: () => setProperties
+  });
 
-$2`),e=b(e,Zr,"<li>$1</li>"),e=b(e,Yr,`<ol>
-1.`),e=b(e,Xr,`$1
-</ol>
+  // mod/doc/src/types.ts
+  const T_STRING = "string";
+  const T_NUMBER = "number";
+  const T_FUNCTION = "function";
+  const T_BOOLEAN = "boolean";
 
-$2`),e=b(e,Qr,"<li>$1</li>"),e}var cn="Startseite",un="Pr\xE4sentation",mn="Allgemein",pn="Anwendung installieren",dn="Anwendung deinstallieren",fn="Installieren",gn="Bereits installiert",vn="Einloggen",hn="Nutzereinstellungen",yn="Einstellungen",wn="Registrieren",bn="Ausloggen",xn="Kommentare",Tn="Fehler",En="Folgt",Sn="Follower",Ln="Navigation",Mn="Besuche $u's Seite",Pn="Senden",Hn="Name",Nn="Namen \xE4ndern",In="Name erfolgreich aktualisiert",kn="Name konnte nicht aktualisiert werden",Rn="Schlie\xDFen",An="Folgen",Un="Nicht mehr folgen",Cn="Post bearbeiten",Bn="Post l\xF6schen",_n="Soll der Post gel\xF6scht werden?",Fn="Post wurde gel\xF6scht",On="Post konnte nicht gel\xF6scht werden",$n="Fortfahren",Wn="Abbrechen",Vn="Bearbeitet",jn="Kommentieren",Gn="Kommentar l\xF6schen",zn="Zeige Men\xFC an",Kn="\xC4nderungen speichern",qn="Bild entfernen",Jn="Bild hochladen",Zn="Konto l\xF6schen",Yn="Konto wirklich l\xF6schen?",Xn="Wenn du das Konto l\xF6scht, kannst du den Vorgang nicht mehr r\xFCckg\xE4ngig machen.",Qn="F\xFCr diese Aktion hast du keine Berechtigungen.",Dn="Progressive Webanwendung",eo="Folgender Fehler ist aufgetreten: '$e'",to="Dateityp '$t' nicht unterst\xFCtzt.",ro="Klicken um '$c' in die Zwischenablage zu kopieren",no="Benutzername",oo="E-Mail Adresse",io="Passwort",so="Aktuelles Passwort",ao="Dein Passwort wurde erfolgreich aktualisiert",lo="Dein Passwort konnte nicht aktualisiert werden",co="Passwort aktualisieren",uo="\xC4ndere dein Passwort",mo="Passwort wiederholen",po="Neues Passwort",fo="Neues Passwort wiederholen",go="Erfolgreich eingeloggt",vo="Du bist nun eingeloggt",ho="Einloggen fehlgeschlagen",yo="Benutzer existiert nicht oder inkorrekte Eingaben",wo="Du bist nun abgemeldet",bo="Erfolgreich registriert. Du kannst dich nun einloggen.",xo="Entweder existiert der Benutzer bereits oder falsche Eingaben get\xE4tigt.",To="Passw\xF6rter stimmen nicht \xFCberein",Eo="Vorschau",So=" Nutzer/n gef\xE4llt das",Lo="Gehe zur Kommentarsektion",Mo="Seite '$url' nicht gefunden.",Po="Die Nachricht ist zu kurz",Ho="Die Nachricht hat die maximale L\xE4nge \xFCberschritten",No="Die Nachricht hat eine inkorrekte L\xE4nge",Io="So kannst du die Nachricht nicht absenden.",ko="Du hast bereits ein Konto?",Ro="Logge dich in dein Konto ein",Ao="Erstelle ein Konto",Uo="Dein Grund zum Einloggen",Co="Noch kein Konto?",Bo="Vor $n Sekunden",_o="Vor einer Sekunde",Fo="Vor $n Minuten",Oo="Vor einer Minute",$o="Vor $n Stunden",Wo="Vor einer Stunde",Vo="Vor $n Tagen",jo="Vor einem Tag",Go="Vor $n Wochen",zo="Vor einer Woche",Ko="Vor $n Monaten",qo="Vor einem Monat",Jo="Vor $n Jahren",Zo="Vor einem Jahr",a={home:cn,presentation:un,general:mn,installApp:pn,uninstallApp:dn,install:fn,isInstalled:gn,login:vn,userSettings:hn,settings:yn,register:wn,logout:bn,comments:xn,error:Tn,following:En,followers:Sn,navigation:Ln,visitUser:Mn,send:Pn,name:Hn,changeName:Nn,changeNameSuccess:In,changeNameFailed:kn,close:Rn,follow:An,unfollow:Un,editPost:Cn,deletePost:Bn,deletePostSure:_n,deletePostSuccess:Fn,deletePostFailed:On,continue:$n,abort:Wn,edited:Vn,actionComment:jn,deleteComment:Gn,showPostMenu:zn,save:Kn,removeImage:qn,uploadImage:Jn,deleteAccount:Zn,deleteAccountSure:Yn,deleteAccountInfo:Xn,authError:Qn,progressiveWebApp:Dn,followingError:eo,unsupportedFileType:to,clickToCopy:ro,username:no,email:oo,password:io,currentPassword:so,passwordChangedSuccess:ao,passwordChangedFailed:lo,changePassword:co,changePasswordTitle:uo,passwordReEnter:mo,newPassword:po,newPasswordReEnter:fo,loginSuccess:go,loginSuccessMessage:vo,loginFailed:ho,loginFailedMessage:yo,logoutMessage:wo,registerSuccess:bo,registerFailed:xo,passwordsNotSame:To,showPostPreview:Eo,nUsersLikedThat:So,showComments:Lo,routeNotFound:Mo,messageTooShort:Po,messageTooLong:Ho,messageWrongLength:No,messageCriteriaError:Io,alreadyAccount:ko,enterAccount:Ro,createAccount:Ao,loginReason:Uo,noAccount:Co,secondsAgo:Bo,secondAgo:_o,minutesAgo:Fo,minuteAgo:Oo,hoursAgo:$o,hourAgo:Wo,daysAgo:Vo,dayAgo:jo,weeksAgo:Go,weekAgo:zo,monthsAgo:Ko,monthAgo:qo,yearsAgo:Jo,yearAgo:Zo};function oe(e){let t=Math.floor((Date.now()-e)/1e3),r;return r=Math.floor(t/31536e3),r==1?a.yearAgo:r>1?q(a.yearsAgo,r):(r=Math.floor(t/2592e3),r==1?a.monthAgo:r>1?q(a.monthsAgo,r):(r=Math.floor(t/604800),r==1?a.weekAgo:r>1?q(a.monthsAgo,r):(r=Math.floor(t/86400),r==1?a.dayAgo:r>1?q(a.daysAgo,r):(r=Math.floor(t/3600),r==1?a.hourAgo:r>1?q(a.hoursAgo,r):(r=Math.floor(t/60),r==1?a.minuteAgo:r>1?q(a.minutesAgo,r):(r=Math.floor(t),r==1?a.secondAgo:q(a.secondsAgo,r)))))))}function q(e,t){return e.replace("$n",t+"")}function $(e){const{top:t,bottom:r}=e.getBoundingClientRect();return(t&&r)===0?!1:t<innerHeight&&r>=0}const de=d(!1);function W(e){return history.pushState(null,"",e),dispatchEvent(new PopStateEvent("popstate"))}const Ke=d(!1),V=d([]);V.subscribe(e=>Ke.set(e.length>0));w("isBox",e=>e.classList.add("box"));function h(e,...t){return e||(e={}),n.h("div",g(g({},e),{isBox:!0}),e.arrow?n.h("div",{className:"arrow arrow-"+e.arrow}):void 0,n.h("div",{className:"box-content"},t))}w("isLabel",e=>e.classList.add("label"));function M(e,...t){return n.h("div",g(g({},e),{isLabel:!0}),n.h("label",{className:"label-content"},e.labelText),t)}w("isButton",e=>e.classList.add("button"));function x(e,...t){return e||(e={}),n.h("button",g(g({},e),{isButton:!0}),n.h("div",{className:"button-content"},t))}w("isHeader",e=>e.classList.add("header"));function T(e,...t){return e||(e={}),n.h("header",g(g({},e),{isHeader:!0}),n.h("div",{className:"title header-content"},t),n.h(C,null))}w("isFooter",e=>e.classList.add("footer"));function k(e,...t){return e||(e={}),n.h("footer",g(g({},e),{isFooter:!0}),n.h(C,null),n.h("div",{className:"footer-content"},t))}function P(e){return n.h("div",{className:"input"},n.h("input",g({},e)))}function qe(e){return n.h("div",{className:"input"},n.h("textarea",g({},e)))}function C(){return n.h("span",{className:"seperator"})}function U(r){var{name:e}=r,t=ke(r,["name"]);let o="icon icon-",i="icon-"+e;e&&(o+=e),t.className&&(o+=" "+t.className,delete t.className);const s=n.h("i",g({className:o,setIcon:c},t));return s;function c(u){s.classList.replace(i,"icon-"+u),i="icon-"+u}}function Pt({placeholder:e,value:t,ref:r},...o){const i=v(),s=v(),c=d(!1);return n.h("div",{className:"box writer",getValues:m,ref:r,clear:u},n.h("div",null,n.h(qe,{ref:i,oninput:p,placeholder:e||"",value:t||""}),n.h("span",{tooltip:a.showPostPreview},n.h(U,{name:"magnifier",className:"toggle-post-preview",onclick:R,styles:{cursor:"pointer"}}))),n.h(k,null,n.h("div",{className:"mark-down-wrapper",if:c},n.h("div",{className:"box mark-down",ref:s}),n.h(C,null)),o));function u(){i.current.value="",s.current.innerHTML="",c.set(!1)}function m(){const S=s.current,N=i.current;if(S&&N)return{raw:N.value,rich:S.innerHTML}}function p(){const S=s.current,N=i.current;S&&N&&(S.innerHTML=pe(N.value))}function R(){c.set(!c.value())}}function Ee(r){var{datetime:e}=r,t=ke(r,["datetime"]);const o=d(oe(e)),i=n.h("time",g({dateTime:e,innerText:o,interval:[s,5e3]},t));function s(){$(i)&&o.set(oe(e))}return i}w("isUploadItem",e=>e.classList.add("upload-item"));function Ht(e){return n.h("div",g(g({},e),{isUploadItem:!0}),n.h("img",{src:e.preview,className:"upload-image"}),n.h("div",{className:"upload-text"},e.fileName),n.h("div",null,n.h(U,{name:"clipboard",copyToClipboard:`![${e.fileName}](${e.preview})`,className:"upload-action"}),n.h(U,{tooltip:a.removeImage,name:"x-red",onclick:t,className:"upload-action"})));function t(){V.update(r=>{let o=r.findIndex(i=>i.key===e.key);o>=0&&r.splice(o,1)})}}w("isMenu",e=>e.classList.add("menu"));function Je(e,...t){return n.h("ul",g(g({},e),{isMenu:!0,isBox:!0}),t)}w("isMenuItem",e=>e.classList.add("menu-item"));function Ze(e,...t){return n.h("li",g(g({},e),{isMenuItem:!0}),t)}function Ye(e,t){return e-=50,t-=50,e<0&&(e=0),innerHeight-e<200&&(e=innerHeight-200),[e,t]}const Nt=v();function y(e,t,r={removeOnClick:!1,timeout:5e3}){const o=Nt.current;o&&(o.appendChild(n.h(Yo,{title:e,message:t,options:r})),o.scrollBy(0,o.scrollHeight))}function Yo({title:e,message:t,options:r}){const o=n.h(h,{className:"notification",arrow:"bottom-right"},n.h(T,{if:!!e},e||""),n.h("div",{className:"notification-message"},t));return r.timeout&&setTimeout(()=>o.remove(),r.timeout),r.removeOnClick&&O(o,"click",()=>o.remove()),o}document.body.appendChild(n.h("div",{id:"notifications"},n.h("div",{ref:Nt,className:"notification-wrapper"})));const Xe={};vt(Xe,{del:()=>ge,get:()=>B,patch:()=>Se,post:()=>J,put:()=>ei});const Xo=()=>localStorage.getItem("token"),Qo=()=>{const e=Xo(),t={"Content-Type":"application/json"};return e&&(t.Authorize="Bearer "+e,t.Authorization="Bearer "+e),t};function Do(e,t,r){var c;r||(r={}),r.responseType||(r.responseType="json");let o=((c=r.init)==null?void 0:c.headers)||{},i=g(g({},Qo()),o);for(let u in o)o[u]||delete i[u];let s={headers:i,method:e,body:t};return[r,s]}async function fe(e,t,r,o){try{let[i,s]=Do(t,r,o),c=await fetch(e,s),u=await c[i.responseType]();return[u,c,null]}catch(i){return[null,null,i]}}const B=(e,t)=>fe(e,"GET",null,t),J=(e,t,r)=>fe(e,"POST",t,r),ei=(e,t,r)=>fe(e,"PUT",t,r),ge=(e,t,r)=>fe(e,"DELETE",t,r),Se=(e,t,r)=>fe(e,"PATCH",t,r),_={removeOnClick:!0,timeout:5e3};function Qe(e){this.message=e}Qe.prototype=new Error,Qe.prototype.name="InvalidCharacterError";var It=typeof window!="undefined"&&window.atob&&window.atob.bind(window)||function(e){var t=String(e).replace(/=+$/,"");if(t.length%4==1)throw new Qe("'atob' failed: The string to be decoded is not correctly encoded.");for(var r,o,i=0,s=0,c="";o=t.charAt(s++);~o&&(r=i%4?64*r+o:o,i++%4)?c+=String.fromCharCode(255&r>>(-2*i&6)):0)o="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o);return c};function ti(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(r){return decodeURIComponent(It(r).replace(/(.)/g,function(o,i){var s=i.charCodeAt(0).toString(16).toUpperCase();return s.length<2&&(s="0"+s),"%"+s}))}(t)}catch(r){return It(t)}}function Le(e){this.message=e}function ri(e,t){if(typeof e!="string")throw new Le("Invalid token specified");var r=(t=t||{}).header===!0?0:1;try{return JSON.parse(ti(e.split(".")[r]))}catch(o){throw new Le("Invalid token specified: "+o.message)}}Le.prototype=new Error,Le.prototype.name="InvalidTokenError";var kt=ri;const ni="",oi=1,j=`${ni}/api/v${oi}`,Z="accounts",Me=j+"/users/",Rt=Me+"follow/",ii=j+`/${Z}`,si=j+`/${Z}/login`,ai=j+`/${Z}/register`,li=j+`/${Z}/token`,ci=j+`/${Z}/displayname`,ba=j+`/${Z}/email`,ui=j+`/${Z}/password`,f=d(!1),Y=d(!0);let ve={};const mi=f.value,ie=()=>mi()?ve:null,At=async e=>!!await Pe(e);async function Ut(){f.set(!1),localStorage.removeItem("token"),y(null,a.logoutMessage,_),W("/login")}async function Bt({alias:e,password:t}){var s;let r=JSON.stringify({username:e,password:t}),[o,i]=await J(si,r);(i==null?void 0:i.status)===200&&((s=o==null?void 0:o.data)==null?void 0:s.accessToken)?(Ct(o.data.accessToken),f.set(!0),y(null,a.loginSuccessMessage,_)):(f.set(!1),y(null,a.loginFailedMessage,_))}async function _t(e){let[t,r]=await J(Rt+e);return(r==null?void 0:r.status)===2e3}async function Ft(e){let[t,r]=await ge(Rt+e);return(r==null?void 0:r.status)===2e3}async function Ot(e){let[t]=await B(Me+`${e}/followers`);return(t==null?void 0:t.data)&&t.data.length?t.data:[]}async function $t(e){let[t]=await B(Me+`${e}/following`);return(t==null?void 0:t.data)&&t.data.length?t.data:[]}async function Wt(e){let t=JSON.stringify({displayName:e}),[r,o]=await Se(ci,t);return(o==null?void 0:o.status)===200?(y(null,a.changeNameSuccess,_),ve.alias=e,ve.displayName=e,!0):(y(null,a.changeNameFailed,_),!1)}async function Vt(e,t){let r=JSON.stringify({currentPassword1:e,newPassword:t}),[o,i]=await Se(ui,r);return(i==null?void 0:i.status)===200?(y(null,a.passwordChangedSuccess,_),!0):(y(null,a.passwordChangedFailed,_),!1)}async function jt(){let[e,t]=await ge(ii,"{}");return(t==null?void 0:t.status)===200?(f.set(!1),localStorage.removeItem("token"),W("/register"),!0):!1}async function pi(){var t;let e=Gt();if(e){const r=(e.exp-Math.round(Date.now()/1e3))/3600;if(r<=24){let[o,i]=await B(li);((t=o==null?void 0:o.data)==null?void 0:t.accessToken)&&Ct(o.data.accessToken),f.set((i==null?void 0:i.status)===200)}else f.set(!0)}else f.set(!1)}async function zt({alias:e,displayName:t,email:r,password:o}){let i=JSON.stringify({email:r,username:e,password:o,displayName:t}),[s,c]=await J(ai,i);(c==null?void 0:c.status)===200?(y(null,a.registerSuccess,_),W("/login")):y(null,a.registerFailed,_)}f.subscribe(async e=>{var t;if(Y.set(!e),e===!1&&(ve={}),e===!0){const r=(t=Gt())==null?void 0:t.sub;ve=await Pe(r)}});function Ct(e){localStorage.setItem("token",e)}async function Pe(e){let[t,r]=await B(Me+e);return(r==null?void 0:r.status)!==200?void 0:t.data}function Gt(){const e=localStorage.getItem("token");if(e)return kt(e)}pi();const Kt={black:"#17111a",darkRed1:"#372538",darkRed2:"#7a213a",red:"#e14141",lightRed:"#ffa070",brownish:"#c44d29",orange:"#ffbf36",yellow:"#fff275",darkBrown:"#753939",brown:"#cf7957",lightBrown:"#ffd1ab",darkGreen:"#39855a",green:"#83e04c",lightGreen:"#dcff70",darkBlue:"#243b61",blue:"#3898ff",lightBlue:"#6eeeff",violet:"#682b82",magenta:"#bf3fb3",pink:"#ff80aa",darkGrey1:"#3e375c",darkGrey2:"#7884ab",grey:"#b2bcc2",white:"#ffffff"},di=Object.keys(Kt);function se(){const e=Math.round(Math.random()*24+1);return Kt[di[e]]}const De=ue(fi),gi=()=>document.getElementById("user-card");De.onClose(()=>{var e;return(e=gi())==null?void 0:e.remove()});async function fi({alias:e,top:t,left:r}){var dt;[t,r]=Ye(t,r);let o=ie().username,i=await Pe(e);const s=d(0),c=d(0),u=d(!1),m=d(!0);return u.subscribe(ee=>m.set(!ee)),N(),Ie(),n.h(h,{styles:{top:`${t}px`,left:`${r}px`},id:"user-card",onmouseleave:De.close},n.h(T,null,n.h("div",{styles:{display:"flex",gap:"8px",alignItems:"center"}},n.h("div",{className:"user-image-wrap"},n.h("div",{className:"user-image",styles:{backgroundColor:se()+" !important"}}),n.h("div",{className:"avatar-circle"})),n.h("a",{href:`/user/${e}`,tooltip:a.visitUser.replace("$u",i.displayName),styles:{flex:"1"}},n.h("div",null,i.displayName),n.h("div",null,"@",i.username)),e===o?void 0:n.h(p,null)),n.h(C,null),n.h("div",{styles:{display:"flex",gap:"8px"}},n.h("div",null,a.followers,": ",s),n.h("div",null,a.following,": ",c))),n.h(h,{arrow:"top-left",if:((dt=i.description)==null?void 0:dt.length)>0},n.h("span",null,i.description)));function p(){return n.h("div",{className:"cursor-pointer"},n.h("div",{if:f},n.h(U,{if:m,tooltip:a.follow,name:"user-follow",onclick:R}),n.h(U,{if:u,tooltip:a.unfollow,name:"user-unfollow",onclick:S})))}async function R(){await _t(i.username),await N(),await Ie()}async function S(){await Ft(i.username),N(),Ie()}async function N(){let ee=await Ot(e);s.set(ee.length),u.set(!!ee.find(lr=>lr.username===o))}async function Ie(){let ee=await $t(e);c.set(ee.length)}}var He=De;const X=document.createElement("textarea");document.body.appendChild(X);qt();async function et(e){let t;try{X.value=e,hi(),vi()}catch(r){t=r}finally{return qt(),t}}function vi(){X.select(),X.setSelectionRange(0,X.value.length),document.execCommand("copy")}function qt(){X.setAttribute("hidden","true")}function hi(){X.removeAttribute("hidden")}w("user-card",(e,t)=>O(e,"mouseenter",r=>{He.open({alias:t,top:r.clientY,left:r.clientX})}));w("copyToClipboard",(e,t)=>{n.setProperties(e,{tooltip:a.clickToCopy.replace("$c",typeof t=="function"?t():t)}),O(e,"click",()=>{let r;typeof t=="function"?r=t():typeof t=="string"&&(r=t),r&&et(r)})});w("tooltip",(e,t)=>{e.classList.add("tooltip"),e.appendChild(n.createElement("span",{className:"tooltip-text"},t))});w("routerLink",(e,t)=>O(e,"click",()=>W(t)));function tt({routes:e}){const t=n.h("div",{id:"router"});return Tt({routes:e,target:t}).onLoad(()=>de.set(!0)).onLoadEnd(()=>de.set(!1)),t}function rt(){return n.h(h,{id:"navigation"},n.h(T,{classList:"hide-mobile"},a.navigation),n.h("div",{className:"list"},n.h("a",{href:"/"},a.home),n.h("a",{if:Y,href:"/login"},a.login),n.h("a",{if:Y,href:"/register"},a.register),n.h("a",{if:f,href:"/settings"},a.settings),n.h("a",{if:f,onclick:Ut},a.logout)))}const yi="",wi=1,ae=`${yi}/api/v${wi}/posts`,nt=ae+"/",bi=ae+"/like/",G=d([]),Q=e=>G.value().find(t=>t.id===e),Jt=async e=>!!await ot(e),le=(e,t)=>t.datePosted-e.datePosted;async function he(e=null,t=1,r=50){let o=[];e&&o.push(`Username=${e}`),t&&o.push(`Page=${t}`),r&&o.push(`Size=${r}`);let i=o.join("&");i.length>0&&(i="?"+i);let[s,c]=await B(ae+i);if(![200,204].includes(c==null?void 0:c.status))return;(s==null?void 0:s.data)&&G.set(s.data)}async function ot(e){let[t,r]=await B(nt+e);if([200,204].includes(r==null?void 0:r.status))return Q(t.data.id)||G.value().push(t.data),t.data}async function Zt(e){const t=JSON.stringify({content:e});let[r,o]=await J(ae,t);return(o==null?void 0:o.status)===200}async function Yt(e){let[t,r]=await ge(nt+e);return[200,204].includes(r==null?void 0:r.status)?(y(null,a.deletePostSuccess),G.update(o=>{const i=o.findIndex(s=>s.id===e);i>=0&&o.splice(i,1)})):y(null,a.deletePostFailed),(r==null?void 0:r.status)===204}async function Xt(e){let t=Q(e),r=t.liked?"del":"post",[o,i]=await Xe[r](bi+e,"{}");if(i.status!==200)return!1;let[s,c]=await B(nt+e);return c.status!==200?!1:(xi(e,s.data),!0)}function xi(e,t){let r=Q(e);if(r)for(let o in t)r[o]=t[o]}async function Qt(e){var r;let[t]=await B(ae+"/"+e+"/comments");return((r=t==null?void 0:t.data)==null?void 0:r.length)?t.data:[]}async function Dt(e,t){let r=JSON.stringify({content:t}),[o,i]=await J(ae+"/"+e+"/comments",r);return(i==null?void 0:i.status)===200}const Ja=document.createElement("a"),Ne=new FileReader;function er(e){return new Promise(t=>{try{let r=document.createElement("input");r.accept=e.accept,r.type="file",r.onchange=o=>{let i=o.target.files;if(!i.length)return t([null,null]);let s=i[0];Ne.onload=c=>{if(e.maxSize&&s.size>e.maxSize)return t([null,new Error("Filesize exceeded")]);s.data=c.target.result,t([s,null])},Ne.onerror=()=>t([null,null]),Ne.onabort=()=>t([null,null]),Ne["readAs"+e.readAs](s)},r.click()}catch(r){t([null,r])}})}function tr({postId:e}){const t=v(),r=d([]),o=d(!1);return s(),n.h("div",{interval:[s,3e4]},n.h("div",{if:f},n.h(C,null),n.h("form",{onsubmit:i,styles:{display:"flex",gap:"8px",flexDirection:"column"}},n.h(qe,{ref:t}),n.h(x,{type:"submit",styles:{width:"max-content"}},a.actionComment))),n.h("div",{if:o},n.h(C,null),n.h("div",{className:"comments",for:{of:r,do:Ti,sort:le}})));async function i(c){c.preventDefault();const u=t.current.value;if(!f.value()){y(null,a.authError);return}if(!u||u.length<4)return y(null,a.messageCriteriaError);let m=await Dt(e,u);m&&(t.current.value="",s())}function s(){Qt(e).then(c=>{r.set(c),o.set(c.length>0)})}}function Ti(e){var r;const t=((r=ie())==null?void 0:r.username)===e.user.alias;return n.h("div",{className:"comment"},n.h("div",{className:"comment-flex",styles:{flexDirection:t?"row-reverse":"row"}},n.h("div",{className:"user-image","user-card":e.user.alias,styles:{backgroundColor:se()+" !important"}}),n.h(h,{arrow:t?"top-right":"top-left"},n.h("div",{className:"top"},n.h("div",{className:"comment-author"},e.user.alias),n.h(Ee,{datetime:e.datePosted*1e3,className:"datetime"})),n.h("div",null,e.textContent))))}function D(e){const t=d("post opacity-0"),r=ue(i),o=ue(s);return n.h("div",{className:t,interval:[c,250]},n.h("div",{styles:{display:"flex",gap:"8px"}},n.h("div",null,n.h("div",{className:"user-image-wrap","user-card":e.user.alias},n.h("div",{className:"user-image",styles:{backgroundColor:se()+" !important"}}),n.h("div",{className:"avatar-circle"}))),n.h(h,{className:"post-content",arrow:"top-left"},n.h(T,null,n.h("div",{className:"wrap-ellipsis",styles:{width:"50%"}},e.user.displayName,n.h("span",{className:"user-alias"},"@",e.user.alias)),n.h("div",{className:"datetime"},n.h(Ee,{datetime:e.datePosted*1e3,className:"hide-mobile"}),n.h("span",{if:e.datePosted!==e.dateEdited,tooltip:a.edited},"*"),n.h(U,{name:"calendar",tooltip:oe(e.datePosted*1e3)}))),n.h("div",{className:"user-content"},n.h(Ei,{postId:e.id,data:e.textContent})),n.h(k,null,n.h("div",{styles:{display:"flex",gap:"8px",alignItems:"center"}},n.h(Si,{likeAmount:e.likeAmount,postId:e.id}),n.h(Li,{userAlias:e.user.alias,postId:e.id,commentsAmount:e.commentsAmount}),n.h("div",{className:"post-menu",tooltip:a.showPostMenu},n.h(U,{if:f,name:"menu-meatballs",onclick:r.open})),n.h("span",{styles:{position:"absolute",bottom:"0",right:"0"}},n.h("div",{portal:r}),n.h("div",{portal:o})))),e.showComments?n.h(tr,{postId:e.id}):void 0)));function i(){var p;const m=((p=ie())==null?void 0:p.username)===e.user.alias;return n.h(Je,{onmouseleave:r.close},n.h(Ze,null,n.h("a",{href:`/user/${e.user.alias}/post/${e.id}`},a.comments)),n.h(Ze,{if:m,onclick:o.open},a.deletePost))}function s(){return n.h(Je,{onmouseleave:u},n.h(T,null,a.deletePostSure),n.h("div",{styles:{margin:"0 auto",width:"max-content"}},n.h("div",{styles:{display:"flex",gap:"8px"}},n.h(x,{onclick:()=>Yt(e.id)},a.continue),n.h(x,{onclick:u},a.abort))))}function c(m){t.set(`post opacity-${$(m)?"1":"0"}`)}function u(){o.close(),r.open(null)}}function Ei({postId:e,data:t}){const r=d(t),o=d("");return r.subscribe(s=>o.set(pe(s))),n.h(h,{className:"text-content",interval:[i,1e4]},n.h("div",{innerHTML:o,className:"mark-down"}));function i(s){if(!$(s))return;let c=Q(e);if(!c)return;r.set(c.textContent)}}function Si({likeAmount:e,postId:t}){const r=d(String(e)),o=v();return n.h("div",{className:"heart-action",styles:{display:"flex",gap:"8px",alignItems:"center"},if:f,mount:i,interval:[i,250],tooltip:[r,a.nUsersLikedThat]},n.h(U,{ref:o,name:"heart-grey",onclick:()=>Xt(t),className:"wiggle-vertical",styles:{cursor:"pointer"}}),n.h("span",null,r));function i(s){if(!$(s)&&f.value())return;let c=Q(t);if(!c)return;r.set(String(c.likeAmount)),o.current.setIcon(c.liked?"heart-red":"heart-grey")}}function Li({userAlias:e,postId:t,commentsAmount:r}){const o=d(String(r));return n.h("a",{href:`/user/${e}/post/${t}`,className:"comment-action",tooltip:a.showComments,interval:[i,250]},n.h("div",{styles:{display:"flex",gap:"8px",alignItems:"center"}},n.h(U,{name:"comment-bubbles-grey",className:"post-comment"}),n.h("span",null,o)));function i(s){if(!$(s)&&f.value())return;let c=Q(t);if(!c)return;o.set(String(c.commentsAmount))}}async function rr(e){try{const t=e.split(";base64,"),r=t[0].split(":")[1],o=atob(t[1]),i=o.length,s=new Uint8Array(i);for(let c=0;c<i;++c)s[c]=o.charCodeAt(c);return[new Blob([s],{type:r}),null]}catch(t){return[null,t]}}const Mi="xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";function nr(){return Mi.replace(/[xy]/g,e=>{let t=Math.random()*16|0,r=e==="x"?t:t&3|8;return r.toString(16)})}async function it(){return await he(),n.h("div",{styles:{display:"flex",flexDirection:"column",gap:"8px"}},n.h("div",{if:f},n.h(Pi,null)),n.h("div",{for:{of:G,do:D,sort:le,limit:5}}))}function Pi(){const e=v();return n.h("form",{onsubmit:o,destroy:()=>V.set([])},n.h(Pt,{ref:e},n.h("div",{styles:{display:"flex",gap:"8px"}},n.h(x,{type:"submit"},a.send),n.h(x,{type:"button",onclick:t},a.uploadImage)),n.h("div",{if:Ke},n.h(C,null),n.h("div",{styles:{display:"flex",flexDirection:"column-reverse",gap:"8px"},for:{of:V,do:i=>n.h(Ht,{key:i.key,preview:i.preview,fileName:i.fileName})}}))));async function t(){let[i,s]=await er({accept:"image/*",readAs:"DataURL",maxSize:5242880}),[c]=await rr(i.data);if(s)return y(null,a.followingError.replace("$e",s.message));if(!i.type.startsWith("image/"))return y(null,a.unsupportedFileType.replace("$t",i.type));V.update(u=>{u.push({key:nr(),fileName:i.name,preview:i.data,data:c})})}function r(){return{text:e.current.getValues().raw}}async function o(i){if(i.preventDefault(),!f.value())return y(null,a.authError),!1;const s=r();if(!s.text)return y(null,a.messageCriteriaError);let c=await Zt(s.text);c&&(e.current.clear(),V.set([]),he())}}var or=`Durch die Installation dieser Anwendung werden einige Inhalte (wie z. B. Grafiken) lokal auf dem Ger\xE4t hinterlegt, damit diese
-  nicht mehr heruntergeladen werden m\xFCssen, wenn Sie diese Seite wieder besuchen.`;const z=d(!1),st=d(!0);z.subscribe(e=>st.set(!e));async function ir(){"serviceWorker"in navigator&&(await navigator.serviceWorker.register("serviceworker.js"),z.set(!0))}async function sr(){if("serviceWorker"in navigator){let e=await navigator.serviceWorker.getRegistrations();for(let t of e)t&&t.unregister()}z.set(!1)}"serviceWorker"in navigator&&navigator.serviceWorker.getRegistration("serviceworker.js").then(e=>{e&&e.active?z.set(!!e.active):z.set(!1)}).catch(()=>z.set(!1));async function at(){return n.h("div",{id:"settings",styles:{display:"flex",flexDirection:"column",gap:"8px"}},n.h(Hi,null),n.h(ki,null),n.h(Ii,null),n.h(Ni,null))}function Hi(){const e={changed:d(!1),reference:v()};return n.h(h,null,n.h(T,null,a.changeName),n.h(M,{labelText:a.name},n.h(P,{ref:e.reference,type:"text",placeholder:a.name,oninput:()=>e.changed.set(!!e.reference.current.value)})),n.h("div",{if:e.changed},n.h(k,null,n.h(x,{type:"button",onclick:t},a.save))));async function t(){let r=await Wt(e.reference.current.value);r&&(e.reference.current.value="")}}function Ni(){return n.h(h,null,n.h(T,null,a.progressiveWebApp),n.h(h,null,or),n.h(k,null,n.h(x,{if:st,onclick:ir},a.installApp),n.h(x,{if:z,onclick:sr},a.uninstallApp)))}function Ii(){const e=d(!1);return n.h(h,null,n.h(T,null,a.deleteAccount),n.h(h,null,a.deleteAccountInfo),n.h(k,null,n.h(x,{type:"button",onclick:()=>e.set(!e.value())},a.deleteAccount),n.h(x,{type:"button",onclick:()=>jt(),if:e},a.continue)))}function ki(){const e={changed:d(!1),changable:d(!1),references:[v(),v(),v()]};return n.h(h,null,n.h(T,null,a.changePasswordTitle),n.h(M,{labelText:a.currentPassword},n.h(P,{name:"password",ref:e.references[0],type:"password",placeholder:"********",oninput:t})),n.h("div",{styles:{display:"flex",flexDirection:"row",gap:"8px"}},n.h(M,{labelText:a.newPassword},n.h(P,{name:"password",ref:e.references[1],type:"password",placeholder:"********",oninput:t})),n.h(M,{labelText:a.newPasswordReEnter},n.h(P,{name:"password",ref:e.references[2],type:"password",placeholder:"********",oninput:t}))),n.h("div",{if:e.changable},n.h(k,null,n.h(x,{type:"button",onclick:r},a.save))));function t(o){e.changed.set(!!e.references[0].current.value),e.changable.set(e.references[0].current.value&&e.references[1].current.value&&e.references[2].current.value&&e.references[1].current.value===e.references[2].current.value)}async function r(o){let i=await Vt(e.references[0].current.value,e.references[1].current.value);i&&e.references.forEach(s=>s.current.value="")}}async function lt(){const e=v(),t=v();return n.h(h,{id:"login"},n.h(T,null,a.enterAccount),n.h("form",{onsubmit:o},n.h("div",{styles:{display:"flex",flexDirection:"column",gap:"8px"}},n.h("div",{styles:{display:"flex",gap:"8px"}},n.h(M,{labelText:a.username},n.h(P,{ref:e,type:"text",placeholder:a.username,required:"true"})),n.h(M,{labelText:a.password},n.h(P,{ref:t,type:"password",placeholder:"********",required:"true"}))),n.h(k,null,n.h("div",{styles:{display:"flex",flexDirection:"row",gap:"8px"}},n.h(x,{type:"submit"},a.login),n.h("a",{href:"/register"},n.h(x,{type:"button"},a.noAccount)))))));function r(){return{alias:e.current.value,password:t.current.value}}async function o(i){i.preventDefault(),await Bt(r()),f.value()&&W("/")}}async function ct({alias:e}){return await he(e),n.h("div",{for:{of:G,do:D,sort:le}})}async function ut({alias:e,id:t}){const r=await ot(parseInt(t));return n.h(D,{id:r.id,user:r.user,textContent:r.textContent,liked:r.liked,likeAmount:r.likeAmount,datePosted:r.datePosted,dateEdited:r.dateEdited,showComments:!0})}async function mt(){const e=v(),t=v(),r=v(),o=[v(),v()];return n.h(h,{id:"register"},n.h(T,null,a.createAccount),n.h("form",{onsubmit:c},n.h("div",{styles:{display:"flex",flexDirection:"column",gap:"8px"}},n.h("div",{styles:{display:"flex",flexDirection:"row",gap:"8px"}},n.h(M,{labelText:a.username},n.h(P,{name:"alias",ref:e,type:"text",placeholder:a.username,required:"true"})),n.h(M,{labelText:a.name},n.h(P,{name:"name",ref:t,type:"text",placeholder:a.name,required:"true"}))),n.h(M,{labelText:a.email},n.h(P,{name:"email",ref:r,type:"email",placeholder:"your@email.com",required:"true"})),n.h("div",{styles:{display:"flex",flexDirection:"row",gap:"8px"}},n.h(M,{labelText:a.password},n.h(P,{name:"password",ref:o[0],type:"password",placeholder:"********",required:"true"})),n.h(M,{labelText:a.passwordReEnter},n.h(P,{name:"password",ref:o[1],type:"password",placeholder:"********",required:"true"}))),n.h(k,null,n.h("div",{styles:{display:"flex",flexDirection:"row",gap:"8px"}},n.h(x,{type:"submit"},a.register),n.h("a",{href:"/login"},n.h(x,{type:"button"},a.alreadyAccount)))))));function i(){return{alias:e.current.value,name:t.current.value,email:r.current.value,passwords:[o[0].current.value,o[1].current.value]}}function s(){return[...new Set(i().passwords)].length===1}async function c(u){u.preventDefault();let m=i();if(!s())return y(null,a.passwordsNotSame);zt({alias:m.alias,displayName:m.name,email:m.email,password:m.passwords[0]})}}function pt(){return n.h(h,{id:"route-not-found"},n.h(T,null,a.error),n.h("div",{className:"box message"},a.routeNotFound.replace("$url",location.pathname)))}const Ri=[{path:"",title:a.home,component:it},{path:"login/?*",title:a.login,component:lt,activates:[Y.value]},{path:"register/?*",title:a.register,component:mt,activates:[Y.value]},{path:"settings/?*",title:a.settings,component:at,activates:[f.value]},{path:"user/:alias",title:({alias:e})=>e,component:ct,activates:[({alias:e})=>At(e)],children:[{path:"post/:id",title:({alias:e,id:t})=>e+"/post/"+t,component:ut,activates:[({alias:e,id:t})=>Jt(parseInt(t))]}]},{path:"**",title:a.error,component:pt}];var ar=Ri;function Ai(){return n.h("div",{id:"app"},n.h("div",{id:"loading-bar",if:de}),n.h("div",{id:"app-grid"},n.h("aside",{id:"side"},n.h(rt,null)),n.h("main",{id:"content"},n.h(tt,{routes:ar}))),n.h("div",{styles:{height:"100vh",width:"100vw",position:"fixed",top:"0",left:"0",pointerEvents:"none"}},n.h("div",{portal:He})))}document.getElementById("app").replaceWith(n.h(Ai,null));})();
+  // mod/doc/src/helper.ts
+  function eachFn(list, ...args) {
+    if (!list || list.length === 0)
+      return;
+    let i = 0;
+    const len = list.length;
+    for (i; i < len; i++)
+      list[i](...args);
+  }
+  function blank() {
+    return Object.create(null);
+  }
+  function sub(subscribers, fn) {
+    subscribers.push(fn);
+    return () => unsub(subscribers, fn);
+  }
+  function unsub(subscribers, fn) {
+    const index = subscribers.indexOf(fn);
+    if (index !== -1)
+      subscribers.splice(index, 1);
+  }
+  function createHash(input) {
+    let h2;
+    for (let i = 0, length = input.length; i < length; i++)
+      h2 = Math.imul(31, h2) + input.charCodeAt(i) | 0;
+    return h2.toString(36);
+  }
+  function prepareForList(list, {sort: sort2, filter, limit, offset}) {
+    let copy2 = [...list];
+    if (filter)
+      copy2 = copy2.filter(filter);
+    if (sort2)
+      copy2 = copy2.sort(sort2);
+    if (typeof offset === T_NUMBER)
+      copy2 = copy2.slice(0, offset);
+    if (typeof limit === T_NUMBER)
+      copy2.length = limit;
+    return copy2;
+  }
+  function keysOf(obj) {
+    let keys = [];
+    for (let key in obj)
+      keys.push(key);
+    return keys;
+  }
+  function lifeCycle(el, type, fn) {
+    let fns = el[Hooks][type] || (el[Hooks][type] = []);
+    return sub(fns, fn);
+  }
+
+  // mod/doc/src/globals.ts
+  const Hooks = Symbol("Hooks");
+  const Mount = Symbol("Mount");
+  const Destroy = Symbol("Destroy");
+  const Events = Symbol("Events");
+  const Styles = Symbol("Styles");
+  const Directives = blank();
+
+  // mod/doc/src/events.ts
+  function onGlobalEvent(name2, fn) {
+    if (!window[Hooks]) {
+      window[Hooks] = blank();
+      if (!window[Hooks][Events])
+        window[Hooks][Events] = blank();
+    }
+    let fns = window[Hooks][Events][name2] || (window[Hooks][Events][name2] = []);
+    let event = (ev) => eachFn(fns, ev);
+    fns.push(fn);
+    if (fns.length === 1)
+      listen(window, name2, event);
+    return () => {
+      const index = fns.indexOf(fn);
+      if (index !== -1) {
+        fns.splice(index, 1);
+        if (fns.length === 0)
+          unlisten(window, name2, event);
+      }
+    };
+  }
+  function onEvent(el, name2, fn) {
+    let fns = el[Hooks][Events][name2] || (el[Hooks][Events][name2] = []);
+    let event = (ev) => eachFn(fns, ev);
+    fns.push(fn);
+    if (fns.length === 1)
+      listen(el, name2, event);
+    lifeCycle(el, Destroy, () => {
+      const index = fns.indexOf(fn);
+      if (index !== -1) {
+        fns.splice(index, 1);
+        if (fns.length === 0)
+          unlisten(el, name2, event);
+      }
+    });
+  }
+  function listen(target, name2, listener) {
+    target.addEventListener(name2, listener, false);
+  }
+  function unlisten(target, name2, listener) {
+    target.removeEventListener(name2, listener, false);
+  }
+
+  // mod/doc/src/properties.ts
+  function setProperties(el, props) {
+    const keys = keysOf(props);
+    keys.forEach((key) => {
+      const dir = Directives[key];
+      dir ? dir(el, props[key]) : writeDefault(el, key, props[key]);
+    });
+  }
+  function writeDefault(el, key, property) {
+    if (property === void 0)
+      return;
+    if (property.subscribe) {
+      let state = property;
+      el[key] = state.value();
+      lifeCycle(el, Destroy, state.subscribe((val) => {
+        if (el[key] !== val)
+          el[key] = val;
+      }));
+    } else if (key.startsWith("on") && typeof property === T_FUNCTION) {
+      onEvent(el, key.slice(2), property);
+    } else {
+      el[key] = property;
+    }
+  }
+
+  // mod/doc/src/children.ts
+  function render(el, ...children4) {
+    el.innerHTML = "";
+    appendChildren(el, children4, el);
+  }
+  function appendChildren(el, children4, $el) {
+    let frag = fragment();
+    const len = children4.length;
+    if (len > 0) {
+      for (let i = 0; i < len; i++) {
+        if (children4[i] === void 0)
+          continue;
+        if (children4[i] === null)
+          continue;
+        if (Array.isArray(children4[i])) {
+          appendChildren(frag, children4[i], $el);
+        } else if (typeof children4[i] === T_STRING || typeof children4[i] === T_NUMBER) {
+          frag.appendChild(text(children4[i]));
+        } else if (children4[i] instanceof Element) {
+          frag.appendChild(children4[i]);
+        } else if (children4[i].subscribe) {
+          let stateValue = children4[i].value();
+          if (typeof stateValue === T_STRING || typeof stateValue === T_NUMBER) {
+            let state = children4[i];
+            let content = text(state.value());
+            frag.appendChild(content);
+            lifeCycle($el, Destroy, state.subscribe((val) => {
+              let newVal = val + "";
+              if (content.textContent !== newVal)
+                content.textContent = newVal;
+            }));
+          } else if (stateValue instanceof Element) {
+            let state = children4[i];
+            frag.appendChild(state.value());
+            lifeCycle($el, Destroy, state.subscribe((val) => {
+              state.value().replaceWith(val);
+            }));
+          }
+        }
+      }
+      el.appendChild(frag);
+    }
+  }
+
+  // mod/doc/src/elements.ts
+  function element(type) {
+    let el = document.createElement(type);
+    prepareHooks(el);
+    return el;
+  }
+  const text = (data) => document.createTextNode(data + "");
+  const fragment = () => document.createDocumentFragment();
+  function prepareHooks(el) {
+    el[Hooks] = blank();
+    el[Hooks][Mount] = [];
+    el[Hooks][Destroy] = [];
+    el[Hooks][Events] = blank();
+  }
+  function createElement(type, props, ...children4) {
+    if (typeof type === T_FUNCTION)
+      return type(props, ...children4);
+    let el = element(type);
+    setProperties(el, props);
+    appendChildren(el, children4, el);
+    return el;
+  }
+
+  // mod/doc/src/doc.ts
+  const h = createElement;
+
+  // mod/doc/src/core.ts
+  function observable(initialValue) {
+    let current = initialValue;
+    const subscribers = [];
+    const pub = {isObservable: true, set, subscribe, update, value};
+    function set(newValue) {
+      current = newValue;
+      eachFn(subscribers, current);
+      return pub;
+    }
+    function update(fn) {
+      fn(current);
+      eachFn(subscribers, current);
+      return pub;
+    }
+    function value() {
+      return current;
+    }
+    function subscribe(fn) {
+      fn(current);
+      return sub(subscribers, fn);
+    }
+    return pub;
+  }
+  function reference() {
+    let current;
+    const pub = {isRef: true, current};
+    return pub;
+  }
+  function portal(component) {
+    let anchor;
+    let current;
+    const openObservers = [];
+    const closeObservers = [];
+    const pub = {isPortal: true, open, close: close2, set, onOpen, onClose};
+    async function open(props, ...children4) {
+      if (!current) {
+        current = await component(props, ...children4);
+        anchor.appendChild(current);
+        eachFn(openObservers);
+      } else {
+        close2();
+        open(props, ...children4);
+      }
+    }
+    function set(newAnchor) {
+      anchor = newAnchor;
+      return pub;
+    }
+    function close2() {
+      if (current) {
+        current.remove();
+        current = void 0;
+        eachFn(closeObservers);
+      }
+      return pub;
+    }
+    function onOpen(fn) {
+      openObservers.push(fn);
+      return pub;
+    }
+    function onClose(fn) {
+      closeObservers.push(fn);
+      return pub;
+    }
+    return pub;
+  }
+
+  // mod/doc/src/router/create-matcher.ts
+  const R_OPTIONAL = /\*/g;
+  const R_REPLACER = /\:([a-zA-Z]+)/gi;
+  const R_PARAM = "(?<$1>[^\\/\\:\\?]+?)";
+  const R_START = "^/";
+  const R_END = "/?$";
+  const R_WILDCARD_STR = "(\\S+)?";
+  const R_WILDCARD = /\S+/i;
+  const R_DOUBLESLASH = /\/\//g;
+  const R_SINGLESLASH = "/";
+  const R_MULTI_WILDCARD = /(\*\*)+/g;
+  const R_SINGLE_WILDCARD = "**";
+  function createMatcher(path) {
+    if (path.startsWith("/"))
+      throw new Error("RoutePath cannot start with an '/'");
+    if (path.endsWith("/"))
+      throw new Error("RoutePath cannot end with an '/'");
+    if (path === "**")
+      return R_WILDCARD;
+    path = path.replace(R_OPTIONAL, R_WILDCARD_STR);
+    path = path.replace(R_REPLACER, R_PARAM);
+    path = path.replace(R_DOUBLESLASH, R_SINGLESLASH);
+    path = path.replace(R_MULTI_WILDCARD, R_SINGLE_WILDCARD);
+    return new RegExp(R_START + path + R_END);
+  }
+
+  // mod/doc/src/router/create-routes.ts
+  function createRoutes(routes2) {
+    let routesArray = [];
+    let i = 0;
+    while (routes2[i]) {
+      let {component, path, title, children: children4, activates} = routes2[i];
+      let matcher = createMatcher(path);
+      activates = [...new Set(activates)];
+      routesArray.push({title, matcher, component, activates});
+      if (children4) {
+        routes2.splice(i + 1, 0, ...children4.map((rc) => {
+          if (rc.activates && activates) {
+            rc.activates = [...activates, ...new Set(rc.activates)];
+          } else if (activates) {
+            rc.activates = activates;
+          }
+          rc.path = path + "/" + rc.path;
+          return rc;
+        }));
+      }
+      i++;
+    }
+    return routesArray;
+  }
+
+  // mod/doc/src/router/execute-activators.ts
+  async function executeActivators(activatorArray, params) {
+    if (activatorArray) {
+      try {
+        for (let activator of activatorArray) {
+          if (await activator(params) !== true)
+            return false;
+        }
+      } catch (error2) {
+        console.error(error2);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // mod/doc/src/router/parameters.ts
+  function parameters(matcher, url2) {
+    let matched = matcher.exec(url2);
+    return matched.groups ? __assign({}, matched.groups) : Object.create(null);
+  }
+
+  // mod/doc/src/router/find-route.ts
+  async function findRoute(routes2, url2) {
+    let i = 0;
+    while (routes2[i]) {
+      let route = routes2[i];
+      if (!route.matcher.test(url2)) {
+        i++;
+        continue;
+      }
+      route.params = parameters(route.matcher, url2);
+      let activatable = await executeActivators(route.activates, route.params);
+      if (activatable)
+        return route;
+      i++;
+      continue;
+    }
+  }
+
+  // mod/doc/src/router/load-route.ts
+  async function loadRoute(routes2, url2) {
+    let route = await findRoute(routes2, url2);
+    if (!route) {
+      return;
+    }
+    let {component, title, params} = route;
+    let stateTitle = "";
+    if (title) {
+      if (typeof title === T_FUNCTION) {
+        stateTitle = title(params);
+      } else if (typeof title === T_STRING) {
+        stateTitle = title;
+      }
+    }
+    let stateComponent = await component(params);
+    return {
+      title: stateTitle,
+      params,
+      component: stateComponent
+    };
+  }
+
+  // mod/doc/src/router/render-route.ts
+  async function renderRoute(targetComponent, route, url2) {
+    if (route.title)
+      document.title = route.title;
+    history.replaceState(route.params, document.title, url2);
+    render(targetComponent, route.component);
+  }
+
+  // mod/doc/src/router/url.ts
+  function fullUrl() {
+    return location.pathname + location.search + location.hash;
+  }
+
+  // mod/doc/src/router/mod.ts
+  function router({target, routes: routes2}) {
+    const Routes2 = createRoutes(routes2);
+    const callbacks = {
+      load: [],
+      loadEnd: [],
+      loadError: []
+    };
+    const pub = {onLoad, onLoadEnd, onLoadError};
+    async function listener() {
+      let loadUrl = fullUrl();
+      eachFn(callbacks.load);
+      let route = await loadRoute(Routes2, loadUrl);
+      if (route) {
+        renderRoute(target, route, loadUrl);
+      } else {
+        eachFn(callbacks.loadError);
+      }
+      eachFn(callbacks.loadEnd);
+    }
+    function onLoad(fn) {
+      callbacks.load.push(fn);
+      return pub;
+    }
+    function onLoadEnd(fn) {
+      callbacks.loadEnd.push(fn);
+      return pub;
+    }
+    function onLoadError(fn) {
+      callbacks.loadEnd.push(fn);
+      return pub;
+    }
+    listener();
+    onGlobalEvent("popstate", listener);
+    return pub;
+  }
+  onGlobalEvent("click", (event) => {
+    let target = event.target;
+    while (target) {
+      if (target["href"]) {
+        event.preventDefault();
+        history.pushState(null, "", target["href"]);
+        dispatchEvent(new PopStateEvent("popstate"));
+        break;
+      }
+      target = target["parentNode"];
+    }
+  });
+
+  // mod/doc/src/styles.ts
+  const styleElement = document.createElement("style");
+  document.head.appendChild(styleElement);
+  const CSSSheet = styleElement.sheet;
+  const CSSMap = blank();
+  function useStyles(el, rules) {
+    if (!el[Styles])
+      el[Styles] = blank();
+    const elStyles = el[Styles];
+    const add2 = [];
+    const del3 = [];
+    const keys = keysOf(rules);
+    for (let i = 0, len = keys.length; i < len; i++) {
+      const property = keys[i].replace(/([A-Z])/g, "-$1");
+      const name2 = createRule(`${property}: ${rules[keys[i]]};`);
+      if (!elStyles[property]) {
+        elStyles[property] = name2;
+        add2.push(name2);
+      } else {
+        del3.push(elStyles[property]);
+        elStyles[property] = name2;
+        add2.push(name2);
+      }
+    }
+    el.classList.remove(...del3);
+    el.classList.add(...add2);
+  }
+  function createRule(rule) {
+    let name2 = "r-" + createHash(rule);
+    let style = `.${name2} { ${rule} }`;
+    if (!CSSMap[name2]) {
+      CSSMap[name2] = style;
+      insertRule(style);
+    } else {
+      if (CSSMap[name2] !== style) {
+        name2 += "_";
+        CSSMap[name2] = `.${name2} { ${rule} }`;
+        insertRule(CSSMap[name2]);
+      }
+    }
+    return name2;
+  }
+  function insertRule(rule) {
+    CSSSheet.insertRule(rule, CSSSheet.rules.length);
+  }
+
+  // mod/doc/src/directives.ts
+  const directive = (name2, fn) => Directives[name2] = fn;
+  const mountDirective = (e2, p) => lifeCycle(e2, Mount, p);
+  const destroyDirective = (e2, p) => lifeCycle(e2, Destroy, p);
+  const intervalDirective = (e2, p) => {
+    let id = setInterval(() => p[0](e2), p[1]);
+    return lifeCycle(e2, Destroy, () => clearInterval(id));
+  };
+  const referenceDirective = (e2, p) => {
+    if (p.isRef)
+      p.current = e2;
+  };
+  const portalDirective = (e2, p) => {
+    if (p.isPortal)
+      p.set(e2);
+  };
+  const ifDirective = (e2, p) => {
+    if (typeof p === T_BOOLEAN) {
+      if (p === false)
+        e2.setAttribute("hidden", "");
+    } else if (p.subscribe) {
+      let state = p;
+      lifeCycle(e2, Destroy, state.subscribe((val) => {
+        val === true ? e2.removeAttribute("hidden") : e2.setAttribute("hidden", "");
+      }));
+    }
+  };
+  const stylesDirective = (e2, p) => {
+    if (p.subscribe) {
+      let state = p;
+      lifeCycle(e2, Destroy, state.subscribe((rules) => useStyles(e2, rules)));
+    } else {
+      useStyles(e2, p);
+    }
+  };
+  const forDirective = (e2, p) => {
+    let sort2 = p.sort;
+    let filter = p.filter;
+    let limit = p.limit;
+    let offset = p.offset;
+    let com = p.do;
+    if (p.of) {
+      if (Array.isArray(p.of)) {
+        let copy2 = prepareForList(p.of, {sort: sort2, filter, limit, offset});
+        render(e2, ...copy2.map(com));
+      } else if (p.of && p.of.subscribe) {
+        let list = p.of;
+        destroyDirective(e2, list.subscribe((val) => {
+          let copy2 = prepareForList(val, {sort: sort2, filter, limit, offset});
+          render(e2, ...copy2.map(com));
+        }));
+      }
+    }
+  };
+  directive("styles", stylesDirective);
+  directive("if", ifDirective);
+  directive("ref", referenceDirective);
+  directive("portal", portalDirective);
+  directive("mount", mountDirective);
+  directive("destroy", destroyDirective);
+  directive("interval", intervalDirective);
+  directive("for", forDirective);
+
+  // app/helpers/mark-down.ts
+  const IMG = /\![\[]{1}([^\]]+)[\]]{1}[\(]{1}([^\)\"]+)(\"(.+)\")?[\)]{1}/g;
+  const A = /[\[]{1}([^\]]+)[\]]{1}[\(]{1}([^\)\"]+)(\"(.+)\")?[\)]{1}/g;
+  const PRE0 = /^\s*\n\`\`\`(([^\s]+))?/gm;
+  const PRE1 = /^\`\`\`\s*\n/gm;
+  const PRE2 = /(\<pre.+\>)\s*\n\<p\>(.+)\<\/p\>/gm;
+  const CODE0 = /[\`]{1}([^\`]+)[\`]{1}/g;
+  const P0 = /^\s*(\n)?(.+)/gm;
+  const P1 = /\<(\/)?(h\d|ul|ol|li|img|pre)/;
+  const B = /[\*\_]{2}([^\*\_]+)[\*\_]{2}/g;
+  const I = /[\*\_]{1}([^\*\_]+)[\*\_]{1}/g;
+  const DEL = /[\~]{2}([^\~]+)[\~]{2}/g;
+  const UL0 = /^\s*\n\*/gm;
+  const UL1 = /^(\*.+)\s*\n([^\*])/gm;
+  const UL2 = /^\* (.+)/gm;
+  const OL0 = /^\s*\n\d\./gm;
+  const OL1 = /^(\d\..+)\s*\n([^\d\.])/gm;
+  const OL2 = /^\d\. (.+)/gm;
+  const H1 = /[\\#]{1} (.+)/g;
+  const H2 = /[\\#]{2} (.+)/g;
+  const H3 = /[\\#]{3} (.+)/g;
+  const H4 = /[\\#]{4} (.+)/g;
+  const H5 = /[\\#]{5} (.+)/g;
+  const H6 = /[\\#]{6} (.+)/g;
+  function replace(text2, find, value) {
+    return text2.replace(find, value);
+  }
+  function translateMarkDown(text2) {
+    text2 = buildLists(text2);
+    text2 = buildHeaders(text2);
+    text2 = replace(text2, IMG, `<img loading="lazy" src="$2" alt="$1">`);
+    text2 = replace(text2, A, `<a target="_blank" href="$2">$1</a>`);
+    text2 = buildFontStyles(text2);
+    text2 = replace(text2, PRE0, `<pre class="$2">`);
+    text2 = replace(text2, PRE1, "</pre>\n\n");
+    text2 = replace(text2, CODE0, "<code>$1</code>");
+    text2 = replace(text2, P0, (m) => P1.test(m) ? m : `<p>${m}</p>`);
+    text2 = replace(text2, PRE2, "$1$2");
+    return text2;
+  }
+  function buildHeaders(t2) {
+    t2 = replace(t2, H6, "<h6>$1</h6>");
+    t2 = replace(t2, H5, "<h5>$1</h5>");
+    t2 = replace(t2, H4, "<h4>$1</h4>");
+    t2 = replace(t2, H3, "<h3>$1</h3>");
+    t2 = replace(t2, H2, "<h2>$1</h2>");
+    t2 = replace(t2, H1, "<h1>$1</h1>");
+    return t2;
+  }
+  function buildFontStyles(t2) {
+    t2 = replace(t2, B, "<b>$1</b>");
+    t2 = replace(t2, I, "<i>$1</i>");
+    t2 = replace(t2, DEL, "<del>$1</del>");
+    return t2;
+  }
+  function buildLists(t2) {
+    t2 = replace(t2, UL0, "<ul>\n*");
+    t2 = replace(t2, UL1, "$1\n</ul>\n\n$2");
+    t2 = replace(t2, UL2, "<li>$1</li>");
+    t2 = replace(t2, OL0, "<ol>\n1.");
+    t2 = replace(t2, OL1, "$1\n</ol>\n\n$2");
+    t2 = replace(t2, OL2, "<li>$1</li>");
+    return t2;
+  }
+
+  // lang/de_DE.json
+  var home = "Startseite";
+  var presentation = "Pr\xE4sentation";
+  var general = "Allgemein";
+  var installApp = "Anwendung installieren";
+  var uninstallApp = "Anwendung deinstallieren";
+  var install = "Installieren";
+  var isInstalled = "Bereits installiert";
+  var login = "Einloggen";
+  var userSettings = "Nutzereinstellungen";
+  var settings = "Einstellungen";
+  var register = "Registrieren";
+  var logout = "Ausloggen";
+  var comments = "Kommentare";
+  var error = "Fehler";
+  var following = "Folgt";
+  var followers = "Follower";
+  var navigation = "Navigation";
+  var visitUser = "Besuche $u's Seite";
+  var send = "Senden";
+  var name = "Name";
+  var changeName = "Namen \xE4ndern";
+  var changeNameSuccess = "Name erfolgreich aktualisiert";
+  var changeNameFailed = "Name konnte nicht aktualisiert werden";
+  var close = "Schlie\xDFen";
+  var follow = "Folgen";
+  var unfollow = "Nicht mehr folgen";
+  var editPost = "Post bearbeiten";
+  var deletePost = "Post l\xF6schen";
+  var deletePostSure = "Soll der Post gel\xF6scht werden?";
+  var deletePostSuccess = "Post wurde gel\xF6scht";
+  var deletePostFailed = "Post konnte nicht gel\xF6scht werden";
+  var continue2 = "Fortfahren";
+  var abort = "Abbrechen";
+  var edited = "Bearbeitet";
+  var actionComment = "Kommentieren";
+  var deleteComment = "Kommentar l\xF6schen";
+  var showPostMenu = "Zeige Men\xFC an";
+  var save = "\xC4nderungen speichern";
+  var removeImage = "Bild entfernen";
+  var uploadImage = "Bild hochladen";
+  var deleteAccount = "Konto l\xF6schen";
+  var deleteAccountSure = "Konto wirklich l\xF6schen?";
+  var deleteAccountInfo = "Wenn du das Konto l\xF6scht, kannst du den Vorgang nicht mehr r\xFCckg\xE4ngig machen.";
+  var authError = "F\xFCr diese Aktion hast du keine Berechtigungen.";
+  var progressiveWebApp = "Progressive Webanwendung";
+  var followingError = "Folgender Fehler ist aufgetreten: '$e'";
+  var unsupportedFileType = "Dateityp '$t' nicht unterst\xFCtzt.";
+  var clickToCopy = "Klicken um '$c' in die Zwischenablage zu kopieren";
+  var username = "Benutzername";
+  var email = "E-Mail Adresse";
+  var password = "Passwort";
+  var currentPassword = "Aktuelles Passwort";
+  var passwordChangedSuccess = "Dein Passwort wurde erfolgreich aktualisiert";
+  var passwordChangedFailed = "Dein Passwort konnte nicht aktualisiert werden";
+  var changePassword = "Passwort aktualisieren";
+  var changePasswordTitle = "\xC4ndere dein Passwort";
+  var passwordReEnter = "Passwort wiederholen";
+  var newPassword = "Neues Passwort";
+  var newPasswordReEnter = "Neues Passwort wiederholen";
+  var errorOnUpload = "Beim Hochladen ist ein Fehler aufgetreten";
+  var loginSuccess = "Erfolgreich eingeloggt";
+  var loginSuccessMessage = "Du bist nun eingeloggt";
+  var loginFailed = "Einloggen fehlgeschlagen";
+  var loginFailedMessage = "Benutzer existiert nicht oder inkorrekte Eingaben";
+  var logoutMessage = "Du bist nun abgemeldet";
+  var registerSuccess = "Erfolgreich registriert. Du kannst dich nun einloggen.";
+  var registerFailed = "Entweder existiert der Benutzer bereits oder falsche Eingaben get\xE4tigt.";
+  var passwordsNotSame = "Passw\xF6rter stimmen nicht \xFCberein";
+  var showPostPreview = "Vorschau";
+  var nUsersLikedThat = " Nutzer/n gef\xE4llt das";
+  var showComments = "Gehe zur Kommentarsektion";
+  var routeNotFound = "Seite '$url' nicht gefunden.";
+  var messageTooShort = "Die Nachricht ist zu kurz";
+  var messageTooLong = "Die Nachricht hat die maximale L\xE4nge \xFCberschritten";
+  var messageWrongLength = "Die Nachricht hat eine inkorrekte L\xE4nge";
+  var messageCriteriaError = "So kannst du die Nachricht nicht absenden.";
+  var alreadyAccount = "Du hast bereits ein Konto?";
+  var enterAccount = "Logge dich in dein Konto ein";
+  var createAccount = "Erstelle ein Konto";
+  var loginReason = "Dein Grund zum Einloggen";
+  var noAccount = "Noch kein Konto?";
+  var secondsAgo = "Vor $n Sekunden";
+  var secondAgo = "Vor einer Sekunde";
+  var minutesAgo = "Vor $n Minuten";
+  var minuteAgo = "Vor einer Minute";
+  var hoursAgo = "Vor $n Stunden";
+  var hourAgo = "Vor einer Stunde";
+  var daysAgo = "Vor $n Tagen";
+  var dayAgo = "Vor einem Tag";
+  var weeksAgo = "Vor $n Wochen";
+  var weekAgo = "Vor einer Woche";
+  var monthsAgo = "Vor $n Monaten";
+  var monthAgo = "Vor einem Monat";
+  var yearsAgo = "Vor $n Jahren";
+  var yearAgo = "Vor einem Jahr";
+  var de_DE_default = {
+    home,
+    presentation,
+    general,
+    installApp,
+    uninstallApp,
+    install,
+    isInstalled,
+    login,
+    userSettings,
+    settings,
+    register,
+    logout,
+    comments,
+    error,
+    following,
+    followers,
+    navigation,
+    visitUser,
+    send,
+    name,
+    changeName,
+    changeNameSuccess,
+    changeNameFailed,
+    close,
+    follow,
+    unfollow,
+    editPost,
+    deletePost,
+    deletePostSure,
+    deletePostSuccess,
+    deletePostFailed,
+    continue: continue2,
+    abort,
+    edited,
+    actionComment,
+    deleteComment,
+    showPostMenu,
+    save,
+    removeImage,
+    uploadImage,
+    deleteAccount,
+    deleteAccountSure,
+    deleteAccountInfo,
+    authError,
+    progressiveWebApp,
+    followingError,
+    unsupportedFileType,
+    clickToCopy,
+    username,
+    email,
+    password,
+    currentPassword,
+    passwordChangedSuccess,
+    passwordChangedFailed,
+    changePassword,
+    changePasswordTitle,
+    passwordReEnter,
+    newPassword,
+    newPasswordReEnter,
+    errorOnUpload,
+    loginSuccess,
+    loginSuccessMessage,
+    loginFailed,
+    loginFailedMessage,
+    logoutMessage,
+    registerSuccess,
+    registerFailed,
+    passwordsNotSame,
+    showPostPreview,
+    nUsersLikedThat,
+    showComments,
+    routeNotFound,
+    messageTooShort,
+    messageTooLong,
+    messageWrongLength,
+    messageCriteriaError,
+    alreadyAccount,
+    enterAccount,
+    createAccount,
+    loginReason,
+    noAccount,
+    secondsAgo,
+    secondAgo,
+    minutesAgo,
+    minuteAgo,
+    hoursAgo,
+    hourAgo,
+    daysAgo,
+    dayAgo,
+    weeksAgo,
+    weekAgo,
+    monthsAgo,
+    monthAgo,
+    yearsAgo,
+    yearAgo
+  };
+
+  // app/helpers/elapsed-time.ts
+  function elapsedTime(datetime) {
+    let sec = Math.floor((Date.now() - datetime) / 1e3);
+    let n2;
+    n2 = Math.floor(sec / 31536e3);
+    if (n2 == 1) {
+      return de_DE_default.yearAgo;
+    } else if (n2 > 1) {
+      return replace2(de_DE_default.yearsAgo, n2);
+    }
+    n2 = Math.floor(sec / 2592e3);
+    if (n2 == 1) {
+      return de_DE_default.monthAgo;
+    } else if (n2 > 1) {
+      return replace2(de_DE_default.monthsAgo, n2);
+    }
+    n2 = Math.floor(sec / 604800);
+    if (n2 == 1) {
+      return de_DE_default.weekAgo;
+    } else if (n2 > 1) {
+      return replace2(de_DE_default.monthsAgo, n2);
+    }
+    n2 = Math.floor(sec / 86400);
+    if (n2 == 1) {
+      return de_DE_default.dayAgo;
+    } else if (n2 > 1) {
+      return replace2(de_DE_default.daysAgo, n2);
+    }
+    n2 = Math.floor(sec / 3600);
+    if (n2 == 1) {
+      return de_DE_default.hourAgo;
+    } else if (n2 > 1) {
+      return replace2(de_DE_default.hoursAgo, n2);
+    }
+    n2 = Math.floor(sec / 60);
+    if (n2 == 1) {
+      return de_DE_default.minuteAgo;
+    } else if (n2 > 1) {
+      return replace2(de_DE_default.minutesAgo, n2);
+    }
+    n2 = Math.floor(sec);
+    if (n2 == 1) {
+      return de_DE_default.secondAgo;
+    } else {
+      return replace2(de_DE_default.secondsAgo, n2);
+    }
+  }
+  function replace2(text2, time) {
+    return text2.replace("$n", time + "");
+  }
+
+  // app/helpers/onscreen.ts
+  function onScreen(el) {
+    const {top, bottom} = el.getBoundingClientRect();
+    if ((top && bottom) === 0)
+      return false;
+    return top < innerHeight && bottom >= 0;
+  }
+
+  // app/services/generic.service.ts
+  const isLoading = observable(false);
+  function activateRoute(href) {
+    history.pushState(null, "", href);
+    return dispatchEvent(new PopStateEvent("popstate"));
+  }
+  const Uploaded = observable(false);
+  const Uploads = observable([]);
+  Uploads.subscribe((images) => Uploaded.set(images.length > 0 ? true : false));
+
+  // app/services/notification.service.tsx
+  const BottomRight = reference();
+  function push(title, message, options = {
+    removeOnClick: false,
+    timeout: 5e3
+  }) {
+    const wrapper = BottomRight.current;
+    if (wrapper) {
+      wrapper.appendChild(/* @__PURE__ */ doc_exports.h(Notification, {
+        title,
+        message,
+        options
+      }));
+      wrapper.scrollBy(0, wrapper.scrollHeight);
+    }
+  }
+  function Notification({title, message, options}) {
+    const View = /* @__PURE__ */ doc_exports.h(Box, {
+      className: "notification",
+      arrow: "bottom-right"
+    }, /* @__PURE__ */ doc_exports.h(Header, {
+      if: !!title
+    }, title || ""), /* @__PURE__ */ doc_exports.h("div", {
+      className: "notification-message"
+    }, message));
+    if (options.timeout)
+      setTimeout(() => View.remove(), options.timeout);
+    if (options.removeOnClick)
+      onEvent(View, "click", () => View.remove());
+    return View;
+  }
+  document.body.appendChild(/* @__PURE__ */ doc_exports.h("div", {
+    id: "notifications"
+  }, /* @__PURE__ */ doc_exports.h("div", {
+    ref: BottomRight,
+    className: "notification-wrapper"
+  })));
+
+  // app/services/http.service.ts
+  const http_service_exports = {};
+  __export(http_service_exports, {
+    del: () => del,
+    get: () => get,
+    patch: () => patch,
+    post: () => post,
+    put: () => put
+  });
+  const token = () => localStorage.getItem("token");
+  const httpHeaders = () => {
+    const localToken = token();
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    if (localToken) {
+      headers["Authorize"] = "Bearer " + localToken;
+      headers["Authorization"] = "Bearer " + localToken;
+    }
+    return headers;
+  };
+  function createHttp(method, body, options) {
+    var _a;
+    if (!options)
+      options = {};
+    if (!options.responseType)
+      options.responseType = "json";
+    let _headers = ((_a = options.init) == null ? void 0 : _a.headers) || {};
+    let headers = __assign(__assign({}, httpHeaders()), _headers);
+    for (let key in _headers) {
+      if (!_headers[key]) {
+        delete headers[key];
+      }
+    }
+    let init = {headers, method, body};
+    return [options, init];
+  }
+  async function f(url2, method, body, options) {
+    try {
+      let [opt, init] = createHttp(method, body, options);
+      let response = await fetch(url2, init);
+      let data = await response[opt.responseType]();
+      return [data, response, null];
+    } catch (error2) {
+      return [null, null, error2];
+    }
+  }
+  const get = (url2, opt) => f(url2, "GET", null, opt);
+  const post = (url2, body, opt) => f(url2, "POST", body, opt);
+  const put = (url2, body, opt) => f(url2, "PUT", body, opt);
+  const del = (url2, body, opt) => f(url2, "DELETE", body, opt);
+  const patch = (url2, body, opt) => f(url2, "PATCH", body, opt);
+
+  // app/services/post.service.ts
+  const URL2 = "http://localhost:5000";
+  const API_VERSION = 1;
+  const API_URL = `${URL2}/api/v${API_VERSION}/posts`;
+  const API_POSTS_ID = API_URL + "/";
+  const API_POSTS_LIKE = API_URL + "/like/";
+  const API_MEDIA = URL2 + "/api/v" + API_VERSION + "/media/";
+  const Posts = observable([]);
+  const localById = (postId) => Posts.value().find((post5) => post5.id === postId);
+  const hasPost = async (postId) => !!await getPost(postId);
+  const sort = (a, b) => b.datePosted - a.datePosted;
+  async function load(username2 = null, page = 1, size = 50) {
+    let url2 = [];
+    if (username2)
+      url2.push(`Username=${username2}`);
+    if (page)
+      url2.push(`Page=${page}`);
+    if (size)
+      url2.push(`Size=${size}`);
+    let query = url2.join("&");
+    if (query.length > 0)
+      query = "?" + query;
+    let [postRes, res] = await get(API_URL + query);
+    if (![200, 204].includes(res == null ? void 0 : res.status))
+      return;
+    if (postRes == null ? void 0 : postRes.data)
+      Posts.set(postRes.data);
+  }
+  async function getPost(postId) {
+    let [wrapper, res] = await get(API_POSTS_ID + postId);
+    if ([200, 204].includes(res == null ? void 0 : res.status)) {
+      if (!localById(wrapper.data.id)) {
+        Posts.value().push(wrapper.data);
+      }
+      return wrapper.data;
+    }
+  }
+  async function add(content) {
+    const body = JSON.stringify({content});
+    let [_, res] = await post(API_URL, body);
+    return (res == null ? void 0 : res.status) === 200;
+  }
+  async function del2(postId) {
+    let [_, res] = await del(API_POSTS_ID + postId);
+    if ([200, 204].includes(res == null ? void 0 : res.status)) {
+      push(null, de_DE_default.deletePostSuccess);
+      Posts.update((list) => {
+        const idx = list.findIndex((post5) => post5.id === postId);
+        if (idx >= 0)
+          list.splice(idx, 1);
+      });
+    } else {
+      push(null, de_DE_default.deletePostFailed);
+    }
+    return (res == null ? void 0 : res.status) === 204;
+  }
+  async function like(postId) {
+    let post5 = localById(postId);
+    let method = post5.liked ? "del" : "post";
+    let [_, res] = await http_service_exports[method](API_POSTS_LIKE + postId, "{}");
+    if (res.status !== 200)
+      return false;
+    let [w2, r2] = await get(API_POSTS_ID + postId);
+    if (r2.status !== 200)
+      return false;
+    patchOne(postId, w2.data);
+    return true;
+  }
+  function patchOne(id, newData) {
+    let post5 = localById(id);
+    if (post5)
+      for (let key in newData)
+        post5[key] = newData[key];
+  }
+  async function loadComments(id) {
+    var _a;
+    let [wrapper] = await get(API_URL + "/" + id + "/comments");
+    return ((_a = wrapper == null ? void 0 : wrapper.data) == null ? void 0 : _a.length) ? wrapper.data : [];
+  }
+  async function addComment(id, content) {
+    let body = JSON.stringify({content});
+    let [wrapper, res] = await post(API_URL + "/" + id + "/comments", body);
+    return (res == null ? void 0 : res.status) === 200;
+  }
+  async function addMedia(file) {
+    var _a;
+    let formData = new FormData();
+    formData.append("file", file, file.name);
+    let [wrapper, res] = await post(API_MEDIA, formData, {
+      init: {headers: {"Content-Type": null}}
+    });
+    if ((res == null ? void 0 : res.status) !== 200 || !((_a = wrapper == null ? void 0 : wrapper.data) == null ? void 0 : _a.guid)) {
+      return;
+    }
+    return wrapper.data.guid;
+  }
+  async function delMedia(guid) {
+    return false;
+    let [wrapper, res] = await del(API_MEDIA + guid);
+    return (res == null ? void 0 : res.status) === 200;
+  }
+
+  // app/components/mu.component.tsx
+  directive("isBox", (el) => el.classList.add("box"));
+  function Box(props, ...children4) {
+    if (!props)
+      props = {};
+    return /* @__PURE__ */ doc_exports.h("div", __assign(__assign({}, props), {
+      isBox: true
+    }), !props.arrow ? void 0 : /* @__PURE__ */ doc_exports.h("div", {
+      className: "arrow arrow-" + props.arrow
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      className: "box-content"
+    }, children4));
+  }
+  directive("isLabel", (el) => el.classList.add("label"));
+  function Label(props, ...children4) {
+    return /* @__PURE__ */ doc_exports.h("div", __assign(__assign({}, props), {
+      isLabel: true
+    }), /* @__PURE__ */ doc_exports.h("label", {
+      className: "label-content"
+    }, props.labelText), children4);
+  }
+  directive("isButton", (el) => el.classList.add("button"));
+  function Button(props, ...children4) {
+    if (!props)
+      props = {};
+    return /* @__PURE__ */ doc_exports.h("button", __assign(__assign({}, props), {
+      isButton: true
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      className: "button-content"
+    }, children4));
+  }
+  directive("isHeader", (el) => el.classList.add("header"));
+  function Header(props, ...children4) {
+    if (!props)
+      props = {};
+    return /* @__PURE__ */ doc_exports.h("header", __assign(__assign({}, props), {
+      isHeader: true
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      className: "title header-content"
+    }, children4), /* @__PURE__ */ doc_exports.h(Seperator, null));
+  }
+  directive("isFooter", (el) => el.classList.add("footer"));
+  function Footer(props, ...children4) {
+    if (!props)
+      props = {};
+    return /* @__PURE__ */ doc_exports.h("footer", __assign(__assign({}, props), {
+      isFooter: true
+    }), /* @__PURE__ */ doc_exports.h(Seperator, null), /* @__PURE__ */ doc_exports.h("div", {
+      className: "footer-content"
+    }, children4));
+  }
+  function Input(props) {
+    return /* @__PURE__ */ doc_exports.h("div", {
+      className: "input"
+    }, /* @__PURE__ */ doc_exports.h("input", __assign({}, props)));
+  }
+  function TextArea(props) {
+    return /* @__PURE__ */ doc_exports.h("div", {
+      className: "input"
+    }, /* @__PURE__ */ doc_exports.h("textarea", __assign({}, props)));
+  }
+  function Seperator() {
+    return /* @__PURE__ */ doc_exports.h("span", {
+      className: "seperator"
+    });
+  }
+  function Icon(_a) {
+    var {name: name2} = _a, props = __rest(_a, ["name"]);
+    let className = "icon icon-";
+    let iconName = "icon-" + name2;
+    if (name2)
+      className += name2;
+    if (props.className) {
+      className += " " + props.className;
+      delete props.className;
+    }
+    const View = /* @__PURE__ */ doc_exports.h("i", __assign({
+      className,
+      setIcon
+    }, props));
+    return View;
+    function setIcon(name3) {
+      View.classList.replace(iconName, "icon-" + name3);
+      iconName = "icon-" + name3;
+    }
+  }
+  function Writer({placeholder, value, ref}, ...children4) {
+    const TextAreaRef = reference();
+    const MarkDownContent = reference();
+    const Visible = observable(false);
+    return /* @__PURE__ */ doc_exports.h("div", {
+      className: "box writer",
+      getValues,
+      ref,
+      clear
+    }, /* @__PURE__ */ doc_exports.h("div", null, /* @__PURE__ */ doc_exports.h(TextArea, {
+      ref: TextAreaRef,
+      oninput: writeMarkDown,
+      placeholder: placeholder || "",
+      value: value || ""
+    }), /* @__PURE__ */ doc_exports.h("span", {
+      tooltip: de_DE_default.showPostPreview
+    }, /* @__PURE__ */ doc_exports.h(Icon, {
+      name: "magnifier",
+      className: "toggle-post-preview",
+      onclick: toggleVisibility,
+      styles: {cursor: "pointer"}
+    }))), /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h("div", {
+      className: "mark-down-wrapper",
+      if: Visible
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "box mark-down",
+      ref: MarkDownContent
+    }), /* @__PURE__ */ doc_exports.h(Seperator, null)), children4));
+    function clear() {
+      TextAreaRef.current.value = "";
+      MarkDownContent.current.innerHTML = "";
+      Visible.set(false);
+    }
+    function getValues() {
+      const el = MarkDownContent.current;
+      const text2 = TextAreaRef.current;
+      if (el && text2) {
+        return {
+          raw: text2.value,
+          rich: el.innerHTML
+        };
+      }
+    }
+    function writeMarkDown() {
+      const el = MarkDownContent.current;
+      const text2 = TextAreaRef.current;
+      if (el && text2) {
+        el.innerHTML = translateMarkDown(text2.value);
+      }
+    }
+    function toggleVisibility() {
+      Visible.set(!Visible.value());
+    }
+  }
+  function Time(_a) {
+    var {datetime} = _a, props = __rest(_a, ["datetime"]);
+    const InnerText = observable(elapsedTime(datetime));
+    const View = /* @__PURE__ */ doc_exports.h("time", __assign({
+      dateTime: datetime,
+      innerText: InnerText,
+      interval: [intervalFn, 5e3]
+    }, props));
+    function intervalFn() {
+      if (onScreen(View))
+        InnerText.set(elapsedTime(datetime));
+    }
+    return View;
+  }
+  directive("isUploadItem", (el) => el.classList.add("upload-item"));
+  function UploadItemElement(props) {
+    return /* @__PURE__ */ doc_exports.h("div", __assign(__assign({}, props), {
+      isUploadItem: true
+    }), /* @__PURE__ */ doc_exports.h("img", {
+      src: props.preview,
+      className: "upload-image"
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      className: "upload-text"
+    }, props.fileName), /* @__PURE__ */ doc_exports.h("div", null, /* @__PURE__ */ doc_exports.h(Icon, {
+      name: "clipboard",
+      copyToClipboard: `![${props.fileName}](${props.preview})`,
+      className: "upload-action"
+    }), /* @__PURE__ */ doc_exports.h(Icon, {
+      tooltip: de_DE_default.removeImage,
+      name: "x-red",
+      onclick: removeUpload,
+      className: "upload-action"
+    })));
+    function removeUpload() {
+      Uploads.update((files) => {
+        let idx = files.findIndex((file) => file.key === props.key);
+        if (idx >= 0) {
+          files.splice(idx, 1);
+          delMedia(props.key);
+        }
+      });
+    }
+  }
+  directive("isMenu", (el) => el.classList.add("menu"));
+  function Menu(props, ...children4) {
+    return /* @__PURE__ */ doc_exports.h("ul", __assign(__assign({}, props), {
+      isMenu: true,
+      isBox: true
+    }), children4);
+  }
+  directive("isMenuItem", (el) => el.classList.add("menu-item"));
+  function MenuItem(props, ...children4) {
+    return /* @__PURE__ */ doc_exports.h("li", __assign(__assign({}, props), {
+      isMenuItem: true
+    }), children4);
+  }
+
+  // app/helpers/adjust-card-position.ts
+  function adjustCardPosition(top, left) {
+    top -= 50;
+    left -= 50;
+    if (top < 0) {
+      top = 0;
+    }
+    if (innerHeight - top < 200) {
+      top = innerHeight - 200;
+    }
+    return [top, left];
+  }
+
+  // app/config/settings.ts
+  const notification = {
+    removeOnClick: true,
+    timeout: 5e3
+  };
+  const MAX_FILE_SIZE = 5242880;
+
+  // node_modules/jwt-decode/build/jwt-decode.esm.js
+  function e(e2) {
+    this.message = e2;
+  }
+  e.prototype = new Error(), e.prototype.name = "InvalidCharacterError";
+  var r = typeof window != "undefined" && window.atob && window.atob.bind(window) || function(r2) {
+    var t2 = String(r2).replace(/=+$/, "");
+    if (t2.length % 4 == 1)
+      throw new e("'atob' failed: The string to be decoded is not correctly encoded.");
+    for (var n2, o2, a = 0, i = 0, c = ""; o2 = t2.charAt(i++); ~o2 && (n2 = a % 4 ? 64 * n2 + o2 : o2, a++ % 4) ? c += String.fromCharCode(255 & n2 >> (-2 * a & 6)) : 0)
+      o2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(o2);
+    return c;
+  };
+  function t(e2) {
+    var t2 = e2.replace(/-/g, "+").replace(/_/g, "/");
+    switch (t2.length % 4) {
+      case 0:
+        break;
+      case 2:
+        t2 += "==";
+        break;
+      case 3:
+        t2 += "=";
+        break;
+      default:
+        throw "Illegal base64url string!";
+    }
+    try {
+      return function(e3) {
+        return decodeURIComponent(r(e3).replace(/(.)/g, function(e4, r2) {
+          var t3 = r2.charCodeAt(0).toString(16).toUpperCase();
+          return t3.length < 2 && (t3 = "0" + t3), "%" + t3;
+        }));
+      }(t2);
+    } catch (e3) {
+      return r(t2);
+    }
+  }
+  function n(e2) {
+    this.message = e2;
+  }
+  function o(e2, r2) {
+    if (typeof e2 != "string")
+      throw new n("Invalid token specified");
+    var o2 = (r2 = r2 || {}).header === true ? 0 : 1;
+    try {
+      return JSON.parse(t(e2.split(".")[o2]));
+    } catch (e3) {
+      throw new n("Invalid token specified: " + e3.message);
+    }
+  }
+  n.prototype = new Error(), n.prototype.name = "InvalidTokenError";
+  var jwt_decode_esm_default = o;
+
+  // app/services/user.service.ts
+  const URL3 = "http://localhost:5000";
+  const API_VERSION2 = 1;
+  const API_URL2 = `${URL3}/api/v${API_VERSION2}`;
+  const API_ACCOUNT = "accounts";
+  const API_USER = API_URL2 + "/users/";
+  const API_FOLLOW = API_USER + "follow/";
+  const API_ACCOUNTS = API_URL2 + `/${API_ACCOUNT}`;
+  const API_LOGIN = API_URL2 + `/${API_ACCOUNT}/login`;
+  const API_REGISTER = API_URL2 + `/${API_ACCOUNT}/register`;
+  const API_TOKEN = API_URL2 + `/${API_ACCOUNT}/token`;
+  const API_DISPLAY_NAME = API_URL2 + `/${API_ACCOUNT}/displayname`;
+  const API_EMAIL = API_URL2 + `/${API_ACCOUNT}/email`;
+  const API_PASSWORD = API_URL2 + `/${API_ACCOUNT}/password`;
+  const isUser = observable(false);
+  const isGuest = observable(true);
+  let _currentUser = {};
+  const isLoggedIn = isUser.value;
+  const currentUser = () => isLoggedIn() ? _currentUser : null;
+  const hasUser = async (alias) => !!await getUser(alias);
+  async function logout2() {
+    isUser.set(false);
+    localStorage.removeItem("token");
+    push(null, de_DE_default.logoutMessage, notification);
+    activateRoute("/login");
+  }
+  async function login2({alias, password: password2}) {
+    var _a;
+    let body = JSON.stringify({username: alias, password: password2});
+    let [token2, res] = await post(API_LOGIN, body);
+    if ((res == null ? void 0 : res.status) === 200 && ((_a = token2 == null ? void 0 : token2.data) == null ? void 0 : _a.accessToken)) {
+      setToken(token2.data.accessToken);
+      isUser.set(true);
+      push(null, de_DE_default.loginSuccessMessage, notification);
+    } else {
+      isUser.set(false);
+      push(null, de_DE_default.loginFailedMessage, notification);
+    }
+  }
+  async function follow2(username2) {
+    let [_, res] = await post(API_FOLLOW + username2);
+    return (res == null ? void 0 : res.status) === 2e3;
+  }
+  async function unfollow2(username2) {
+    let [_, res] = await del(API_FOLLOW + username2);
+    return (res == null ? void 0 : res.status) === 2e3;
+  }
+  async function followers2(username2) {
+    let [wrapper] = await get(API_USER + `${username2}/followers`);
+    return (wrapper == null ? void 0 : wrapper.data) && wrapper.data.length ? wrapper.data : [];
+  }
+  async function following2(username2) {
+    let [wrapper] = await get(API_USER + `${username2}/following`);
+    return (wrapper == null ? void 0 : wrapper.data) && wrapper.data.length ? wrapper.data : [];
+  }
+  async function patchDisplayName(displayName) {
+    let body = JSON.stringify({displayName});
+    let [_, res] = await patch(API_DISPLAY_NAME, body);
+    if ((res == null ? void 0 : res.status) === 200) {
+      push(null, de_DE_default.changeNameSuccess, notification);
+      _currentUser.alias = displayName;
+      _currentUser.displayName = displayName;
+      return true;
+    }
+    push(null, de_DE_default.changeNameFailed, notification);
+    return false;
+  }
+  async function patchPassword(currentPassword2, newPassword2) {
+    let body = JSON.stringify({currentPassword1: currentPassword2, newPassword: newPassword2});
+    let [_, res] = await patch(API_PASSWORD, body);
+    if ((res == null ? void 0 : res.status) === 200) {
+      push(null, de_DE_default.passwordChangedSuccess, notification);
+      return true;
+    }
+    push(null, de_DE_default.passwordChangedFailed, notification);
+    return false;
+  }
+  async function deleteAccount2() {
+    let [wrapper, res] = await del(API_ACCOUNTS, "{}");
+    if ((res == null ? void 0 : res.status) === 200) {
+      isUser.set(false);
+      localStorage.removeItem("token");
+      activateRoute("/register");
+      return true;
+    }
+    return false;
+  }
+  async function refreshToken() {
+    var _a;
+    let token2 = getToken();
+    if (token2) {
+      const diff = (token2.exp - Math.round(Date.now() / 1e3)) / 3600;
+      if (diff <= 24) {
+        let [wrapper, res] = await get(API_TOKEN);
+        if ((_a = wrapper == null ? void 0 : wrapper.data) == null ? void 0 : _a.accessToken) {
+          setToken(wrapper.data.accessToken);
+        }
+        isUser.set((res == null ? void 0 : res.status) === 200);
+      } else {
+        isUser.set(true);
+      }
+    } else {
+      isUser.set(false);
+    }
+  }
+  async function register2({alias, displayName, email: email2, password: password2}) {
+    let body = JSON.stringify({email: email2, username: alias, password: password2, displayName});
+    let [_, res] = await post(API_REGISTER, body);
+    if ((res == null ? void 0 : res.status) === 200) {
+      push(null, de_DE_default.registerSuccess, notification);
+      activateRoute("/login");
+    } else {
+      push(null, de_DE_default.registerFailed, notification);
+    }
+  }
+  isUser.subscribe(async (state) => {
+    var _a;
+    isGuest.set(state ? false : true);
+    if (state === false)
+      _currentUser = {};
+    if (state === true) {
+      const alias = (_a = getToken()) == null ? void 0 : _a.sub;
+      _currentUser = await getUser(alias);
+    }
+  });
+  function setToken(accessToken) {
+    localStorage.setItem("token", accessToken);
+  }
+  async function getUser(username2) {
+    let [wrapper, res] = await get(API_USER + username2);
+    if ((res == null ? void 0 : res.status) !== 200)
+      return;
+    return wrapper.data;
+  }
+  function getToken() {
+    const token2 = localStorage.getItem("token");
+    if (token2) {
+      return jwt_decode_esm_default(token2);
+    }
+  }
+  refreshToken();
+
+  // app/helpers/colors.ts
+  const Colors = {
+    black: "#17111a",
+    darkRed1: "#372538",
+    darkRed2: "#7a213a",
+    red: "#e14141",
+    lightRed: "#ffa070",
+    brownish: "#c44d29",
+    orange: "#ffbf36",
+    yellow: "#fff275",
+    darkBrown: "#753939",
+    brown: "#cf7957",
+    lightBrown: "#ffd1ab",
+    darkGreen: "#39855a",
+    green: "#83e04c",
+    lightGreen: "#dcff70",
+    darkBlue: "#243b61",
+    blue: "#3898ff",
+    lightBlue: "#6eeeff",
+    violet: "#682b82",
+    magenta: "#bf3fb3",
+    pink: "#ff80aa",
+    darkGrey1: "#3e375c",
+    darkGrey2: "#7884ab",
+    grey: "#b2bcc2",
+    white: "#ffffff"
+  };
+  const ColorKeys = Object.keys(Colors);
+  function randomColor() {
+    const ran = Math.round(Math.random() * 24 + 1);
+    return Colors[ColorKeys[ran]];
+  }
+
+  // app/components/user-card.component.tsx
+  const UserCardPortal = portal(UserCard);
+  const existing = () => document.getElementById("user-card");
+  UserCardPortal.onClose(() => {
+    var _a;
+    return (_a = existing()) == null ? void 0 : _a.remove();
+  });
+  async function UserCard({alias, top, left}) {
+    var _a, _b;
+    [top, left] = adjustCardPosition(top, left);
+    let yourUserName = (_a = currentUser()) == null ? void 0 : _a.username;
+    let user2 = await getUser(alias);
+    const followers3 = observable(0);
+    const following3 = observable(0);
+    const follows = observable(false);
+    const followsNot = observable(true);
+    follows.subscribe((value) => followsNot.set(!value));
+    refreshFollowers();
+    refreshFollowing();
+    return /* @__PURE__ */ doc_exports.h(Box, {
+      styles: {top: `${top}px`, left: `${left}px`},
+      id: "user-card",
+      onmouseleave: UserCardPortal.close
+    }, /* @__PURE__ */ doc_exports.h(Header, null, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", gap: "8px", alignItems: "center"}
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "user-image-wrap"
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "user-image",
+      styles: {backgroundColor: randomColor() + " !important"}
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      className: "avatar-circle"
+    })), /* @__PURE__ */ doc_exports.h("a", {
+      href: `/user/${alias}`,
+      tooltip: de_DE_default.visitUser.replace("$u", user2.displayName),
+      styles: {flex: "1"}
+    }, /* @__PURE__ */ doc_exports.h("div", null, user2.displayName), /* @__PURE__ */ doc_exports.h("div", null, "@", user2.username)), alias === yourUserName ? void 0 : /* @__PURE__ */ doc_exports.h(FollowButtons, null)), /* @__PURE__ */ doc_exports.h(Seperator, null), /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h("div", null, de_DE_default.followers, ": ", followers3), /* @__PURE__ */ doc_exports.h("div", null, de_DE_default.following, ": ", following3))), /* @__PURE__ */ doc_exports.h(Box, {
+      arrow: "top-left",
+      if: ((_b = user2.description) == null ? void 0 : _b.length) > 0
+    }, /* @__PURE__ */ doc_exports.h("span", null, user2.description)));
+    function FollowButtons() {
+      return /* @__PURE__ */ doc_exports.h("div", {
+        className: "cursor-pointer"
+      }, /* @__PURE__ */ doc_exports.h("div", {
+        if: isUser
+      }, /* @__PURE__ */ doc_exports.h(Icon, {
+        if: followsNot,
+        tooltip: de_DE_default.follow,
+        name: "user-follow",
+        onclick: follow3
+      }), /* @__PURE__ */ doc_exports.h(Icon, {
+        if: follows,
+        tooltip: de_DE_default.unfollow,
+        name: "user-unfollow",
+        onclick: unfollow3
+      })));
+    }
+    async function follow3() {
+      await follow2(user2.username);
+      await refreshFollowers();
+      await refreshFollowing();
+    }
+    async function unfollow3() {
+      await unfollow2(user2.username);
+      refreshFollowers();
+      refreshFollowing();
+    }
+    async function refreshFollowers() {
+      let list = await followers2(alias);
+      followers3.set(list.length);
+      follows.set(!!list.find((user3) => user3.username === yourUserName));
+    }
+    async function refreshFollowing() {
+      let list = await following2(alias);
+      following3.set(list.length);
+    }
+  }
+  var user_card_component_default = UserCardPortal;
+
+  // app/helpers/copy-to-clipboard.ts
+  const TextArea2 = document.createElement("textarea");
+  document.body.appendChild(TextArea2);
+  hide();
+  async function copyToClipboard(content) {
+    let error2;
+    try {
+      TextArea2.value = content;
+      show();
+      copy();
+    } catch (err) {
+      error2 = err;
+    } finally {
+      hide();
+      return error2;
+    }
+  }
+  function copy() {
+    TextArea2.select();
+    TextArea2.setSelectionRange(0, TextArea2.value.length);
+    document.execCommand("copy");
+  }
+  function hide() {
+    TextArea2.setAttribute("hidden", "true");
+  }
+  function show() {
+    TextArea2.removeAttribute("hidden");
+  }
+
+  // app/directives/mu.directive.ts
+  directive("user-card", (el, prop) => onEvent(el, "mouseenter", (event) => {
+    user_card_component_default.open({alias: prop, top: event.clientY, left: event.clientX});
+  }));
+  directive("copyToClipboard", (el, prop) => {
+    doc_exports.setProperties(el, {tooltip: de_DE_default.clickToCopy.replace("$c", typeof prop === "function" ? prop() : prop)});
+    onEvent(el, "click", () => {
+      let content;
+      if (typeof prop === "function") {
+        content = prop();
+      } else if (typeof prop === "string") {
+        content = prop;
+      }
+      if (content) {
+        copyToClipboard(content);
+      }
+    });
+  });
+  directive("tooltip", (el, prop) => {
+    el.classList.add("tooltip");
+    el.appendChild(doc_exports.createElement("span", {className: "tooltip-text"}, prop));
+  });
+  directive("routerLink", (el, prop) => onEvent(el, "click", () => activateRoute(prop)));
+
+  // app/components/router.component.tsx
+  function Router({routes: routes2}) {
+    const View = /* @__PURE__ */ doc_exports.h("div", {
+      id: "router"
+    });
+    router({routes: routes2, target: View}).onLoad(() => isLoading.set(true)).onLoadEnd(() => isLoading.set(false));
+    return View;
+  }
+
+  // app/components/navigation.component.tsx
+  function Navigation() {
+    return /* @__PURE__ */ doc_exports.h(Box, {
+      id: "navigation"
+    }, /* @__PURE__ */ doc_exports.h(Header, {
+      classList: "hide-mobile"
+    }, de_DE_default.navigation), /* @__PURE__ */ doc_exports.h("div", {
+      className: "list"
+    }, /* @__PURE__ */ doc_exports.h("a", {
+      href: "/"
+    }, de_DE_default.home), /* @__PURE__ */ doc_exports.h("a", {
+      if: isGuest,
+      href: "/login"
+    }, de_DE_default.login), /* @__PURE__ */ doc_exports.h("a", {
+      if: isGuest,
+      href: "/register"
+    }, de_DE_default.register), /* @__PURE__ */ doc_exports.h("a", {
+      if: isUser,
+      href: "/settings"
+    }, de_DE_default.settings), /* @__PURE__ */ doc_exports.h("a", {
+      if: isUser,
+      onclick: logout2
+    }, de_DE_default.logout)));
+  }
+
+  // app/helpers/up-down.ts
+  const DownloadElement = document.createElement("a");
+  const Reader = new FileReader();
+  function up(option) {
+    return new Promise((res) => {
+      try {
+        let input = document.createElement("input");
+        input.accept = option.accept;
+        input.type = "file";
+        input.onchange = (event) => {
+          let files = event.target.files;
+          if (!files.length)
+            return res([null, null]);
+          let file = files[0];
+          Reader.onload = (event2) => {
+            if (option.maxSize && file.size > option.maxSize) {
+              return res([null, new Error("Filesize exceeded")]);
+            }
+            file.data = event2.target.result;
+            res([file, null]);
+          };
+          Reader.onerror = () => res([null, null]);
+          Reader.onabort = () => res([null, null]);
+          Reader["readAs" + option.readAs](file);
+        };
+        input.click();
+      } catch (error2) {
+        res([null, error2]);
+      }
+    });
+  }
+
+  // app/components/comment.component.tsx
+  function Comments({postId}) {
+    const TextAreaRef = reference();
+    const comments2 = observable([]);
+    const hasComments = observable(false);
+    loadComments2();
+    return /* @__PURE__ */ doc_exports.h("div", {
+      interval: [loadComments2, 3e4]
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      if: isUser
+    }, /* @__PURE__ */ doc_exports.h(Seperator, null), /* @__PURE__ */ doc_exports.h("form", {
+      onsubmit: tryComment,
+      styles: {display: "flex", gap: "8px", flexDirection: "column"}
+    }, /* @__PURE__ */ doc_exports.h(TextArea, {
+      ref: TextAreaRef
+    }), /* @__PURE__ */ doc_exports.h(Button, {
+      type: "submit",
+      styles: {width: "max-content"}
+    }, de_DE_default.actionComment))), /* @__PURE__ */ doc_exports.h("div", {
+      if: hasComments
+    }, /* @__PURE__ */ doc_exports.h(Seperator, null), /* @__PURE__ */ doc_exports.h("div", {
+      className: "comments",
+      for: {of: comments2, do: Comment, sort}
+    })));
+    async function tryComment(event) {
+      event.preventDefault();
+      const value = TextAreaRef.current.value;
+      if (!isUser.value()) {
+        push(null, de_DE_default.authError);
+        return;
+      }
+      if (!value || value.length < 4) {
+        return push(null, de_DE_default.messageCriteriaError);
+      }
+      let result = await addComment(postId, value);
+      if (result) {
+        TextAreaRef.current.value = "";
+        loadComments2();
+      }
+    }
+    function loadComments2() {
+      loadComments(postId).then(($) => {
+        comments2.set($);
+        hasComments.set($.length > 0);
+      });
+    }
+  }
+  function Comment(props) {
+    var _a;
+    const Owner = ((_a = currentUser()) == null ? void 0 : _a.username) === props.user.alias;
+    return /* @__PURE__ */ doc_exports.h("div", {
+      className: "comment"
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "comment-flex",
+      styles: {flexDirection: Owner ? "row-reverse" : "row"}
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "user-image",
+      "user-card": props.user.alias,
+      styles: {backgroundColor: randomColor() + " !important"}
+    }), /* @__PURE__ */ doc_exports.h(Box, {
+      arrow: Owner ? "top-right" : "top-left"
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "top"
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "comment-author"
+    }, props.user.alias), /* @__PURE__ */ doc_exports.h(Time, {
+      datetime: props.datePosted * 1e3,
+      className: "datetime"
+    })), /* @__PURE__ */ doc_exports.h("div", null, props.textContent))));
+  }
+
+  // app/components/post.component.tsx
+  function Post(props) {
+    const visible = observable("post opacity-0");
+    const MenuPortal = portal(PostMenu);
+    const DeletePostPortal = portal(DeletePostMenu);
+    return /* @__PURE__ */ doc_exports.h("div", {
+      className: visible,
+      interval: [intervalFn, 250]
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h("div", null, /* @__PURE__ */ doc_exports.h("div", {
+      className: "user-image-wrap",
+      "user-card": props.user.alias
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      className: "user-image",
+      styles: {backgroundColor: randomColor() + " !important"}
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      className: "avatar-circle"
+    }))), /* @__PURE__ */ doc_exports.h(Box, {
+      className: "post-content",
+      arrow: "top-left"
+    }, /* @__PURE__ */ doc_exports.h(Header, null, /* @__PURE__ */ doc_exports.h("div", {
+      className: "wrap-ellipsis",
+      styles: {width: "50%"}
+    }, props.user.displayName, /* @__PURE__ */ doc_exports.h("span", {
+      className: "user-alias"
+    }, "@", props.user.alias)), /* @__PURE__ */ doc_exports.h("div", {
+      className: "datetime"
+    }, /* @__PURE__ */ doc_exports.h(Time, {
+      datetime: props.datePosted * 1e3,
+      className: "hide-mobile"
+    }), /* @__PURE__ */ doc_exports.h("span", {
+      if: props.datePosted !== props.dateEdited,
+      tooltip: de_DE_default.edited
+    }, "*"), /* @__PURE__ */ doc_exports.h(Icon, {
+      name: "calendar",
+      tooltip: elapsedTime(props.datePosted * 1e3)
+    }))), /* @__PURE__ */ doc_exports.h("div", {
+      className: "user-content"
+    }, /* @__PURE__ */ doc_exports.h(TextContainer, {
+      postId: props.id,
+      data: props.textContent
+    })), /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", gap: "8px", alignItems: "center"}
+    }, /* @__PURE__ */ doc_exports.h(HeartContainer, {
+      likeAmount: props.likeAmount,
+      postId: props.id
+    }), /* @__PURE__ */ doc_exports.h(CommentContainer, {
+      userAlias: props.user.alias,
+      postId: props.id,
+      commentsAmount: props.commentsAmount
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      className: "post-menu",
+      tooltip: de_DE_default.showPostMenu
+    }, /* @__PURE__ */ doc_exports.h(Icon, {
+      if: isUser,
+      name: "menu-meatballs",
+      onclick: MenuPortal.open
+    })), /* @__PURE__ */ doc_exports.h("span", {
+      styles: {position: "absolute", bottom: "0", right: "0"}
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      portal: MenuPortal
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      portal: DeletePostPortal
+    })))), !props.showComments ? void 0 : /* @__PURE__ */ doc_exports.h(Comments, {
+      postId: props.id
+    }))));
+    function PostMenu() {
+      var _a;
+      const Owner = ((_a = currentUser()) == null ? void 0 : _a.username) === props.user.alias;
+      return /* @__PURE__ */ doc_exports.h(Menu, {
+        onmouseleave: MenuPortal.close
+      }, /* @__PURE__ */ doc_exports.h(MenuItem, null, /* @__PURE__ */ doc_exports.h("a", {
+        href: `/user/${props.user.alias}/post/${props.id}`
+      }, de_DE_default.comments)), /* @__PURE__ */ doc_exports.h(MenuItem, {
+        if: Owner,
+        onclick: DeletePostPortal.open
+      }, de_DE_default.deletePost));
+    }
+    function DeletePostMenu() {
+      return /* @__PURE__ */ doc_exports.h(Menu, {
+        onmouseleave: firstMenu
+      }, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.deletePostSure), /* @__PURE__ */ doc_exports.h("div", {
+        styles: {margin: "0 auto", width: "max-content"}
+      }, /* @__PURE__ */ doc_exports.h("div", {
+        styles: {display: "flex", gap: "8px"}
+      }, /* @__PURE__ */ doc_exports.h(Button, {
+        onclick: () => del2(props.id)
+      }, de_DE_default.continue), /* @__PURE__ */ doc_exports.h(Button, {
+        onclick: firstMenu
+      }, de_DE_default.abort))));
+    }
+    function intervalFn(el) {
+      visible.set(`post opacity-${onScreen(el) ? "1" : "0"}`);
+    }
+    function firstMenu() {
+      DeletePostPortal.close();
+      MenuPortal.open(null);
+    }
+  }
+  function TextContainer({postId, data}) {
+    const Text = observable(data);
+    const MD = observable("");
+    Text.subscribe((txt) => MD.set(translateMarkDown(txt)));
+    return /* @__PURE__ */ doc_exports.h(Box, {
+      className: "text-content",
+      interval: [refreshFn, 1e4]
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      innerHTML: MD,
+      className: "mark-down"
+    }));
+    function refreshFn(el) {
+      if (!onScreen(el))
+        return;
+      let post5 = localById(postId);
+      if (!post5)
+        return;
+      Text.set(post5.textContent);
+    }
+  }
+  function HeartContainer({likeAmount, postId}) {
+    const likes = observable(String(likeAmount));
+    const HeartRef = reference();
+    return /* @__PURE__ */ doc_exports.h("div", {
+      className: "heart-action",
+      styles: {display: "flex", gap: "8px", alignItems: "center"},
+      if: isUser,
+      mount: refreshFn,
+      interval: [refreshFn, 250],
+      tooltip: [likes, de_DE_default.nUsersLikedThat]
+    }, /* @__PURE__ */ doc_exports.h(Icon, {
+      ref: HeartRef,
+      name: "heart-grey",
+      onclick: () => like(postId),
+      className: "wiggle-vertical",
+      styles: {cursor: "pointer"}
+    }), /* @__PURE__ */ doc_exports.h("span", null, likes));
+    function refreshFn(el) {
+      if (!onScreen(el) && isUser.value())
+        return;
+      let post5 = localById(postId);
+      if (!post5)
+        return;
+      likes.set(String(post5.likeAmount));
+      HeartRef.current.setIcon(post5.liked ? "heart-red" : "heart-grey");
+    }
+  }
+  function CommentContainer({userAlias, postId, commentsAmount}) {
+    const comments2 = observable(String(commentsAmount));
+    return /* @__PURE__ */ doc_exports.h("a", {
+      href: `/user/${userAlias}/post/${postId}`,
+      className: "comment-action",
+      tooltip: de_DE_default.showComments,
+      interval: [refreshFn, 250]
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", gap: "8px", alignItems: "center"}
+    }, /* @__PURE__ */ doc_exports.h(Icon, {
+      name: "comment-bubbles-grey",
+      className: "post-comment"
+    }), /* @__PURE__ */ doc_exports.h("span", null, comments2)));
+    function refreshFn(el) {
+      if (!onScreen(el) && isUser.value())
+        return;
+      let post5 = localById(postId);
+      if (!post5)
+        return;
+      comments2.set(String(post5.commentsAmount));
+    }
+  }
+
+  // app/views/home.view.tsx
+  async function HomeView() {
+    await load();
+    return /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "column", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      if: isUser
+    }, /* @__PURE__ */ doc_exports.h(HomeWriter, null)), /* @__PURE__ */ doc_exports.h("div", {
+      for: {of: Posts, do: Post, sort, limit: 5}
+    }));
+  }
+  function HomeWriter() {
+    const WriterRef = reference();
+    return /* @__PURE__ */ doc_exports.h("form", {
+      onsubmit: tryPost,
+      destroy: () => Uploads.set([])
+    }, /* @__PURE__ */ doc_exports.h(Writer, {
+      ref: WriterRef
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "submit"
+    }, de_DE_default.send), /* @__PURE__ */ doc_exports.h(Button, {
+      type: "button",
+      onclick: uploadImage2
+    }, de_DE_default.uploadImage)), /* @__PURE__ */ doc_exports.h("div", {
+      if: Uploaded
+    }, /* @__PURE__ */ doc_exports.h(Seperator, null), /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "column-reverse", gap: "8px"},
+      for: {
+        of: Uploads,
+        do: (props) => /* @__PURE__ */ doc_exports.h(UploadItemElement, {
+          key: props.key,
+          preview: props.preview,
+          fileName: props.fileName
+        })
+      }
+    }))));
+    async function uploadImage2() {
+      let [file, error2] = await up({accept: "image/*", readAs: "BinaryString", maxSize: MAX_FILE_SIZE});
+      if (error2) {
+        return push(null, de_DE_default.followingError.replace("$e", error2.message));
+      }
+      if (!file.type.startsWith("image/")) {
+        return push(null, de_DE_default.unsupportedFileType.replace("$t", file.type));
+      }
+      if (!file.data)
+        return push(null, de_DE_default.errorOnUpload);
+      let guid = await addMedia(file);
+      if (!guid)
+        return push(null, de_DE_default.errorOnUpload);
+      Uploads.update(($) => $.push({key: guid, fileName: file.name, preview: API_MEDIA + guid}));
+    }
+    function getValues() {
+      var _a;
+      return {text: (_a = WriterRef.current.getValues()) == null ? void 0 : _a.raw};
+    }
+    async function tryPost(event) {
+      event.preventDefault();
+      if (!isUser.value()) {
+        push(null, de_DE_default.authError);
+        return false;
+      }
+      const values = getValues();
+      if (!values.text)
+        return push(null, de_DE_default.messageCriteriaError);
+      let success = await add(values.text);
+      if (success) {
+        WriterRef.current.clear();
+        Uploads.set([]);
+        load();
+      }
+    }
+  }
+
+  // lang/de_DE.progressiveWebAppText.ts
+  var de_DE_progressiveWebAppText_default = `Durch die Installation dieser Anwendung werden einige Inhalte (wie z. B. Grafiken) lokal auf dem Ger\xE4t hinterlegt, damit diese
+  nicht mehr heruntergeladen werden m\xFCssen, wenn Sie diese Seite wieder besuchen.`;
+
+  // app/services/install.service.ts
+  const isInstalled2 = observable(false);
+  const isNotInstalled = observable(true);
+  isInstalled2.subscribe((state) => isNotInstalled.set(!state));
+  async function install2() {
+    if ("serviceWorker" in navigator) {
+      await navigator.serviceWorker.register("serviceworker.js");
+      isInstalled2.set(true);
+    }
+  }
+  async function uninstall() {
+    if ("serviceWorker" in navigator) {
+      let registrations = await navigator.serviceWorker.getRegistrations();
+      for (let registration of registrations) {
+        if (registration)
+          registration.unregister();
+      }
+    }
+    isInstalled2.set(false);
+  }
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistration("serviceworker.js").then((registration) => {
+      if (registration && registration.active) {
+        isInstalled2.set(!!registration.active);
+      } else {
+        isInstalled2.set(false);
+      }
+    }).catch(() => isInstalled2.set(false));
+  }
+
+  // app/views/settings.view.tsx
+  async function SettingsView() {
+    return /* @__PURE__ */ doc_exports.h("div", {
+      id: "settings",
+      styles: {display: "flex", flexDirection: "column", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(ChangeNameView, null), /* @__PURE__ */ doc_exports.h(ChangePasswordView, null), /* @__PURE__ */ doc_exports.h(DeleteAccountView, null), /* @__PURE__ */ doc_exports.h(ProgressiveView, null));
+  }
+  function ChangeNameView() {
+    const Name = {
+      changed: observable(false),
+      reference: reference()
+    };
+    return /* @__PURE__ */ doc_exports.h(Box, null, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.changeName), /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.name
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      ref: Name.reference,
+      type: "text",
+      placeholder: de_DE_default.name,
+      oninput: () => Name.changed.set(!!Name.reference.current.value)
+    })), /* @__PURE__ */ doc_exports.h("div", {
+      if: Name.changed
+    }, /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "button",
+      onclick: changeNameEvent
+    }, de_DE_default.save))));
+    async function changeNameEvent() {
+      let success = await patchDisplayName(Name.reference.current.value);
+      if (success)
+        Name.reference.current.value = "";
+    }
+  }
+  function ProgressiveView() {
+    return /* @__PURE__ */ doc_exports.h(Box, null, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.progressiveWebApp), /* @__PURE__ */ doc_exports.h(Box, null, de_DE_progressiveWebAppText_default), /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h(Button, {
+      if: isNotInstalled,
+      onclick: install2
+    }, de_DE_default.installApp), /* @__PURE__ */ doc_exports.h(Button, {
+      if: isInstalled2,
+      onclick: uninstall
+    }, de_DE_default.uninstallApp)));
+  }
+  function DeleteAccountView() {
+    const DeleteContinue = observable(false);
+    return /* @__PURE__ */ doc_exports.h(Box, null, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.deleteAccount), /* @__PURE__ */ doc_exports.h(Box, null, de_DE_default.deleteAccountInfo), /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "button",
+      onclick: () => DeleteContinue.set(!DeleteContinue.value())
+    }, de_DE_default.deleteAccount), /* @__PURE__ */ doc_exports.h(Button, {
+      type: "button",
+      onclick: () => deleteAccount2(),
+      if: DeleteContinue
+    }, de_DE_default.continue)));
+  }
+  function ChangePasswordView() {
+    const Passwords = {
+      changed: observable(false),
+      changable: observable(false),
+      references: [reference(), reference(), reference()]
+    };
+    return /* @__PURE__ */ doc_exports.h(Box, null, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.changePasswordTitle), /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.currentPassword
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "password",
+      ref: Passwords.references[0],
+      type: "password",
+      placeholder: "********",
+      oninput: passwordEvent
+    })), /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "row", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.newPassword
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "password",
+      ref: Passwords.references[1],
+      type: "password",
+      placeholder: "********",
+      oninput: passwordEvent
+    })), /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.newPasswordReEnter
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "password",
+      ref: Passwords.references[2],
+      type: "password",
+      placeholder: "********",
+      oninput: passwordEvent
+    }))), /* @__PURE__ */ doc_exports.h("div", {
+      if: Passwords.changable
+    }, /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "button",
+      onclick: updatePassword
+    }, de_DE_default.save))));
+    function passwordEvent(event) {
+      Passwords.changed.set(!!Passwords.references[0].current.value);
+      Passwords.changable.set(Passwords.references[0].current.value && Passwords.references[1].current.value && Passwords.references[2].current.value && Passwords.references[1].current.value === Passwords.references[2].current.value);
+    }
+    async function updatePassword(event) {
+      let success = await patchPassword(Passwords.references[0].current.value, Passwords.references[1].current.value);
+      if (success) {
+        Passwords.references.forEach((ref) => ref.current.value = "");
+      }
+    }
+  }
+
+  // app/views/login.view.tsx
+  async function LoginView() {
+    const InputAlias = reference();
+    const InputPassword = reference();
+    return /* @__PURE__ */ doc_exports.h(Box, {
+      id: "login"
+    }, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.enterAccount), /* @__PURE__ */ doc_exports.h("form", {
+      onsubmit: tryLogin
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "column", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.username
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      ref: InputAlias,
+      type: "text",
+      placeholder: de_DE_default.username,
+      required: "true"
+    })), /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.password
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      ref: InputPassword,
+      type: "password",
+      placeholder: "********",
+      required: "true"
+    }))), /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "row", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "submit"
+    }, de_DE_default.login), /* @__PURE__ */ doc_exports.h("a", {
+      href: "/register"
+    }, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "button"
+    }, de_DE_default.noAccount)))))));
+    function getValues() {
+      return {
+        alias: InputAlias.current.value,
+        password: InputPassword.current.value
+      };
+    }
+    async function tryLogin(event) {
+      event.preventDefault();
+      await login2(getValues());
+      if (isUser.value()) {
+        activateRoute("/");
+      }
+    }
+  }
+
+  // app/views/user.view.tsx
+  async function UserView({alias}) {
+    await load(alias);
+    return /* @__PURE__ */ doc_exports.h("div", {
+      for: {of: Posts, do: Post, sort}
+    });
+  }
+
+  // app/views/user-post.view.tsx
+  async function UserPostView({alias, id}) {
+    const post5 = await getPost(parseInt(id));
+    return /* @__PURE__ */ doc_exports.h(Post, {
+      id: post5.id,
+      user: post5.user,
+      textContent: post5.textContent,
+      liked: post5.liked,
+      likeAmount: post5.likeAmount,
+      commentsAmount: post5.commentsAmount,
+      datePosted: post5.datePosted,
+      dateEdited: post5.dateEdited,
+      showComments: true
+    });
+  }
+
+  // app/views/register.view.tsx
+  async function RegisterView() {
+    const InputAlias = reference();
+    const InputName = reference();
+    const InputEmail = reference();
+    const InputPasswords = [reference(), reference()];
+    return /* @__PURE__ */ doc_exports.h(Box, {
+      id: "register"
+    }, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.createAccount), /* @__PURE__ */ doc_exports.h("form", {
+      onsubmit: tryRegister
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "column", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "row", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.username
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "alias",
+      ref: InputAlias,
+      type: "text",
+      placeholder: de_DE_default.username,
+      required: "true"
+    })), /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.name
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "name",
+      ref: InputName,
+      type: "text",
+      placeholder: de_DE_default.name,
+      required: "true"
+    }))), /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.email
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "email",
+      ref: InputEmail,
+      type: "email",
+      placeholder: "your@email.com",
+      required: "true"
+    })), /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "row", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.password
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "password",
+      ref: InputPasswords[0],
+      type: "password",
+      placeholder: "********",
+      required: "true"
+    })), /* @__PURE__ */ doc_exports.h(Label, {
+      labelText: de_DE_default.passwordReEnter
+    }, /* @__PURE__ */ doc_exports.h(Input, {
+      name: "password",
+      ref: InputPasswords[1],
+      type: "password",
+      placeholder: "********",
+      required: "true"
+    }))), /* @__PURE__ */ doc_exports.h(Footer, null, /* @__PURE__ */ doc_exports.h("div", {
+      styles: {display: "flex", flexDirection: "row", gap: "8px"}
+    }, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "submit"
+    }, de_DE_default.register), /* @__PURE__ */ doc_exports.h("a", {
+      href: "/login"
+    }, /* @__PURE__ */ doc_exports.h(Button, {
+      type: "button"
+    }, de_DE_default.alreadyAccount)))))));
+    function getValues() {
+      return {
+        alias: InputAlias.current.value,
+        name: InputName.current.value,
+        email: InputEmail.current.value,
+        passwords: [InputPasswords[0].current.value, InputPasswords[1].current.value]
+      };
+    }
+    function equalPasswords() {
+      return [...new Set(getValues().passwords)].length === 1;
+    }
+    async function tryRegister(event) {
+      event.preventDefault();
+      let values = getValues();
+      if (!equalPasswords())
+        return push(null, de_DE_default.passwordsNotSame);
+      register2({
+        alias: values.alias,
+        displayName: values.name,
+        email: values.email,
+        password: values.passwords[0]
+      });
+    }
+  }
+
+  // app/views/route-not-found.view.tsx
+  function RouteNotFoundView() {
+    return /* @__PURE__ */ doc_exports.h(Box, {
+      id: "route-not-found"
+    }, /* @__PURE__ */ doc_exports.h(Header, null, de_DE_default.error), /* @__PURE__ */ doc_exports.h("div", {
+      className: "box message"
+    }, de_DE_default.routeNotFound.replace("$url", location.pathname)));
+  }
+
+  // routes.ts
+  const Routes = [
+    {
+      path: "",
+      title: de_DE_default.home,
+      component: HomeView
+    },
+    {
+      path: "login/?*",
+      title: de_DE_default.login,
+      component: LoginView,
+      activates: [isGuest.value]
+    },
+    {
+      path: "register/?*",
+      title: de_DE_default.register,
+      component: RegisterView,
+      activates: [isGuest.value]
+    },
+    {
+      path: "settings/?*",
+      title: de_DE_default.settings,
+      component: SettingsView,
+      activates: [isUser.value]
+    },
+    {
+      path: "user/:alias",
+      title: ({alias}) => alias,
+      component: UserView,
+      activates: [
+        ({alias}) => hasUser(alias)
+      ],
+      children: [
+        {
+          path: "post/:id",
+          title: ({alias, id}) => alias + "/post/" + id,
+          component: UserPostView,
+          activates: [
+            ({alias, id}) => hasPost(parseInt(id))
+          ]
+        }
+      ]
+    },
+    {
+      path: "**",
+      title: de_DE_default.error,
+      component: RouteNotFoundView
+    }
+  ];
+  var routes_default = Routes;
+
+  // app.tsx
+  function Application() {
+    return /* @__PURE__ */ doc_exports.h("div", {
+      id: "app"
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      id: "loading-bar",
+      if: isLoading
+    }), /* @__PURE__ */ doc_exports.h("div", {
+      id: "app-grid"
+    }, /* @__PURE__ */ doc_exports.h("aside", {
+      id: "side"
+    }, /* @__PURE__ */ doc_exports.h(Navigation, null)), /* @__PURE__ */ doc_exports.h("main", {
+      id: "content"
+    }, /* @__PURE__ */ doc_exports.h(Router, {
+      routes: routes_default
+    }))), /* @__PURE__ */ doc_exports.h("div", {
+      styles: {height: "100vh", width: "100vw", position: "fixed", top: "0", left: "0", pointerEvents: "none"}
+    }, /* @__PURE__ */ doc_exports.h("div", {
+      portal: user_card_component_default
+    })));
+  }
+  document.getElementById("app").replaceWith(/* @__PURE__ */ doc_exports.h(Application, null));
+})();

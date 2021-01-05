@@ -1,15 +1,13 @@
 import Doc, { reference } from "../../mod/doc/mod"
 import * as µ from "../components/mu.component"
 import i18n from "../../lang/de_DE.json"
-import * as http from "../services/http.service"
 import { up } from "../helpers/up-down"
 import { Uploaded, Uploads } from "../services/generic.service"
 import * as PostService from "../services/post.service"
 import * as UserService from "../services/user.service"
+import { MAX_FILE_SIZE } from "../config/settings"
 import Post from "../components/post.component"
 import * as NotificationService from "../services/notification.service"
-import { base64ToBlob } from "../helpers/base64-to-blob"
-import { UUIDv4 } from "../helpers/uuid-v4"
 
 export default async function HomeView() {
   await PostService.load()
@@ -52,39 +50,21 @@ function HomeWriter() {
 
 
   async function uploadImage() {
-    let [file, error] = await up({ accept: "image/*", readAs: "DataURL", maxSize: 5242880 })
-    let [blob] = await base64ToBlob(file.data)
-
+    let [file, error] = await up({ accept: "image/*", readAs: "BinaryString", maxSize: MAX_FILE_SIZE })
     if (error) {
       return NotificationService.push(null, i18n.followingError.replace("$e", error.message))
     }
     if (!file.type.startsWith("image/")) {
       return NotificationService.push(null, i18n.unsupportedFileType.replace("$t", file.type))
     }
-
-    Uploads.update(uploads => {
-      uploads.push({
-        key: UUIDv4(),
-        fileName: file.name,
-        preview: file.data,
-        data: blob
-      })
-      /* 
-        This is how the upload works, theoretically
-        let formData = new FormData()
-        formData.append("file", blob, file.name)
-        http.post("http://localhost:5000/api/v1/media", formData, {
-          init: { headers: { "Content-Type": null } }
-        })
-      */
-    })
+    if (!file.data) return NotificationService.push(null, i18n.errorOnUpload)
+    let guid = await PostService.addMedia(file)
+    if (!guid) return NotificationService.push(null, i18n.errorOnUpload)
+    Uploads.update($ => $.push({ key: guid, fileName: file.name, preview: PostService.API_MEDIA + guid }))
   }
 
   function getValues() {
-    return {
-      text: WriterRef.current.getValues().raw,
-      // images: Uploads.value().map(({ fileData, fileName }) => ({ name: fileName, data: fileData }))
-    }
+    return { text: WriterRef.current.getValues()?.raw }
   }
 
   async function tryPost(event: Event) {

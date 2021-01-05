@@ -12,7 +12,7 @@ UserCardPortal.onClose(() => existing()?.remove())
 export async function UserCard({ alias, top, left }) {
   [top, left] = adjustCardPosition(top, left)
 
-  let yourUserName = UserService.currentUser().username
+  let yourUserName = UserService.currentUser()?.username
   let user = await UserService.getUser(alias)
   const followers = observable(0)
   const following = observable(0)

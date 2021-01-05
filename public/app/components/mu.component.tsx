@@ -3,6 +3,7 @@ import translateMarkDown from "../helpers/mark-down"
 import elapsedTime from "../helpers/elapsed-time"
 import onScreen from "../helpers/onscreen"
 import { Uploads } from "../services/generic.service"
+import * as PostService from "../services/post.service"
 import i18n from "../../lang/de_DE.json"
 
 directive("isBox", el => el.classList.add("box"))
@@ -209,7 +210,10 @@ export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Partia
   function removeUpload() {
     Uploads.update(files => {
       let idx = files.findIndex(file => file.key === props.key)
-      if (idx >= 0) files.splice(idx, 1)
+      if (idx >= 0) {
+        files.splice(idx, 1)
+        PostService.delMedia(props.key)
+      }
     })
   }
 }

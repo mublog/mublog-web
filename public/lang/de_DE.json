@@ -58,6 +58,7 @@
     "passwordReEnter": "Passwort wiederholen",
     "newPassword": "Neues Passwort",
     "newPasswordReEnter": "Neues Passwort wiederholen",
+    "errorOnUpload": "Beim Hochladen ist ein Fehler aufgetreten",
     "loginSuccess": "Erfolgreich eingeloggt",
     "loginSuccessMessage": "Du bist nun eingeloggt",
     "loginFailed": "Einloggen fehlgeschlagen",

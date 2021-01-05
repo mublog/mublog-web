@@ -11,6 +11,7 @@ export default async function UserPostView({ alias, id }: URLParams) {
       textContent={post.textContent}
       liked={post.liked}
       likeAmount={post.likeAmount}
+      commentsAmount={post.commentsAmount}
       datePosted={post.datePosted}
       dateEdited={post.dateEdited}
       showComments

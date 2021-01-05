@@ -3,11 +3,12 @@ import * as NotificationService from "./notification.service"
 import * as http from "./http.service"
 import i18n from "../../lang/de_DE.json"
 
-const URL = ""
+const URL = "http://localhost:5000"
 const API_VERSION = 1
 const API_URL = `${URL}/api/v${API_VERSION}/posts`
 const API_POSTS_ID = API_URL + "/"
 const API_POSTS_LIKE = API_URL + "/like/"
+export const API_MEDIA = URL + "/api/v" + API_VERSION + "/media/"
 
 export const Posts = observable<PostModel[]>([])
 
@@ -88,5 +89,23 @@ export async function addComment(id: number, content: string) {
 
 export async function delComment(id: number) {
   let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_URL + "/" + id + "/comments")
+  return res?.status === 200
+}
+
+export async function addMedia(file: any) {
+  let formData = new FormData()
+  formData.append("file", file, file.name)
+  let [wrapper, res] = await http.post<ResponseWrapper<Media>>(API_MEDIA, formData, {
+    init: { headers: { "Content-Type": null } }
+  })
+  if (res?.status !== 200 || !wrapper?.data?.guid) {
+    return
+  }
+  return wrapper.data.guid
+}
+
+export async function delMedia(guid: string) {
+  return false
+  let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_MEDIA + guid)
   return res?.status === 200
 }

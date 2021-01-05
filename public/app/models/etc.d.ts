@@ -1,8 +1,11 @@
 interface UploadItem {
   key: string
   preview: string
-  data: any
   fileName: string
+}
+
+interface Media {
+  guid: string
 }
 
 interface JWToken {

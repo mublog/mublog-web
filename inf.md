@@ -2,8 +2,6 @@
 
 # Überblick
 
-# Bedienungsanleitung
-
 # Implementierte Features
 
 # Systemanforderungen
