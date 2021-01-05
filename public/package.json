@@ -3,8 +3,8 @@
   "version": "1.5.1",
   "description": "",
   "scripts": {
-    "build-css": "sass styles/main.scss styles/main.css --minify --style=compressed --no-source-map",
-    "build-js": "esbuild app.tsx --loader:.js=jsx --jsx-factory=Doc.h --bundle --target=chrome58,firefox57,safari11 --outfile=app.js",
+    "build-css": "sass styles/main.scss styles/main.css --style=compressed --no-source-map",
+    "build-js": "esbuild app.tsx --loader:.js=jsx --minify --jsx-factory=Doc.h --bundle --target=chrome58,firefox57,safari11 --outfile=app.js",
     "build": "npm run build-css && npm run build-js"
   },
   "repository": {
