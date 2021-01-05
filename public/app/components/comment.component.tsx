@@ -1,8 +1,9 @@
-import Doc, { reference, observable, portal } from "../../mod/doc/mod"
+import Doc, { reference, observable } from "../../mod/doc/mod"
 import * as UserService from "../services/user.service"
 import * as µ from "./mu.component"
 import i18n from "../../lang/de_DE.json"
 import * as PostService from "../services/post.service"
+import * as NotificationService from "../services/notification.service"
 import { randomColor } from "../helpers/colors"
 
 export function Comments({ postId }: { postId: number }) {
@@ -13,11 +14,14 @@ export function Comments({ postId }: { postId: number }) {
 
   return (
     <div interval={[loadComments, 30000]}>
-      <µ.Seperator />
-      <form onsubmit={tryComment} styles={{ display: "flex", gap: "8px", flexDirection: "column" }}>
-        <µ.TextArea ref={TextAreaRef} />
-        <µ.Button type="submit" styles={{ width: "max-content" }}>{i18n.actionComment}</µ.Button>
-      </form>
+      <div if={UserService.isUser}>
+        <µ.Seperator />
+        <form onsubmit={tryComment} styles={{ display: "flex", gap: "8px", flexDirection: "column" }}>
+          <µ.TextArea ref={TextAreaRef} />
+          <µ.Button type="submit" styles={{ width: "max-content" }}>{i18n.actionComment}</µ.Button>
+        </form>
+      </div>
+
       <div if={hasComments}>
         <µ.Seperator />
         <div className="comments" for={{ of: comments, do: Comment, sort: PostService.sort }} />
@@ -28,6 +32,13 @@ export function Comments({ postId }: { postId: number }) {
   async function tryComment(event: Event) {
     event.preventDefault()
     const value = TextAreaRef.current.value
+    if (!UserService.isUser.value()) {
+      NotificationService.push(null, i18n.authError)
+      return
+    }
+    if (!value || value.length < 4) {
+      return NotificationService.push(null, i18n.messageCriteriaError)
+    }
     let result = await PostService.addComment(postId, value)
     if (result) {
       TextAreaRef.current.value = ""
