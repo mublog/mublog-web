@@ -7,11 +7,10 @@ import { randomColor } from "../helpers/colors"
 
 const UserCardPortal = portal(UserCard)
 const existing = () => document.getElementById("user-card")
+UserCardPortal.onClose(() => existing()?.remove())
 
 export async function UserCard({ alias, top, left }) {
   [top, left] = adjustCardPosition(top, left)
-  let exist = existing()
-  if (exist) exist.remove()
 
   let yourUserName = UserService.currentUser().username
   let user = await UserService.getUser(alias)
@@ -21,8 +20,8 @@ export async function UserCard({ alias, top, left }) {
   const followsNot = observable(true)
   follows.subscribe(value => followsNot.set(!value))
 
-  await refreshFollowers()
-  await refreshFollowing()
+  refreshFollowers()
+  refreshFollowing()
 
   return (
     <µ.Box styles={{ top: `${top}px`, left: `${left}px` }} id="user-card" onmouseleave={UserCardPortal.close}>
@@ -33,16 +32,19 @@ export async function UserCard({ alias, top, left }) {
             <div className="avatar-circle" />
           </div>
           <a href={`/user/${alias}`} tooltip={i18n.visitUser.replace("$u", user.displayName)} styles={{ flex: "1" }}>
-            <div>
-              @{user.username}
-            </div>
+            <div>{user.displayName}</div>
+            <div>@{user.username}</div>
           </a>
           {alias === yourUserName ? undefined : <FollowButtons />}
         </div>
+        <µ.Seperator />
+        <div styles={{ display: "flex", gap: "8px" }}>
+          <div>{i18n.followers}: {followers}</div>
+          <div>{i18n.following}: {following}</div>
+        </div>
       </µ.Header>
-      <div>{i18n.followers}: {followers}</div>
-      <div>{i18n.following}: {following}</div>
       <µ.Box arrow="top-left" if={user.description?.length > 0}>
+
         <span>{user.description}</span>
       </µ.Box>
     </µ.Box>

@@ -77,19 +77,16 @@ export function patchOne(id: number, newData: PostModel) {
 
 export async function loadComments(id: number): Promise<CommentModel[]> {
   let [wrapper] = await http.get<ResponseWrapper<CommentModel[]>>(API_URL + "/" + id + "/comments")
-  if (wrapper?.data?.length) {
-    return wrapper.data
-  }
-  return []
+  return wrapper?.data?.length ? wrapper.data : []
 }
 
 export async function addComment(id: number, content: string) {
   let body = JSON.stringify({ content })
   let [wrapper, res] = await http.post<ResponseWrapper<CommentModel[]>>(API_URL + "/" + id + "/comments", body)
-  if (res?.status === 200) {
-    return true
-  }
-  else {
-    return false
-  }
+  return res?.status === 200
+}
+
+export async function delComment(id: number) {
+  let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_URL + "/" + id + "/comments")
+  return res?.status === 200
 }

@@ -199,7 +199,10 @@ export function UploadItemElement(props: HTMLProperties<HTMLDivElement> & Partia
     <div {...props} isUploadItem>
       <img src={props.preview} className="upload-image" />
       <div className="upload-text">{props.fileName}</div>
-      <Icon tooltip={i18n.removeImage} name="x-red" onclick={removeUpload} className="upload-action" />
+      <div>
+        <Icon name="clipboard" copyToClipboard={`![${props.fileName}](${props.preview})`} className="upload-action" />
+        <Icon tooltip={i18n.removeImage} name="x-red" onclick={removeUpload} className="upload-action" />
+      </div>
     </div>
   ) as HTMLDivElement
 

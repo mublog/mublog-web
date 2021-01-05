@@ -6,7 +6,7 @@ import * as µ from "./mu.component"
 export default function Navigation() {
   return (
     <µ.Box id="navigation">
-      <µ.Header>{i18n.navigation}</µ.Header>
+      <µ.Header classList="hide-mobile">{i18n.navigation}</µ.Header>
       <div className="list">
         <a href="/">{i18n.home}</a>
         <a if={UserService.isGuest} href="/login">{i18n.login}</a>

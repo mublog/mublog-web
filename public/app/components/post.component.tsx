@@ -1,6 +1,7 @@
 import Doc, { reference, observable, portal } from "../../mod/doc/mod"
 import * as UserService from "../services/user.service"
 import * as µ from "./mu.component"
+import { Comments } from "./comment.component"
 import i18n from "../../lang/de_DE.json"
 import translateMarkDown from "../helpers/mark-down"
 import * as PostService from "../services/post.service"
@@ -55,16 +56,13 @@ export default function Post(props: PostModel) {
 
   function PostMenu() {
     const Owner = UserService.currentUser()?.username === props.user.alias
-
     /**
-     * editbutton:
      * <µ.MenuItem if={Owner}>
      *   {i18n.editPost}
      * </µ.MenuItem>
      */
-
     return (
-      <µ.Menu onmouseleave={MenuPortal.close}>
+      <µ.Menu /* onmouseleave={MenuPortal.close} */>
         <µ.MenuItem>
           <a href={`/user/${props.user.alias}/post/${props.id}`}>
             {i18n.comments}
@@ -105,55 +103,6 @@ export default function Post(props: PostModel) {
   }
 }
 
-function Comments({ postId }: { postId: number }) {
-  const TextAreaRef = reference<HTMLTextAreaElement>()
-  const comments = observable([] as CommentModel[])
-  loadComments()
-
-  return (
-    <div interval={[loadComments, 10000]}>
-      <µ.Seperator />
-      <form onsubmit={tryComment} styles={{ display: "flex", gap: "8px", flexDirection: "column" }}>
-        <µ.TextArea ref={TextAreaRef} />
-        <µ.Button type="submit" styles={{ width: "max-content" }}>{i18n.actionComment}</µ.Button>
-      </form>
-      <µ.Seperator />
-      <div className="comments" for={{ of: comments, do: Comment, sort: PostService.sort }} />
-    </div>
-  ) as HTMLDivElement
-
-  async function tryComment(event: Event) {
-    event.preventDefault()
-    const value = TextAreaRef.current.value
-    let result = await PostService.addComment(postId, value)
-    if (result) {
-      TextAreaRef.current.value = ""
-      loadComments()
-    }
-  }
-
-  function loadComments() {
-    PostService.loadComments(postId).then($ => comments.set($))
-  }
-}
-
-function Comment(props: CommentModel) {
-  const Owner = UserService.currentUser()?.username === props.user.alias
-  return (
-    <div className="comment">
-      <div className="comment-flex" styles={{ flexDirection: Owner ? "row-reverse" : "row" }}>
-        <div className="user-image" user-card={props.user.alias} styles={{ backgroundColor: randomColor() + " !important" }} />
-        <µ.Box arrow={Owner ? "top-right" : "top-left"}>
-          <div className="comment-author">
-            {props.user.alias}
-          </div>
-          {props.textContent}
-        </µ.Box>
-      </div>
-    </div>
-  ) as HTMLDivElement
-}
-
 function TextContainer({ postId, data }: { postId: number, data: string }) {
   const Text = observable<string>(data)
   const MD = observable<string>("")
@@ -174,7 +123,7 @@ function TextContainer({ postId, data }: { postId: number, data: string }) {
 }
 
 function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: number }) {
-  const likes = observable(likeAmount)
+  const likes = observable(String(likeAmount))
   const HeartRef = reference<µ.IconElement>()
 
   return (
@@ -201,13 +150,13 @@ function HeartContainer({ likeAmount, postId }: { likeAmount: number, postId: nu
     if (!onScreen(el) && UserService.isUser.value()) return
     let post = PostService.localById(postId)
     if (!post) return
-    likes.set(post.likeAmount)
+    likes.set(String(post.likeAmount))
     HeartRef.current.setIcon(post.liked ? "heart-red" : "heart-grey")
   }
 }
 
 function CommentContainer({ userAlias, postId, commentsAmount }: { userAlias: string, postId: number, commentsAmount: number }) {
-  const comments = observable(commentsAmount)
+  const comments = observable(String(commentsAmount))
 
   return (
     <a
@@ -227,6 +176,6 @@ function CommentContainer({ userAlias, postId, commentsAmount }: { userAlias: st
     if (!onScreen(el) && UserService.isUser.value()) return
     let post = PostService.localById(postId)
     if (!post) return
-    comments.set(post.commentsAmount)
+    comments.set(String(post.commentsAmount))
   }
 }
