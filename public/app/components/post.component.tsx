@@ -62,7 +62,7 @@ export default function Post(props: PostModel) {
      * </µ.MenuItem>
      */
     return (
-      <µ.Menu /* onmouseleave={MenuPortal.close} */>
+      <µ.Menu onmouseleave={MenuPortal.close}>
         <µ.MenuItem>
           <a href={`/user/${props.user.alias}/post/${props.id}`}>
             {i18n.comments}
