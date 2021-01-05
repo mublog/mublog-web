@@ -6,7 +6,7 @@ import * as http from "./http.service"
 import * as cfg from "../config/settings"
 import jwtDecode from "jwt-decode"
 
-const URL = "http://localhost:5000"
+const URL = "/"
 const API_VERSION = 1
 const API_URL = `${URL}/api/v${API_VERSION}`
 const API_ACCOUNT = "accounts"

@@ -3,7 +3,7 @@ import * as NotificationService from "./notification.service"
 import * as http from "./http.service"
 import i18n from "../../lang/de_DE.json"
 
-const URL = "http://localhost:5000"
+const URL = "/"
 const API_VERSION = 1
 const API_URL = `${URL}/api/v${API_VERSION}/posts`
 const API_POSTS_ID = API_URL + "/"
