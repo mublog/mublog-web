@@ -278,6 +278,12 @@ a {
   }
 }
 
+.wrap-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @keyframes wiggle-vertical {
   0% {
     transform: translateY(0px);
@@ -312,6 +318,9 @@ a {
 
     .datetime {
       margin-left: auto;
+      align-items: center;
+      display: flex;
+      gap: 8px;
     }
   }
 
@@ -643,7 +652,7 @@ h6 {
 #user-card {
   opacity: 1;
   transition: opacity 250ms ease-out 0s;
-  width: 400px;
+  width: 300px;
   height: 200px;
   pointer-events: auto;
   position: absolute;

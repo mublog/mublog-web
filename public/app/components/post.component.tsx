@@ -7,6 +7,7 @@ import translateMarkDown from "../helpers/mark-down"
 import * as PostService from "../services/post.service"
 import onScreen from "../helpers/onscreen"
 import { randomColor } from "../helpers/colors"
+import elapsedTime from "../helpers/elapsed-time"
 
 export default function Post(props: PostModel) {
   const visible = observable<string>("post opacity-0")
@@ -24,13 +25,15 @@ export default function Post(props: PostModel) {
         </div>
         <µ.Box className="post-content" arrow="top-left">
           <µ.Header>
-            <div>
+            <div className="wrap-ellipsis" styles={{ width: "50%" }}>
               {props.user.displayName}
               <span className="user-alias">@{props.user.alias}</span>
             </div>
-            <µ.Time datetime={props.datePosted * 1000} className="datetime" />
-            <span if={props.datePosted !== props.dateEdited} tooltip={i18n.edited}>*</span>
-            <µ.Icon name="calendar" />
+            <div className="datetime">
+              <µ.Time datetime={props.datePosted * 1000} className="hide-mobile" />
+              <span if={props.datePosted !== props.dateEdited} tooltip={i18n.edited}>*</span>
+              <µ.Icon name="calendar" tooltip={elapsedTime(props.datePosted * 1000)} />
+            </div>
           </µ.Header>
           <div className="user-content">
             <TextContainer postId={props.id} data={props.textContent} />
