@@ -60,3 +60,11 @@ Meine letzten Worte? Meinen Schatz, den One Piece kriegt ihr nicht :D
 Mit dem ASP.NET Core war ich bereits vertraut, jedoch hat dieses Projekt mir gezeigt was man zu beachten hat wenn man mit einen anderen Leuten an dieser zusammen arbeitet und diese auch so gestaltet das andere Leute diese auch wirklich effektiv nutzen können.
 
 Außerdem habe ich gelernt in Projekten nun noch mehr ins Details zu planen, da dies einem wirklich einige Arbeit ersparen kann.
+
+## Aus der Seite von [Flamascus](https://github.com/Flamascus)
+
+Dieses Projekt hat mir einiges gebracht, da ich zuvor eher weniger mit ASP.NET gearbeitet und nur wenig mit Back-End zu tun hatte.
+Ich habe durch dieses Projekt einigen Einblick in API-Entwicklung bekommen, was für mich sehr nützlich ist.
+Zudem habe ich hierbei MVVM gelernt und mir Xamarin-Forms beigebracht.
+
+Zeitlich gesehen gab es bei dem Projekt kaum Druck und unsere Anforderungen waren gut in der vorgegeben Zeit umsetzbar.
