@@ -10,14 +10,14 @@ import Post from "../components/post.component"
 import * as NotificationService from "../services/notification.service"
 
 export default async function HomeView() {
-  await PostService.load()
+  await PostService.load(null, null, 20)
 
   return (
     <div styles={{ display: "flex", flexDirection: "column", gap: "8px" }}>
       <div if={UserService.isUser}>
         <HomeWriter />
       </div>
-      <div for={{ of: PostService.Posts, do: Post, sort: PostService.sort, limit: 5 }} />
+      <div for={{ of: PostService.Posts, do: Post, sort: PostService.sort }} />
     </div>
   ) as HTMLDivElement
 }
