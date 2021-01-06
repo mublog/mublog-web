@@ -56,7 +56,7 @@ Gab es aus meiner Seite Zeitdruck? Kann ich so nicht sagen, weil wir in der Grup
 
 Meine letzten Worte? Meinen Schatz, den One Piece kriegt ihr nicht :D
 
-### Aus der Seite von [Hourouheki](https://github.com/Hourouheki)
+### Aus der Seite von [Hōrōheki](https://github.com/Hourouheki)
 Mit dem ASP.NET Core war ich bereits vertraut, jedoch hat dieses Projekt mir gezeigt was man zu beachten hat wenn man mit einen anderen Leuten an dieser zusammen arbeitet und diese auch so gestaltet das andere Leute diese auch wirklich effektiv nutzen können.
 
 Außerdem habe ich gelernt in Projekten nun noch mehr ins Details zu planen, da dies einem wirklich einige Arbeit ersparen kann.
