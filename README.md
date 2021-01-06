@@ -69,6 +69,7 @@ Zudem habe ich hierbei MVVM gelernt und mir Xamarin-Forms beigebracht.
 
 Zeitlich gesehen gab es bei dem Projekt kaum Druck und unsere Anforderungen waren gut in der vorgegeben Zeit umsetzbar.
 
+
 # Soziale Kriterien
 ## Entscheidungsfindung
 Wir haben uns in der Gruppe abgesprochen, zu welchen Zeiten wir die Aufgaben lösen und in welcher Tiefe diese zu erledigen sind, damit es dem Projekt nützlich ist.
