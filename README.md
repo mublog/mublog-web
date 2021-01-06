@@ -78,7 +78,7 @@ Wir haben uns in der Gruppe abgesprochen, zu welchen Zeiten wir die Aufgaben lö
 Natürlich hat jeder im Team bereits Erfahrung, welche er auch gerne in das Projekt reingesteckt hat. Demnach wurde auch der Aufwand der einzelnen Aufgaben so verteilt, dass jeder im Team genug zu tun hat.
 
 ## Arbeitsplanung und Stringenz in der Umsetzung
-Ehrlich gesagt haben wir ziemlich locker mit dem Detailgrad der Planung im Team, weswegen wir noch zusätzliche Freiheiten hatten, welche uns manchmal natürlich auch Fallen gestellt hat.
+Ehrlich gesagt waren wir ziemlich locker mit dem Detailgrad der Planung im Team, weswegen wir noch zusätzliche Freiheiten hatten, welche uns manchmal natürlich auch Fallen gestellt hat.
 An die Sachen, die wir fest verplant hatten, hatten wir uns streng gehalten, was natürlich auch zu einigen Diskussionen geführt hatte.
 
 ## Respektvoller Umgang und Konflikte im Team
