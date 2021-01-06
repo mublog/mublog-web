@@ -35,6 +35,8 @@
     "edited": "Bearbeitet",
     "actionComment": "Kommentieren",
     "deleteComment": "Kommentar löschen",
+    "deleteCommentSuccess": "Kommentar wurde gelöscht",
+    "deleteCommentFailure": "Kommentar konnte nicht gelöscht werden",
     "showPostMenu": "Zeige Menü an",
     "save": "Änderungen speichern",
     "removeImage": "Bild entfernen",

@@ -88,7 +88,7 @@ export async function addComment(id: number, content: string) {
 }
 
 export async function delComment(id: number) {
-  let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_URL + "/" + id + "/comments")
+  let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_URL + "/comments/" + id)
   return res?.status === 200
 }
 

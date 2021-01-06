@@ -57,7 +57,7 @@ export function Comments({ postId }: { postId: number }) {
 export function Comment(props: CommentModel) {
   const Owner = UserService.currentUser()?.username === props.user.alias
 
-  return (
+  const View = (
     <div className="comment">
       <div className="comment-flex" styles={{ flexDirection: Owner ? "row-reverse" : "row" }}>
         <div className="user-image" user-card={props.user.alias} styles={{ backgroundColor: randomColor() + " !important" }} />
@@ -71,8 +71,24 @@ export function Comment(props: CommentModel) {
           <div>
             {props.textContent}
           </div>
+          <div if={Owner} styles={{ position: "absolute", bottom: "0px", right: "0px" }}>
+            <µ.Icon name="x-red" className="cursor-pointer" onclick={delComment} />
+          </div>
         </µ.Box>
       </div>
     </div>
   ) as HTMLDivElement
+
+  return View
+
+  async function delComment() {
+    let result = await PostService.delComment(props.id)
+    if (result) {
+      NotificationService.push(null, i18n.deleteCommentSuccess)
+      View.remove()
+    }
+    else {
+      NotificationService.push(null, i18n.deleteCommentFailure)
+    }
+  }
 }
