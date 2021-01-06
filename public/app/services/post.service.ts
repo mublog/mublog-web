@@ -3,7 +3,7 @@ import * as NotificationService from "./notification.service"
 import * as http from "./http.service"
 import i18n from "../../lang/de_DE.json"
 
-const URL = "/"
+const URL = ""
 const API_VERSION = 1
 const API_URL = `${URL}/api/v${API_VERSION}/posts`
 const API_POSTS_ID = API_URL + "/"
@@ -105,7 +105,6 @@ export async function addMedia(file: any) {
 }
 
 export async function delMedia(guid: string) {
-  return false
   let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_MEDIA + guid)
   return res?.status === 200
 }
