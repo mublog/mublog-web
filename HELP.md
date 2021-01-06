@@ -65,6 +65,11 @@ Wozu loggst du dich ein, wenn du jetzt schon wieder raus willst? Verzeih' ich di
 Auf µblog dreht sich alles um Posts, so kannst auch du Inhalte rein setzen.
 Zum Schreiben von Posts kannst du die Markdown-Syntax verwenden.
 
+# Bilder hochladen
+![logout](./assets/post-image.gif)
+
+Um ein Bild zum Post hinzuzufügen musst du nur auf den Knopf mit der Aufschrift "Bild hochladen" klicken. Daraufhin erscheint im unteren Bereich eine Übersicht über deine Bilder. Daneben sind 2 Schaltflächen. Das **X** löscht das Bild wieder und mit einem Klick dem Kopiersymbol speicherst du den Link (mit der MarkDown-Syntax) in den Zwischenspeicher. Diesen Text musst du dann nur noch in die Schreibbereich einfügen.
+
 ## Post löschen
 ![delete-post](./assets/post-delete.gif)
 
