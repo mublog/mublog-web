@@ -105,6 +105,7 @@ export async function addMedia(file: any) {
 }
 
 export async function delMedia(guid: string) {
+  return false
   let [wrapper, res] = await http.del<ResponseWrapper<null>>(API_MEDIA + guid)
   return res?.status === 200
 }
