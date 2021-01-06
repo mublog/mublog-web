@@ -21,7 +21,7 @@ const H3 = /[\\#]{3} (.+)/g
 const H4 = /[\\#]{4} (.+)/g
 const H5 = /[\\#]{5} (.+)/g
 const H6 = /[\\#]{6} (.+)/g
-
+const ALIAS = /(\@[a-zA-Z0-9]+)/gmi
 
 function replace(text: string, find: string | RegExp, value: any) {
   return text.replace(find, value)
@@ -38,6 +38,7 @@ export default function translateMarkDown(text: string): string {
   text = replace(text, CODE0, "<code>$1</code>")
   text = replace(text, P0, m => P1.test(m) ? m : `<p>${m}</p>`)
   text = replace(text, PRE2, "$1$2")
+  text = replace(text, ALIAS, `<a href="/user/$1">$1</a>`)
   return text
 }
 
