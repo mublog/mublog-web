@@ -68,3 +68,21 @@ Ich habe durch dieses Projekt einigen Einblick in API-Entwicklung bekommen, was 
 Zudem habe ich hierbei MVVM gelernt und mir Xamarin-Forms beigebracht.
 
 Zeitlich gesehen gab es bei dem Projekt kaum Druck und unsere Anforderungen waren gut in der vorgegeben Zeit umsetzbar.
+
+# Soziale Kriterien
+## Entscheidungsfindung
+Wir haben uns in der Gruppe abgesprochen, zu welchen Zeiten wir die Aufgaben lösen und in welcher Tiefe diese zu erledigen sind, damit es dem Projekt nützlich ist.
+
+## Arbeitsteilung
+Natürlich hat jeder im Team bereits Erfahrung, welche er auch gerne in das Projekt reingesteckt hat. Demnach wurde auch der Aufwand der einzelnen Aufgaben so verteilt, dass jeder im Team genug zu tun hat.
+
+## Arbeitsplanung und Stringenz in der Umsetzung
+Ehrlich gesagt haben wir ziemlich locker mit dem Detailgrad der Planung im Team, weswegen wir noch zusätzliche Freiheiten hatten, welche uns manchmal natürlich auch Fallen gestellt hat.
+An die Sachen, die wir fest verplant hatten, hatten wir uns streng gehalten, was natürlich auch zu einigen Diskussionen geführt hatte.
+
+## Respektvoller Umgang und Konflikte im Team
+Wir sind mit Konflikten ziemlich locker umgegangen, weil wir uns in den Jahren schon genug kennenlernen konnten, weil wir in etwa die Stärken und Schwächen des anderen kennen.
+Wir waren auf Discord immer vernetzt und respektvoll zueinander :) (Auch unter Druck)
+
+## Arbeitseinsatz für ein gemeinsames Ziel?
+Wir hatten keine besonderen Strategien, um jeden währen der Arbeitszeit so einzubeziehen, dass es nicht zu Frustation derjenigen führte. Wir haben unsere "Energie" so reingesteckt für das gemeinsame Ziel, dass es noch für alle angenehm war zu arbeiten.
