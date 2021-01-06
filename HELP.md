@@ -72,6 +72,7 @@ Dir gefällt dein Post nicht mehr oder hast aus Versehen jemanden beleidigt? Ent
 
 ## Post ent/liken
 ![like-post](./assets/post-like.gif)
+
 Du hast einen neuen Lieblingspost? Zeig es der Welt indem du das Herzsymbol anklickst. Ob du einen Post geliked hast, siehst du, wenn es rot ist.
 
 ## Kommentare lesen und verfassen
