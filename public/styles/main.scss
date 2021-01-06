@@ -307,6 +307,10 @@ a {
   position: relative;
   transition: opacity 250ms ease-out 0s;
 
+  .profile-link {
+    color: $blue;
+  }
+
   .title {
     display: flex;
     gap: 8px;
