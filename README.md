@@ -61,7 +61,7 @@ Mit dem ASP.NET Core war ich bereits vertraut, jedoch hat dieses Projekt mir gez
 
 Außerdem habe ich gelernt in Projekten nun noch mehr ins Details zu planen, da dies einem wirklich einige Arbeit ersparen kann.
 
-## Aus der Seite von [Flamascus](https://github.com/Flamascus)
+### Aus der Seite von [Flamascus](https://github.com/Flamascus)
 
 Dieses Projekt hat mir einiges gebracht, da ich zuvor eher weniger mit ASP.NET gearbeitet und nur wenig mit Back-End zu tun hatte.
 Ich habe durch dieses Projekt einigen Einblick in API-Entwicklung bekommen, was für mich sehr nützlich ist.
