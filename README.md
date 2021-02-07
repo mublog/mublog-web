@@ -2,6 +2,11 @@
 
 ##### *Made with love and [Doc](https://gitlab.com/iljushka/doc)*
 
+# Archival Notice
+µblog was a school project to create a working prototype of a microblogging website.
+No further development is currently planned
+<br/>
+
 # Bedienungsanleitung
 Klicke [hier](https://github.com/mublog/mublog-web/blob/master/HELP.md#bedienungsanleitung) um die Bedienungsanleitung zu lesen. Zur Hilfe befinden sich dort auch animierte Bilder.
 
